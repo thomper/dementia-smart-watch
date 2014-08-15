@@ -7,6 +7,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -87,21 +89,41 @@ public class MainActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_main, container,
+            		false);
             return rootView;
         }
     }
     
     void checkPlayServicesAvailable() {
-    	int resultCode =
-    			GooglePlayServicesUtil.
-    				isGooglePlayServicesAvailable(this);
+    	int resultCode = 
+    			GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
     	if (resultCode != ConnectionResult.SUCCESS) {
+    		// Log error
     		String msg = "Google Play Services unavailable" +
     					 " result code: " + String.valueOf(resultCode);
     		Log.d(TAG, msg);
-        	Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, -1);
-        	errorDialog.show();
+    	
+    		if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+    			
+    			// Show a dialog to fix the error if it can be fixed, then exit.
+    			Dialog dialog = 
+    					GooglePlayServicesUtil.getErrorDialog(resultCode,
+    							this, 0);
+    			dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+					@Override
+					public void onDismiss(DialogInterface dialogInterface) {
+						MainActivity.this.finish();
+					}
+				});
+    			dialog.show();
+    		} else {
+    			
+    			// Show a message if the error can't be fixed, then exit.
+    			Toast.makeText(this, "This device is not supported.",
+						Toast.LENGTH_LONG).show();
+				finish();
+    		}
         }
     }
     
