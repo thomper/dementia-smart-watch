@@ -1,0 +1,5 @@
+# Android library projects
+/google-play-services_lib/
+
+# Eclipse workspace files
+/.metadata/
