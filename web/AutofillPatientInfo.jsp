@@ -12,7 +12,7 @@
 <FORM name='input' action='AutofillPatientInfo.jsp' method='get'>
 Enter CarerID:<input name='careid' type='textbox'>
 <input type='submit' value='Submit'>
-</FORM>
+</FORM><br/><br/>
 <%
 	if(request.getParameter("careid")!=null){
 		//String CarerID = request.getParameter("sessionid");
