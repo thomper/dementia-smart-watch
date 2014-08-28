@@ -10,18 +10,20 @@
 </head>
 <body>
 <% 
+	if(request.getParameter("carer")!=null && request.getParameter("patient")!=null){
 	Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" +
 	"dementiawatch_db","root",""); 
-	Statement st= con.createStatement(); 
-	st.executeQuery("UPDATE patients SET carerID = '"+ request.getParameter("carer")+"' WHERE patientID = '"+request.getParameter("patient")+"'"); 
-	out.println("<H1>Success</H1>"); */
+	Statement st= con.createStatement();
+	st.executeUpdate("UPDATE patients SET carerID = '"+ request.getParameter("carer")+"' WHERE patientID = '"+request.getParameter("patient")+"'"); 
+	out.println("<H1>Success</H1>");
+	}
 %>
 
 Link Patient to carer
 <FORM name='input' action='AddPatientsToCarers.jsp' method='post'>
-	Patient<input id='patient' type='textbox'>
-	Carer<input id='carer' type='textbox'>
+	Patient<input name='patient' type='textbox'/>
+	Carer<input name='carer' type='textbox'/>
 	<input type="submit" value="Submit">
 </FORM>
 </body>
