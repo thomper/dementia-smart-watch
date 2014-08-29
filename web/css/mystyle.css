@@ -1,0 +1,55 @@
+html {
+	
+}
+body {
+	margin: 0px;
+	font: 18pt 'Veranda','Goudy Old Style',sans-serif;
+}
+#container {
+	max-width: 100%;
+    border: 5px solid black;
+	margin: 0px;
+	padding: 0px;
+	font-size:0;
+}
+#header {
+    height: 50px;
+    background: #F0F0F0;
+    border-bottom: 5px solid black;
+	overflow: no-content;
+	padding-top: 1px;
+	padding-bottom: 50px;
+}
+#header-left{
+	font: 24pt 'Veranda', 'Goudy Old Style', sans-serif;
+    color: black;
+	text-align: center;
+    width: 30%;
+    float: left;
+}
+#header-right {
+	font: 24pt 'Veranda', 'Goudy Old Style', sans-serif;
+	color: black;
+    text-align: center;
+	width: 30%;
+    float: right;
+}
+#header-middle {
+	font: 24pt 'Veranda', 'Goudy Old Style', sans-serif;
+    color: #08a3d9;
+	text-align: center;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+	border-left: 5px dotted black;
+	border-right: 5px dotted black;
+	padding: 1px;
+}
+#content {
+	padding-top: 10px;
+	padding-bottom: 1px;
+	background: #F0F0F0 url(background.png) center center;
+    min-height: calc(100vh - 126px);
+	font: 18pt 'Veranda', 'Goudy Old Style', sans-serif;
+	text-align: center;
+}

@@ -1,0 +1,35 @@
+#message {
+    font-family: 'Veranda','Goudy Old Style',sans-serif;
+    position: fixed;
+    top: 30px;
+    left: 2vw;
+    width: 96%;
+    z-index: 105;
+    text-align: center;
+    font-weight: bold;
+    font-size: 100%;
+    color: white;
+    padding: 10px 0px 10px 0px;
+    background-color: #009900;
+}
+
+#message span {
+    text-align: center;
+    width: 95%;
+    float: left;
+}
+
+.close-notify {
+    white-space: nowrap;
+    float: right;
+    margin-right: 10px;
+    color: #fff;
+    text-decoration: none;
+    border: 2px #fff solid;
+    padding-left: 3px;
+    padding-right: 3px
+}
+
+.close-notify a {
+    color: #fff;
+}
