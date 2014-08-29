@@ -1,7 +1,6 @@
 # Eclipse workspace files
 /.metadata/
 
-
 # Built application files
 *.apk
 *.ap_
@@ -14,8 +13,8 @@
 *.class
 
 # Generated files
-bin/
-gen/
+smart-watch/bin/
+smart-watch/gen/
 
 # Gradle files
 .gradle/

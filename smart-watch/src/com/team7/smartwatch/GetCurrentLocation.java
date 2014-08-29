@@ -36,18 +36,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class GetCurrentLocation extends Activity
+		implements OnClickListener {
 
-implements OnClickListener{
-
-	private LocationManager locationMangaer = null;
+	private LocationManager locationManager = null;
 	private LocationListener locationListener = null;
 
 	private Button btnGetLocation = null;
 	private EditText editLocation = null;
-	private ProgressBar pb = null;
 
-	private static final String TAG = "Debug";
-	private Boolean flag = false;
+	private static final String postURL = "http://172.19.4.106:8080/mypage.php";
+	private static final String TAG = GetCurrentLocation.class.getName();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,15 +55,12 @@ implements OnClickListener{
 		// if you want to lock screen for always Portrait mode
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		pb = (ProgressBar) findViewById(R.id.progressBar1);
-		pb.setVisibility(View.INVISIBLE);
-
 		editLocation = (EditText) findViewById(R.id.editTextLocation);
 
 		btnGetLocation = (Button) findViewById(R.id.btnLocation);
 		btnGetLocation.setOnClickListener(this);
 
-		locationMangaer = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 	}
 	
@@ -73,19 +68,17 @@ implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		flag = displayGpsStatus();
-		if (flag) {
+		if (displayGpsStatus()) {
 
 			Log.v(TAG, "onClick");
 
 			editLocation.setText("Please!! move your device to"
 					+ " see the changes in coordinates." + "\nWait..");
 
-			pb.setVisibility(View.VISIBLE);
 			locationListener = new MyLocationListener();
 			
 			
-			locationMangaer.requestLocationUpdates(
+			locationManager.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
 			
 
@@ -139,62 +132,56 @@ implements OnClickListener{
 
 	/*----------Listener class to get coordinates ------------- */
 	private class MyLocationListener implements LocationListener {
-		@Override
-		public void onLocationChanged(Location loc) {
+		
+		// This function for testing only, REMOVE!
+		private void showLocation(Location loc) {
 
-			editLocation.setText("");
-			pb.setVisibility(View.INVISIBLE);
 			Toast.makeText(
 					getBaseContext(),
 					"Location changed : Lat: " + loc.getLatitude() + " Lng: "
 							+ loc.getLongitude(), Toast.LENGTH_SHORT).show();
-			String longitude = "Longitude: " + loc.getLongitude();
-			String longit = " " + loc.getLongitude();
-			String latit = " " + loc.getLatitude();
-			Log.v(TAG, longitude);
-			String latitude = "Latitude: " + loc.getLatitude();
+		}
+		
+		private void logLocation(Location loc) {
+
+			String latitude = "Latitude: " + String.valueOf(loc.getLatitude());
 			Log.v(TAG, latitude);
-
-			/*----------to get City-Name from coordinates ------------- */
-			String cityName = null;
-			Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-			List<Address> addresses;
-			try {
-				addresses = gcd.getFromLocation(loc.getLatitude(),
-						loc.getLongitude(), 1);
-				if (addresses.size() > 0)
-					System.out.println(addresses.get(0).getLocality());
-				cityName = addresses.get(0).getLocality();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
+			String longitude = "Longitude: "
+					+ String.valueOf(loc.getLongitude());
+			Log.v(TAG, longitude);
+		}
+		
+		private void postLocation(Location loc) {
+			
 			// Create a new HttpClient and Post Header
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(
-					"http://172.19.4.106:8080/mypage.php");
+			HttpClient httpClient = new DefaultHttpClient();
+			HttpPost httpPost = new HttpPost(postURL);
 
+			String longit = String.valueOf(loc.getLongitude());
+			String latit = String.valueOf(loc.getLatitude());
 			try {
-				// Add your data
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
 						2);
 				nameValuePairs
 						.add(new BasicNameValuePair("latitude", longit));
 				nameValuePairs
 						.add(new BasicNameValuePair("longitude", latit));
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				httpclient.execute(httppost);
+				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+				httpClient.execute(httpPost);
 
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 			}
+		}
+		
+		@Override
+		public void onLocationChanged(Location loc) {
 
-			String s = longitude + "\n" + latitude
-					+ "\n\nMy Currrent City is: " + cityName;
-			editLocation.setText(s);
-
+			showLocation(loc);  // Testing only, REMOVE
+			logLocation(loc);
+			postLocation(loc);
 		}
 
 		@Override
