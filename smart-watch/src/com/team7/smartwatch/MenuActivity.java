@@ -15,7 +15,7 @@ public class MenuActivity extends Activity {
 
 	
 	public void myLocation(View view) {
-		Intent intent = new Intent(this, GetCurrentLocation.class);
+		Intent intent = new Intent(this, ViewLocationActivity.class);
 	    startActivity(intent);	
 	}
 	
