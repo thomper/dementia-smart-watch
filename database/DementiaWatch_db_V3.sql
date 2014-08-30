@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `patientLoc` (`patientID`, `patientLat`, `patientLong`) VALUES
+INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`) VALUES
 (1, -27.4752990800, 152.9760412000),
 (2, -27.5385548200, 153.0802628000),
 (3, -27.4976428700, 152.9736471000);
