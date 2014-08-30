@@ -82,10 +82,10 @@ INSERT INTO `patients` (`carerID`, `fName`, `lName`, `gender`, `age`, `bloodType
 -- --------------------------------------------------------
 
 --
--- Table structure for table `patientloc`
+-- Table structure for table `patientLoc`
 --
 
-CREATE TABLE IF NOT EXISTS `patientloc` (
+CREATE TABLE IF NOT EXISTS `patientLoc` (
   `patientID` int(5) NOT NULL,
   `patientLat` decimal(20,10) NOT NULL,
   `patientLong` decimal(20,10) NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`) VALUES
+INSERT INTO `patientLoc` (`patientID`, `patientLat`, `patientLong`) VALUES
 (1, -27.4752990800, 152.9760412000),
 (2, -27.5385548200, 153.0802628000),
 (3, -27.4976428700, 152.9736471000);
