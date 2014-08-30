@@ -24,7 +24,7 @@ public class Locator {
 	private LocationListener locationListener;
 	
 	private static final String TAG = Locator.class.getName();
-	private static final String POST_URL = "http://172.19.4.106:8080/mypage.php";
+	private static final String POST_URL = "http://192.168.1.16:8080/updatelocation";
 
 	public Locator(Context context) {
 		this.context = context;
@@ -57,10 +57,12 @@ public class Locator {
 			
 			// Create the post request.
 			HttpPost request = new HttpPost(POST_URL);
+			String patientID = "4";  // TODO: TESTING ONLY!
 			String latit = String.valueOf(loc.getLatitude());
 			String longit = String.valueOf(loc.getLongitude());
 			List<NameValuePair> pairs =
-					new ArrayList<NameValuePair>(2);
+					new ArrayList<NameValuePair>(3);
+			pairs.add(new BasicNameValuePair("patientID", patientID));
 			pairs.add(new BasicNameValuePair("latitude", latit));
 			pairs.add(new BasicNameValuePair("longitude", longit));
 			try {
