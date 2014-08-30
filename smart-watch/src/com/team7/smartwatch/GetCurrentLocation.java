@@ -3,7 +3,6 @@ package com.team7.smartwatch;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -20,31 +19,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class GetCurrentLocation extends Activity
-		implements OnClickListener {
+public class GetCurrentLocation extends Activity {
 
 	private LocationManager locationManager = null;
 	private LocationListener locationListener = null;
 
-	private Button btnGetLocation = null;
-	private EditText editLocation = null;
-
-	private static final String postURL = "http://172.19.4.106:8080/mypage.php";
+	private static final String POST_URL = "http://172.19.4.106:8080/mypage.php";
 	private static final String TAG = GetCurrentLocation.class.getName();
 
 	@Override
@@ -52,40 +40,17 @@ public class GetCurrentLocation extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		// if you want to lock screen for always Portrait mode
+		// Lock screen to portrait mode.
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-		editLocation = (EditText) findViewById(R.id.editTextLocation);
-
-		btnGetLocation = (Button) findViewById(R.id.btnLocation);
-		btnGetLocation.setOnClickListener(this);
-
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-	}
-	
-
-
-	@Override
-	public void onClick(View v) {
-		if (displayGpsStatus()) {
-
-			Log.v(TAG, "onClick");
-
-			editLocation.setText("Please!! move your device to"
-					+ " see the changes in coordinates." + "\nWait..");
-
-			locationListener = new MyLocationListener();
-			
-			
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-			
-
-		} else {
-			alertbox("Gps Status!!", "Your GPS is: OFF");
+		
+		// Setup location tracking.
+		if (!displayGpsStatus()) {
+			alertbox("Gps Disabled", "GPS location tracking is currently disabled.");
 		}
-
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new MyLocationListener();
+		locationManager.requestLocationUpdates(
+				LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
 	}
 
 	/*----Method to Check GPS is enable or disable ----- */
@@ -135,7 +100,6 @@ public class GetCurrentLocation extends Activity
 		
 		// This function for testing only, REMOVE!
 		private void showLocation(Location loc) {
-
 			Toast.makeText(
 					getBaseContext(),
 					"Location changed : Lat: " + loc.getLatitude() + " Lng: "
@@ -143,7 +107,6 @@ public class GetCurrentLocation extends Activity
 		}
 		
 		private void logLocation(Location loc) {
-
 			String latitude = "Latitude: " + String.valueOf(loc.getLatitude());
 			Log.v(TAG, latitude);
 			String longitude = "Longitude: "
@@ -155,7 +118,7 @@ public class GetCurrentLocation extends Activity
 			
 			// Create a new HttpClient and Post Header
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(postURL);
+			HttpPost httpPost = new HttpPost(POST_URL);
 
 			String longit = String.valueOf(loc.getLongitude());
 			String latit = String.valueOf(loc.getLatitude());
@@ -178,7 +141,6 @@ public class GetCurrentLocation extends Activity
 		
 		@Override
 		public void onLocationChanged(Location loc) {
-
 			showLocation(loc);  // Testing only, REMOVE
 			logLocation(loc);
 			postLocation(loc);
