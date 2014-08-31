@@ -15,6 +15,8 @@
 # Generated files
 smart-watch/bin/
 smart-watch/gen/
+smart-watchtests/bin/
+smart-watchtests/gen/
 
 # Gradle files
 .gradle/

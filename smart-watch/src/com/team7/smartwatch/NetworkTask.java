@@ -9,6 +9,8 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+/** NetworkTask makes small HTTP requests asynchronously.  This is required
+ *  because network actions must be run in a separate thread from the UI.  */
 public class NetworkTask extends AsyncTask<HttpUriRequest, Void, HttpResponse> {
 	
 	private static final String TAG = NetworkTask.class.getName();

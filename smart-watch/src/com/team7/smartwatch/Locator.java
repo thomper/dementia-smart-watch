@@ -3,6 +3,7 @@ package com.team7.smartwatch;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -22,10 +23,14 @@ public class Locator {
 	private Context context;
 	private LocationManager locationManager;
 	private LocationListener locationListener;
+	private Location lastLocation;
+	private Date lastTime;
 	
 	private static final String TAG = Locator.class.getName();
-	private static final String POST_URL = "http://192.168.1.16:8080/updatelocation";
+	private static final String POST_URL = "http://192.168.1.41:8080/updatelocation";
 
+	/** Locator provides access to the device's last known location and the
+	 *  time at which the location was last updated. */
 	public Locator(Context context) {
 		this.context = context;
 		locationListener = new MyLocationListener();
@@ -35,6 +40,14 @@ public class Locator {
 				5000, 10, locationListener);
 	}
 	
+	public Location getLastLocation() {
+		return lastLocation;
+	}
+
+	public Date getLastTime() {
+		return lastTime;
+	}
+
 	private class MyLocationListener implements LocationListener {
 
 		// This function for testing only, REMOVE!
@@ -79,6 +92,8 @@ public class Locator {
 
 		@Override
 		public void onLocationChanged(Location loc) {
+			lastLocation = loc;
+			lastTime = new Date();
 			showLocation(loc); // Testing only, REMOVE
 			logLocation(loc);
 			postLocation(loc);
