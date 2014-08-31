@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="assistwatchservlets" default="compile" basedir=".">
+
+	<path id="project-classpath">
+		<fileset dir="WEB-INF/lib" includes="*.jar" />
+	</path>
+
+	<target name="clean">
+		<delete dir="WEB-INF/classes" />
+		<mkdir dir="WEB-INF/classes" />
+	</target>
+
+	<target name="copy-non-java-files">
+		<copy todir="WEB-INF/classes" includeemptydirs="false">
+			<fileset dir="WEB-INF/src" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<target name="compile" depends="clean,copy-non-java-files">
+		<javac srcdir="WEB-INF/src" destdir="WEB-INF/classes" classpathref="project-classpath" />
+	</target>
+
+</project>
