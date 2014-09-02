@@ -12,6 +12,7 @@
 		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">	
 		<link rel="stylesheet" type="text/css" href="css/message.css">
+		<script src="scripts/maps.js" type="text/javascript"></script>
 
 		<%
 			//Has password just been successfully changed?
@@ -96,9 +97,14 @@
 							
 							out.println("<div class='pure-control-group'>");							
 								out.println("<label for='gender'>Gender</label>");
-								out.println("<select name='gender' value='"+rs.getString(5)+"'>");
-									out.println("<option>Male</option>");
-									out.println("<option>Female</option>");
+								out.println("<select name='gender'>");
+								if (rs.getString(5).equals("Male") == true) {
+									out.println("<option selected='Selected' value='Male'>Male</option>");
+									out.println("<option value='Female'>Female</option>");
+								} else {
+									out.println("<option value='Male'>Male</option>");
+									out.println("<option selected='Selected' value='Female'>Female</option>");
+								}
 								out.println("</select>");		
 							out.println("</div>");
 							
@@ -169,7 +175,24 @@
 						out.println("</fieldset>");
 					out.println("</form>");			
 					
-					
+					Statement st2 = conn.createStatement();
+					ResultSet rs2 = st2.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients JOIN patientLoc on patientLoc.patientID = patients.patientID WHERE patientLoc.patientID=" + rs.getString(1));					
+
+					if (rs2.next()) {
+						
+						Double lat = rs2.getDouble(4);
+						Double longtitude = rs2.getDouble(5);
+						String status = rs2.getString(3);
+						String name = rs2.getString(1) + " " + rs2.getString(2);
+						
+						%>						
+						<div id="mapcanvas" style="height:300px; width:500px">
+							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+							<script>google.maps.event.addDomListener(window, 'load', initialize(<%=lat%>, <%=longtitude%>, '<%=name%>', '<%=status%>'));</script>
+						</div>
+						<%
+}						
+			
 				}				
 				else {
 					//no associated patient yet
