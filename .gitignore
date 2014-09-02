@@ -1,6 +1,9 @@
 # Eclipse workspace files
 /.metadata/
 
+# Eclipse .settings
+org.eclipse.jdt.core.prefs
+
 # Built application files
 *.apk
 *.ap_
