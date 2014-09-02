@@ -3,7 +3,7 @@ dementia-smart-watch
 
 INB372 Team7 project.
 
-Build status: [!http://106.186.31.86:9090/job/dementia-smart-watch/badge/icon!|http://106.186.31.86:9090/job/dementia-smart-watch/]
+[![Build Status](http://106.186.31.86:9090/buildStatus/icon?job=dementia-smart-watch)](http://106.186.31.86:9090/job/dementia-smart-watch/)
 
 Build instructions:
 
