@@ -8,6 +8,8 @@ import java.sql.*;
 
 public class LocationUpdater extends HttpServlet {
 
+    private final static String CONNECTION_STRING = "jdbc:mysql://localhost" +
+        ":3306/dementiawatch_db?user=agile374&password=dementia374";
     private final static String DB_NAME = "dementiawatch_db";
     private final static String LOCATION_TABLE = "patientLoc";
     private final static String REPLACE_STATEMENT =
@@ -41,7 +43,7 @@ public class LocationUpdater extends HttpServlet {
         // TODO: Read db username and password from file.
         int rowsUpdated = 0;
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=root");
+            Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             PreparedStatement replaceLoc = conn.prepareStatement(REPLACE_STATEMENT);
             bindValues(replaceLoc, request);
             rowsUpdated = replaceLoc.executeUpdate();
