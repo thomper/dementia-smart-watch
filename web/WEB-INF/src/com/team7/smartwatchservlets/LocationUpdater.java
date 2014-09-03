@@ -27,7 +27,6 @@ public class LocationUpdater extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
     {
-        registerJDBCDriver();
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         int rowsUpdated = update(request);
@@ -42,16 +41,26 @@ public class LocationUpdater extends HttpServlet {
 
         // TODO: Read db username and password from file.
         int rowsUpdated = 0;
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            registerJDBCDriver();
+            conn = DriverManager.getConnection(CONNECTION_STRING);
             PreparedStatement replaceLoc = conn.prepareStatement(REPLACE_STATEMENT);
             bindValues(replaceLoc, request);
             rowsUpdated = replaceLoc.executeUpdate();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (NullPostParameterException e) {
             // TODO: log error?
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                    conn = null;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return rowsUpdated;
