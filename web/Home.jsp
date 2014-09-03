@@ -33,7 +33,7 @@
 			<h1>Main Page</h1>
 			
 			<img src="images/watch.png" alt="watch.png">
-			<h2><a href=""Map.jsp>Map</a></h2>
+			<h2><a href="Map.jsp">Map</a></h2>
 			
 			<br>			
 			<h2><a href="PatientList.jsp">My Patient List</a> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; <a href="AccountDetails.jsp">My Account Details</a> </h2>
