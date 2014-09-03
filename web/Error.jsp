@@ -34,7 +34,7 @@
 						 break;
 				case 7:  out.println("<h3>You entered your password incorrectly.</h3>");
 						 break;
-				case 8:  //
+				case 8:  out.println("<h3>That patientID does not exist.</h3>");
 						 break;
 				case 9:  //
 						 break;
