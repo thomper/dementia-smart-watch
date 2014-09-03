@@ -14,7 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="css/message.css">
 
 		<%
-			//Has password just been successfully changed?
+			//Have account details just been successfully changed?
 			//Displays the success banner
 			int success = 0;
 			try { success = Integer.parseInt(request.getParameter("success")); }

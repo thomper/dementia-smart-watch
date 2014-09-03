@@ -7,7 +7,6 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
-		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
@@ -34,10 +33,10 @@
 			<h1>Main Page</h1>
 			
 			<img src="images/watch.png" alt="watch.png">
-			<p>^Placeholder image. Google map could go here.</p>
+			<h2><a href=""Map.jsp>Map</a></h2>
 			
 			<br>			
-			<h2><a href="MyPatient.jsp">My Patient Details</a> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; <a href="AccountDetails.jsp">My Account Details</a> </h2>
+			<h2><a href="PatientList.jsp">My Patient List</a> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; <a href="AccountDetails.jsp">My Account Details</a> </h2>
 				
 		</div>	
 		

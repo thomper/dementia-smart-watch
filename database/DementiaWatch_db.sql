@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `emergencyContactAddress` varchar(100),
   `emergencyContactSuburb` varchar(20),
   `emergencyContactNum` varchar(10) NOT NULL,
-  `uniqueKey` int(6) NOT NULL,
+  `uniqueKey` varchar(36) NOT NULL,
   PRIMARY KEY (`patientID`),
   UNIQUE KEY `patientID` (`patientID`),
   UNIQUE KEY `uniqueKey` (`uniqueKey`),
