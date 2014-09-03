@@ -1,7 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
 <!DOCTYPE html>
 
 <html>
@@ -67,11 +64,7 @@
 			<h1>Create New Patient</h1>
 			
 			<%			
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				java.sql.Connection conn;
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=root");
-				Statement st = conn.createStatement();					
-									
+
 				out.println("<form class='pure-form pure-form-aligned' action='processing/UpdatePatientDetails.jsp?patientid=0' method='post'>");
 					out.println("<fieldset>");
 					
@@ -153,10 +146,7 @@
 						out.println("</div>");
 						
 					out.println("</fieldset>");
-				out.println("</form>");			
-									
-				st.close();
-				conn.close();				
+				out.println("</form>");							
 				
 			%>			
 			

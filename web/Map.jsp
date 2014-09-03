@@ -22,7 +22,7 @@
 		
 		<div id="header">
 			<div id="header-left">
-				<p>Location: <a href="Home.jsp">Home</a> > Map</p>
+				<p>Location: <a href="PatientList.jsp">Patient List</a> > Map</p>
 			</div>
 			<div id="header-right">
 				<p><a href="ChangePassword.jsp">Change PW</a> | <a href="Logout.jsp">Logout</a></p>
@@ -50,7 +50,7 @@
 				
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 				java.sql.Connection conn;
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=root");
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();
 				
 				ResultSet rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients JOIN patientLoc on patientLoc.patientID = patients.patientID WHERE patientLoc.patientID=" + patientID);	

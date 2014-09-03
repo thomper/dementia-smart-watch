@@ -77,7 +77,7 @@
 			
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 				java.sql.Connection conn;
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=root");
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();
 				ResultSet rs = st.executeQuery("SELECT * FROM patients WHERE patientID='"+patientID+"'");	
 				
