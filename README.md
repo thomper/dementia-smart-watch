@@ -5,12 +5,20 @@ INB372 Team7 project.
 
 [![Build Status](http://106.186.31.86:9090/buildStatus/icon?job=dementia-smart-watch)](http://106.186.31.86:9090/job/dementia-smart-watch/)
 
-Build instructions:
+Android Build Instructions
+--------------------------
+In the repo root directory run:
 
-Android
--------
-TODO
+android update project -p ./smart-watch/
+android update test-project -m ../smart-watch/ -p ./smart-watchtests/
 
-Web
----
-Run ant from the web directory.
+Then in the smart-watchtests/ directory run:
+
+ant clean debug
+ant installt test
+
+You will need to have a phone connected in debugging mode or an Android Virtual Device running for the tests to run.
+
+Web Build Instructions
+----------------------
+Run ant from the web/WEB-INF directory.
