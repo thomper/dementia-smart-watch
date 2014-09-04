@@ -11,7 +11,7 @@ public class LocationUpdater extends HttpServlet {
     private final static String CONNECTION_STRING = "jdbc:mysql://localhost" +
         ":3306/dementiawatch_db?user=agile374&password=dementia374";
     private final static String DB_NAME = "dementiawatch_db";
-    private final static String LOCATION_TABLE = "patientLoc";
+    private final static String LOCATION_TABLE = "patientloc";
     private final static String REPLACE_STATEMENT =
         "REPLACE INTO " + LOCATION_TABLE +
         " (patientID, patientLat, patientLong) " + "values (?, ?, ?)";

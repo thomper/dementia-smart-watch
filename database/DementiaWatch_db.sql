@@ -53,7 +53,7 @@ INSERT INTO `carers` (`carerID`, `fName`, `lName`, `mobileNum`, `contactNum`) VA
 -- Table structure for table `patientalerts`
 --
 
-CREATE TABLE IF NOT EXISTS `patientAlerts` (
+CREATE TABLE IF NOT EXISTS `patientalerts` (
   `patientID` int(5) NOT NULL,
   `alertTime` time NOT NULL DEFAULT '00:00:00',
   `alertDate` date NOT NULL,
@@ -80,7 +80,7 @@ DELIMITER ;
 -- Table structure for table `patientcollapses`
 --
 
-CREATE TABLE IF NOT EXISTS `patientCollapses` (
+CREATE TABLE IF NOT EXISTS `patientcollapses` (
   `patientID` int(5) NOT NULL,
   `collapseTime` time NOT NULL,
   `collapseDate` date NOT NULL,
@@ -114,7 +114,7 @@ DELIMITER ;
 -- Table structure for table `patientfences`
 --
 
-CREATE TABLE IF NOT EXISTS `patientFences` (
+CREATE TABLE IF NOT EXISTS `patientfences` (
   `patientID` int(5) NOT NULL,
   `fenceLat` decimal(20,10) NOT NULL,
   `fenceLong` decimal(20,10) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `patientFences` (
 -- Table structure for table `patientloc`
 --
 
-CREATE TABLE IF NOT EXISTS `patientLoc` (
+CREATE TABLE IF NOT EXISTS `patientloc` (
   `patientID` int(5) NOT NULL,
   `patientLat` decimal(20,10) NOT NULL,
   `patientLong` decimal(20,10) NOT NULL,
@@ -165,7 +165,7 @@ DELIMITER ;
 -- Table structure for table `patientpoints`
 --
 
-CREATE TABLE IF NOT EXISTS `patientPoints` (
+CREATE TABLE IF NOT EXISTS `patientpoints` (
   `patientID` int(5) NOT NULL,
   `pointLat` decimal(20,10) NOT NULL,
   `pointLong` decimal(20,10) NOT NULL,
@@ -272,31 +272,31 @@ DELIMITER ;
 -- Constraints for table `patientalerts`
 --
 ALTER TABLE `patientalerts`
-  ADD CONSTRAINT `patientAlerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientalerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientcollapses`
 --
 ALTER TABLE `patientcollapses`
-  ADD CONSTRAINT `patientCollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientcollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientfences`
 --
 ALTER TABLE `patientfences`
-  ADD CONSTRAINT `patientFences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientfences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientloc`
 --
 ALTER TABLE `patientloc`
-  ADD CONSTRAINT `patientLoc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientloc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientpoints`
 --
 ALTER TABLE `patientpoints`
-  ADD CONSTRAINT `patientPoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientpoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patients`
