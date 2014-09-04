@@ -35,6 +35,7 @@
 		<div id="content">		
 			
 			<%
+				String carerID = session.getAttribute("carerid").toString();
 				int patientID = 0;
 				try { 
 					patientID = Integer.parseInt(request.getParameter("patientid"));
@@ -43,32 +44,39 @@
 
 				//The above code gets you the patientID to do whatever
 				//This page needs to be called as:   Map.jsp?patientid=xxx
+				
 			%>
 			
-			<%		
-				//Josh - this is your code from the old page
+			<%			
+				Double lat = 0.0;
+				Double longtitude = 0.0;
+				String status = "";
+				String name = "";				
 				
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 				java.sql.Connection conn;
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();
 				
-				ResultSet rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients JOIN patientLoc on patientLoc.patientID = patients.patientID WHERE patientLoc.patientID=" + patientID);	
+				if (patientID != 0 ) {
+				
+					ResultSet rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients JOIN "+
+						"patientLoc on patientLoc.patientID = patients.patientID WHERE patientLoc.patientID=" + patientID);	
 
-				Double lat = 0.0;
-				Double longtitude = 0.0;
-				String status = "";
-				String name = "";
-
-				if (rs.next()) {
-					
-					lat = rs.getDouble(4);
-					longtitude = rs.getDouble(5);
-					status = rs.getString(3);
-					name = rs.getString(1) + " " + rs.getString(2);
-				}		
-
-				rs.close();
+					if (rs.next()) {
+						
+						lat = rs.getDouble(4);
+						longtitude = rs.getDouble(5);
+						status = rs.getString(3);
+						name = rs.getString(1) + " " + rs.getString(2);
+					}	
+					rs.close();
+				}
+				else {
+					//No patientID has been passed (i.e. patientID==0)
+					//use the carerID variable to potentially display the location of all patients?
+				}
+				
 				st.close();
 				conn.close();		
 			%>	
@@ -76,7 +84,7 @@
 			<h1>Map / Patient Tracking</h1>
 			<p>Put map here</p><br>
 			
-			<div id="mapcanvas" style="height:300px; width:500px; margin-left:auto; margin-right:auto;">
+			<div id="mapcanvas" style="height:500px; width:800px; margin-left:auto; margin-right:auto;">
 				<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 				<script>google.maps.event.addDomListener(window, 'load', initialize(<%=lat%>, <%=longtitude%>, '<%=name%>', '<%=status%>'));</script>
 			</div>	
