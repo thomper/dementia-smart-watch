@@ -1,9 +1,19 @@
 package com.team7.smartwatchservlets;
 
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 public class LocationUpdater extends HttpServlet {
@@ -14,7 +24,8 @@ public class LocationUpdater extends HttpServlet {
     private final static String LOCATION_TABLE = "patientloc";
     private final static String REPLACE_STATEMENT =
         "REPLACE INTO " + LOCATION_TABLE +
-        " (patientID, patientLat, patientLong) " + "values (?, ?, ?)";
+        " (patientID, patientLat, patientLong, retrievalTime, retrievalDate) " +
+        "values (?, ?, ?, ?, ?)";
     private final static String SUCCESS_MESSAGE = "Location updated";
     private final static String ERROR_MESSAGE = "ERROR: could not update location";
 
@@ -72,14 +83,26 @@ public class LocationUpdater extends HttpServlet {
             String patientID = request.getParameter("patientID");
             String latitude = request.getParameter("latitude");
             String longitude = request.getParameter("longitude");
+            String timeGMT = request.getParameter("timeGMT");
 
-            if (!arrayHasNoNulls(new String[] {patientID, latitude, longitude})) {
+            String values[] = new String[] {patientID, latitude, longitude,
+            		timeGMT};
+            if (!arrayHasNoNulls(values)) {
                 throw new NullPostParameterException();
             }
+            
+            java.util.Date date = stringGMTToDate(timeGMT);
+            java.sql.Timestamp timestamp =
+            		new java.sql.Timestamp(date.getTime());
 
+            // TODO: validate every parameter
             replaceLoc.setInt(1, Integer.parseInt(patientID));
             replaceLoc.setDouble(2, Double.parseDouble(latitude));
             replaceLoc.setDouble(3, Double.parseDouble(longitude));
+            // TODO: THESE TIMESTAMPS ARE IGNORED BY THE DB!!!!
+            System.out.println("*********WARNING! Don't run this in production! See the TODO in bindValues");
+            replaceLoc.setTimestamp(4, timestamp);
+            replaceLoc.setTimestamp(5, timestamp);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -100,5 +123,19 @@ public class LocationUpdater extends HttpServlet {
             }
         }
         return true;
+    }
+    
+    private java.util.Date stringGMTToDate(String time) {
+		SimpleDateFormat dfGMT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		dfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
+        java.util.Date date = null;
+
+		try {
+			date = dfGMT.parse(time);
+		} catch (ParseException ex) {
+			// TODO: log?
+		}
+		
+		return date;
     }
 }
