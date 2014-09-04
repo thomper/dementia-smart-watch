@@ -2,7 +2,7 @@
 /.metadata/
 
 # Eclipse .settings
-org.eclipse.jdt.core.prefs
+.settings/
 
 # Built application files
 *.apk

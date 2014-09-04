@@ -14,8 +14,6 @@ public class ViewLocationActivity extends Activity {
 
 	Locator locator;
 
-	private static final String TAG = ViewLocationActivity.class.getName();
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
