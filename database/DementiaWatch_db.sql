@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2014 at 11:44 AM
+-- Generation Time: Sep 04, 2014 at 12:25 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `dementiawatch_db`
 --
+CREATE DATABASE IF NOT EXISTS `dementiawatch_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `dementiawatch_db`;
 
 -- --------------------------------------------------------
 
@@ -51,7 +53,7 @@ INSERT INTO `carers` (`carerID`, `fName`, `lName`, `mobileNum`, `contactNum`) VA
 -- Table structure for table `patientalerts`
 --
 
-CREATE TABLE IF NOT EXISTS `patientalerts` (
+CREATE TABLE IF NOT EXISTS `patientAlerts` (
   `patientID` int(5) NOT NULL,
   `alertTime` time NOT NULL DEFAULT '00:00:00',
   `alertDate` date NOT NULL,
@@ -78,7 +80,7 @@ DELIMITER ;
 -- Table structure for table `patientcollapses`
 --
 
-CREATE TABLE IF NOT EXISTS `patientcollapses` (
+CREATE TABLE IF NOT EXISTS `patientCollapses` (
   `patientID` int(5) NOT NULL,
   `collapseTime` time NOT NULL,
   `collapseDate` date NOT NULL,
@@ -112,7 +114,7 @@ DELIMITER ;
 -- Table structure for table `patientfences`
 --
 
-CREATE TABLE IF NOT EXISTS `patientfences` (
+CREATE TABLE IF NOT EXISTS `patientFences` (
   `patientID` int(5) NOT NULL,
   `fenceLat` decimal(20,10) NOT NULL,
   `fenceLong` decimal(20,10) NOT NULL,
@@ -127,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `patientfences` (
 -- Table structure for table `patientloc`
 --
 
-CREATE TABLE IF NOT EXISTS `patientloc` (
+CREATE TABLE IF NOT EXISTS `patientLoc` (
   `patientID` int(5) NOT NULL,
   `patientLat` decimal(20,10) NOT NULL,
   `patientLong` decimal(20,10) NOT NULL,
@@ -137,22 +139,25 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TRIGGER IF EXISTS `insert_current_location_retrieval`;
-DELIMITER //
-CREATE TRIGGER `insert_current_retrieval` BEFORE INSERT ON `patientLoc`
- FOR EACH ROW SET NEW.retrievalDate = DATE_FORMAT(now(),'%Y-%m-%d'),
-	NEW.retrievalTime = TIME_FORMAT(CURTIME(), '%H:%i:%s')
-//
-DELIMITER ;
-
 --
 -- Dumping data for table `patientloc`
 --
 
-INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`) VALUES
-(1, '-27.4752990800', '152.9760412000'),
-(2, '-27.5385548200', '153.0802628000'),
-(3, '-27.4976428700', '152.9736471000');
+INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`, `retrievalTime`, `retrievalDate`) VALUES
+(1, '-27.4752990800', '152.9760412000', '10:21:46', '2014-09-04'),
+(2, '-27.5385548200', '153.0802628000', '10:21:46', '2014-09-04'),
+(3, '-27.4976428700', '152.9736471000', '10:21:46', '2014-09-04');
+
+--
+-- Triggers `patientloc`
+--
+DROP TRIGGER IF EXISTS `insert_current_retrieval`;
+DELIMITER //
+CREATE TRIGGER `insert_current_retrieval` BEFORE INSERT ON `patientloc`
+ FOR EACH ROW SET NEW.retrievalDate = DATE_FORMAT(now(),'%Y-%m-%d'),
+	NEW.retrievalTime = TIME_FORMAT(CURTIME(), '%H:%i:%s')
+//
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -160,7 +165,7 @@ INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`) VALUES
 -- Table structure for table `patientpoints`
 --
 
-CREATE TABLE IF NOT EXISTS `patientpoints` (
+CREATE TABLE IF NOT EXISTS `patientPoints` (
   `patientID` int(5) NOT NULL,
   `pointLat` decimal(20,10) NOT NULL,
   `pointLong` decimal(20,10) NOT NULL,
@@ -193,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `emergencyContactAddress` varchar(100) DEFAULT NULL,
   `emergencyContactSuburb` varchar(20) DEFAULT NULL,
   `emergencyContactNum` varchar(10) NOT NULL,
-  `uniqueKey` VARCHAR(36) NOT NULL,
+  `uniqueKey` varchar(36) NOT NULL,
   PRIMARY KEY (`patientID`),
   UNIQUE KEY `patientID` (`patientID`),
   UNIQUE KEY `uniqueKey` (`uniqueKey`),
@@ -205,11 +210,11 @@ CREATE TABLE IF NOT EXISTS `patients` (
 --
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
-(1, 1, 'adam', 'langley', 'Male', 73, 'B', NULL, 'fine', '79 Evelyn Street', 'Grange', '9988776655', 'louise elliot', NULL, NULL, '11223344', 111111),
-(2, 1, 'aaron', 'ramsey', 'Male', 88, 'A', NULL, 'fine', '322 Moggill Road', 'Indooroopilly', '8877665544', 'louise elliot', NULL, NULL, '11223344', 222222),
-(3, 2, 'geoff', 'free', 'Male', 64, 'O', NULL, 'fine', '79 Evelyn Street', 'Grange', '7766554433', 'Paul brand', NULL, NULL, '2233445566', 333333),
-(4, 2, 'jessica', 'langley', 'Female', 99, 'AB', NULL, 'fine', '79 Evelyn Street', 'Grange', '6655443322', 'Paul Brand', NULL, NULL, '2233445566', 444444),
-(5, 3, 'dawn', 'summers', 'Female', 73, 'A+', NULL, 'fine', '79 Evelyn Street', 'Grange', '5544332211', 'jason london', NULL, NULL, '3344556677', 555555);
+(1, 1, 'adam', 'langley', 'Male', 73, 'B', NULL, 'fine', '79 Evelyn Street', 'Grange', '9988776655', 'louise elliot', NULL, NULL, '11223344', '111111'),
+(2, 1, 'aaron', 'ramsey', 'Male', 88, 'A', NULL, 'fine', '322 Moggill Road', 'Indooroopilly', '8877665544', 'louise elliot', NULL, NULL, '11223344', '222222'),
+(3, 2, 'geoff', 'free', 'Male', 64, 'O', NULL, 'fine', '79 Evelyn Street', 'Grange', '7766554433', 'Paul brand', NULL, NULL, '2233445566', '333333'),
+(4, 2, 'jessica', 'langley', 'Female', 99, 'AB', NULL, 'fine', '79 Evelyn Street', 'Grange', '6655443322', 'Paul Brand', NULL, NULL, '2233445566', '444444'),
+(5, 3, 'dawn', 'summers', 'Female', 73, 'A+', NULL, 'fine', '79 Evelyn Street', 'Grange', '5544332211', 'jason london', NULL, NULL, '3344556677', '555555');
 
 -- --------------------------------------------------------
 
@@ -259,24 +264,49 @@ END IF
 //
 DELIMITER ;
 
-ALTER TABLE `patientAlerts`
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `patientalerts`
+--
+ALTER TABLE `patientalerts`
   ADD CONSTRAINT `patientAlerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-ALTER TABLE `patientCollapses`
+
+--
+-- Constraints for table `patientcollapses`
+--
+ALTER TABLE `patientcollapses`
   ADD CONSTRAINT `patientCollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-ALTER TABLE `patientLoc`
+
+--
+-- Constraints for table `patientfences`
+--
+ALTER TABLE `patientfences`
+  ADD CONSTRAINT `patientFences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `patientloc`
+--
+ALTER TABLE `patientloc`
   ADD CONSTRAINT `patientLoc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `patientFences`
-  ADD CONSTRAINT `patientFences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE; 
-
-ALTER TABLE `patientPoints`
+--
+-- Constraints for table `patientpoints`
+--
+ALTER TABLE `patientpoints`
   ADD CONSTRAINT `patientPoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Constraints for table `patients`
+--
 ALTER TABLE `patients`
-  ADD CONSTRAINT `patients_ibfk_1` FOREIGN KEY (`carerID`) REFERENCES `carers` (`carerID`) ON DELETE CASCADE ON UPDATE CASCADE; 
+  ADD CONSTRAINT `patients_ibfk_1` FOREIGN KEY (`carerID`) REFERENCES `carers` (`carerID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Constraints for table `users`
+--
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`carerID`) REFERENCES `carers` (`carerID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
