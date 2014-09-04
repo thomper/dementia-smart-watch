@@ -75,12 +75,12 @@
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='firstName'>First Name</label>");
-							out.println("<input name='firstName' type='text' placeholder='First Name' required>");
+							out.println("<input name='firstName' type='text' placeholder='First Name' maxlength='20' required>");
 						out.println("</div>");
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='surname'>Surname</label>");
-							out.println("<input name='surname' type='text' placeholder='Surname' required>");
+							out.println("<input name='surname' type='text' placeholder='Surname' maxlength='30' required>");
 						out.println("</div>");
 						
 						out.println("<div class='pure-control-group'>");							
@@ -93,52 +93,52 @@
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='age'>Age</label>");
-							out.println("<input name='age' type='number' placeholder='00' required>");
+							out.println("<input name='age' type='number' placeholder='01' min='1' max='125' required>");
 						out.println("</div>");							
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='bloodType'>Blood Type</label>");
-							out.println("<input name='bloodType' type='text' placeholder='O-'>");
+							out.println("<input name='bloodType' type='text' placeholder='O-' maxlength='3'>");
 						out.println("</div>");		
 
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='medication'>Medication</label>");
-							out.println("<input name='medication' type='text' placeholder='Medication'>");
+							out.println("<input name='medication' type='text' placeholder='Medication' maxlength='255'>");
 						out.println("</div>");		
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='address'>Home Address</label>");
-							out.println("<input name='address' type='text' placeholder='Home Address' required>");
+							out.println("<input name='address' type='text' placeholder='Home Address' maxlength='100' required>");
 						out.println("</div>");		
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='suburb'>Home Suburb</label>");
-							out.println("<input name='suburb' type='text' placeholder='Home Suburb' required>");
+							out.println("<input name='suburb' type='text' placeholder='Home Suburb' maxlength='20' required>");
 						out.println("</div>");									
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='conNum'>Contact Number</label>");
-							out.println("<input name='conNum' type='text' placeholder='Contact Number' required>");
+							out.println("<input name='conNum' type='number' placeholder='Contact Number' maxlength='10' required>");
 						out.println("</div>");		
 
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='emergName'>Emergency Contact Name</label>");
-							out.println("<input name='emergName' type='text' placeholder='Emergency Name'>");
+							out.println("<input name='emergName' type='text' placeholder='Emergency Name' maxlength='50'>");
 						out.println("</div>");		
 						
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='emergAddress'>Emergency Contact Address</label>");
-							out.println("<input name='emergAddress' type='text' placeholder='Emergency Address'>");
+							out.println("<input name='emergAddress' type='text' placeholder='Emergency Address' maxlength='100'>");
 						out.println("</div>");		
 
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='emergSuburb'>Emergency Contact Suburb</label>");
-							out.println("<input name='emergSuburb' type='text' placeholder='Emergency Suburb'>");
+							out.println("<input name='emergSuburb' type='text' placeholder='Emergency Suburb' maxlength='20'>");
 						out.println("</div>");		
 
 						out.println("<div class='pure-control-group'>");
 							out.println("<label for='emergNum'>Emergency Contact Number</label>");
-							out.println("<input name='emergNum' type='text' placeholder='Emergency Contact Number' required>");
+							out.println("<input name='emergNum' type='number' placeholder='Emergency Contact Number' maxlength='10' required>");
 						out.println("</div>");	
 
 						out.println("<div class='pure-controls'>");

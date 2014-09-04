@@ -86,27 +86,27 @@
 							
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='firstName'>First Name</label>");
-								out.println("<input name='firstName' type='text' value='"+rs.getString(2)+"' required>");
+								out.println("<input name='firstName' type='text' value='"+rs.getString(2)+"' maxlength='20' required>");
 							out.println("</div>");
 							
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='lastName'>Last Name</label>");
-								out.println("<input name='lastName' type='text' value='"+rs.getString(3)+"' required>");
+								out.println("<input name='lastName' type='text' value='"+rs.getString(3)+"' maxlength='30' required>");
 							out.println("</div>");		
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='mobile'>Mobile #</label>");
-								out.println("<input name='mobile' type='text' value='"+rs.getString(4)+"' required>");
+								out.println("<input name='mobile' type='number' value='"+rs.getString(4)+"' maxlength='10' required>");
 							out.println("</div>");			
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='contactNum'>Alternate Contact #</label>");
-								out.println("<input name='contactNum' type='text' value='"+rs.getString(5)+"' required>");
+								out.println("<input name='contactNum' type='number' value='"+rs.getString(5)+"' maxlength='10' required>");
 							out.println("</div>");	
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='email'>Email Address</label>");
-								out.println("<input name='email' type='email' value='"+rs.getString(6)+"' required>");
+								out.println("<input name='email' type='email' value='"+rs.getString(6)+"' maxlength='50' required>");
 							out.println("</div>");							
 
 							out.println("<div class='pure-controls'>");

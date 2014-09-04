@@ -70,17 +70,17 @@
 					
 					<div class='pure-control-group'>
 						<label for='currentPassword'>Current Password</label>
-						<input name='currentPassword' type='password' required>
+						<input name='currentPassword' type='password' maxlength='64' required>
 					</div>
 
 					<div class='pure-control-group'>
 						<label for='password'>New Password</label>
-						<input name='password' type='password' required>
+						<input name='password' type='password' maxlength='64' required>
 					</div>
 					
 					<div class='pure-control-group'>
 						<label for='confirmPassword'>Confirm New Password</label>
-						<input name='confirmPassword' type='password' required>
+						<input name='confirmPassword' type='password' maxlength='64' required>
 					</div>
 					
 					<div class='pure-controls'>

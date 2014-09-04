@@ -33,30 +33,30 @@
 					<legend><b>Your Details:</b></legend>
 					
 					<label for="username">First Name</label>
-					<center><input name="fname" type="text" placeholder="First Name" required></center>
+					<center><input name="fname" type="text" placeholder="First Name" maxlength='20' required></center>
 					
 					<label for="username">Last Name</label>
-					<center><input name="lname" type="text" placeholder="Last Name" required></center>
+					<center><input name="lname" type="text" placeholder="Last Name" maxlength='30' required></center>
 					
 					<label for="username">Mobile #</label>
-					<center><input name="mobile" type="text" placeholder="0412345678" required></center>
+					<center><input name="mobile" type="number" placeholder="0412345678" maxlength='10' required></center>
 					
 					<label for="username">Alternate Contact #</label>
-					<center><input name="contactnum" type="text" placeholder="0712345678" required></center>
+					<center><input name="contactnum" type="number" placeholder="0712345678" maxlength='10' required></center>
 					
 					<legend><b>Account Details:</b></legend>
 					
 					<label for="email">Email Address</label>
-					<center><input name="email" type="email" placeholder="foo@bar.com" required></center>
+					<center><input name="email" type="email" placeholder="foo@bar.com" maxlength='50' required></center>
 					
 					<label for="username">User Name</label>
-					<center><input name="username" type="text" placeholder="Prefered Username" required></center>
+					<center><input name="username" type="text" placeholder="Prefered Username" maxlength='15' required></center>
 
 					<label for="password">Password</label>
-					<center><input name="password" type="password" placeholder="Password" required></center>
+					<center><input name="password" type="password" placeholder="Password" maxlength='64' required></center>
 					
 					<label for="password">Confirm Password</label>
-					<center><input name="confirmpassword" type="password" placeholder="Password Again" required><center>
+					<center><input name="confirmpassword" type="password" placeholder="Password Again" maxlength='64' required><center>
 
 					<button type="submit" class="pure-button pure-button-primary">Create Account!</button>
 				</fieldset>
