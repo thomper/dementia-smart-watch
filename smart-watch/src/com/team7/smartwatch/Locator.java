@@ -31,7 +31,7 @@ public class Locator {
 	private Date lastTime;
 	
 	private static final String TAG = Locator.class.getName();
-	private static final String POST_URL = "http://192.168.1.41:8080/updatelocation";
+	private static final String POST_URL = "http://192.168.1.20:8080/updatelocation";
 
 	/** Locator provides access to the device's last known location and the
 	 *  time at which the location was last updated. */
@@ -101,13 +101,11 @@ public class Locator {
 			String patientID = "4";  // TODO: TESTING ONLY!
 			String latit = String.valueOf(lastLocation.getLatitude());
 			String longit = String.valueOf(lastLocation.getLongitude());
-			String timeGMT = dateToGMTString(lastTime);
 			List<NameValuePair> pairs =
-					new ArrayList<NameValuePair>(4);
+					new ArrayList<NameValuePair>(3);
 			pairs.add(new BasicNameValuePair("patientID", patientID));
 			pairs.add(new BasicNameValuePair("latitude", latit));
 			pairs.add(new BasicNameValuePair("longitude", longit));
-			pairs.add(new BasicNameValuePair("timeGMT", timeGMT));
 			try {
 				request.setEntity(new UrlEncodedFormEntity(pairs));
 			} catch (UnsupportedEncodingException e) {

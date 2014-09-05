@@ -83,26 +83,22 @@ public class LocationUpdater extends HttpServlet {
             String patientID = request.getParameter("patientID");
             String latitude = request.getParameter("latitude");
             String longitude = request.getParameter("longitude");
-            String timeGMT = request.getParameter("timeGMT");
 
-            String values[] = new String[] {patientID, latitude, longitude,
-            		timeGMT};
+            String values[] = new String[] {patientID, latitude, longitude};
             if (!arrayHasNoNulls(values)) {
                 throw new NullPostParameterException();
             }
-            
-            java.util.Date date = stringGMTToDate(timeGMT);
-            java.sql.Timestamp timestamp =
-            		new java.sql.Timestamp(date.getTime());
 
-            // TODO: validate every parameter
+            // TODO: validate parameters
+            System.out.println("Patient ID: " + patientID);
             replaceLoc.setInt(1, Integer.parseInt(patientID));
             replaceLoc.setDouble(2, Double.parseDouble(latitude));
             replaceLoc.setDouble(3, Double.parseDouble(longitude));
-            // TODO: THESE TIMESTAMPS ARE IGNORED BY THE DB!!!!
-            System.out.println("*********WARNING! Don't run this in production! See the TODO in bindValues");
-            replaceLoc.setTimestamp(4, timestamp);
-            replaceLoc.setTimestamp(5, timestamp);
+            
+            // The time and date are set by a mysql trigger, we just need
+            // to set any value here.
+            replaceLoc.setTimestamp(4, new java.sql.Timestamp(0));
+            replaceLoc.setTimestamp(5, new java.sql.Timestamp(0));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -123,19 +119,5 @@ public class LocationUpdater extends HttpServlet {
             }
         }
         return true;
-    }
-    
-    private java.util.Date stringGMTToDate(String time) {
-		SimpleDateFormat dfGMT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		dfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
-        java.util.Date date = null;
-
-		try {
-			date = dfGMT.parse(time);
-		} catch (ParseException ex) {
-			// TODO: log?
-		}
-		
-		return date;
     }
 }
