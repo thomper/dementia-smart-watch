@@ -1,22 +1,24 @@
 package com.team7.smartwatchservlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 @SuppressWarnings("serial")
-public class LocationUpdater extends HttpServlet {
+public class LocationUpdaterServlet extends HttpServlet {
 
     private final static String DB_NAME = "dementiawatch_db";
     private final static String CONNECTION_STRING = "jdbc:mysql://localhost" +
@@ -29,15 +31,11 @@ public class LocationUpdater extends HttpServlet {
     private final static String SUCCESS_MESSAGE = "Location updated";
     private final static String ERROR_MESSAGE = "ERROR: could not update location";
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-    {
-
-    }
-
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
+    		throws IOException, ServletException
     {
+    	// TODO: return JSON response instead of string.
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         int rowsUpdated = update(request);
@@ -49,10 +47,10 @@ public class LocationUpdater extends HttpServlet {
     }
 
     private int update(HttpServletRequest request) {
-
         // TODO: Read db username and password from file.
         int rowsUpdated = 0;
         Connection conn = null;
+
         try {
             registerJDBCDriver();
             conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -61,9 +59,11 @@ public class LocationUpdater extends HttpServlet {
             rowsUpdated = replaceLoc.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NullPostParameterException e) {
+        } catch (BadPostParameterException e) {
             // TODO: log error?
-        } finally {
+		} finally {
+			
+			// Close database connection.
             try {
                 if (conn != null) {
                     conn.close();
@@ -78,46 +78,74 @@ public class LocationUpdater extends HttpServlet {
     }
 
     private void bindValues(PreparedStatement replaceLoc, HttpServletRequest request)
-            throws NullPostParameterException {
+            throws BadPostParameterException {
+    	
         try {
-            String patientID = request.getParameter("patientID");
-            String latitude = request.getParameter("latitude");
-            String longitude = request.getParameter("longitude");
+        	JSONObject jObj = getJSON(request);
+            String patientID = jObj.getString("patientID");
+            Double latitude = jObj.getDouble("latitude");
+            Double longitude = jObj.getDouble("longitude");
 
-            String values[] = new String[] {patientID, latitude, longitude};
-            if (!arrayHasNoNulls(values)) {
-                throw new NullPostParameterException();
+            if (arrayContainsNull(patientID, latitude, longitude)) {
+                throw new BadPostParameterException();
             }
 
             // TODO: validate parameters
-            System.out.println("Patient ID: " + patientID);
             replaceLoc.setInt(1, Integer.parseInt(patientID));
-            replaceLoc.setDouble(2, Double.parseDouble(latitude));
-            replaceLoc.setDouble(3, Double.parseDouble(longitude));
+            replaceLoc.setDouble(2, latitude);
+            replaceLoc.setDouble(3, longitude);
             
-            // The time and date are set by a mysql trigger, we just need
-            // to set any value here.
+            // The time and date here will be ignored, as they are set by a
+            // mysql trigger. We still need to set them as something though
+            // because they are both defined NOT NULL.
             replaceLoc.setTimestamp(4, new java.sql.Timestamp(0));
             replaceLoc.setTimestamp(5, new java.sql.Timestamp(0));
         } catch (SQLException e) {
+        	// TODO: log
             e.printStackTrace();
+        } catch (JSONException e) {
+        	throw new BadPostParameterException();
         }
+    }
+    
+	private JSONObject getJSON(HttpServletRequest request)
+			throws BadPostParameterException {
+
+		JSONObject jObj;
+		String text;
+
+		try {
+			text = getRawText(request);
+			jObj = new JSONObject(text);
+		} catch (IOException e) {
+			throw new BadPostParameterException();
+		}
+
+		return jObj;
+	}
+
+    private String getRawText(HttpServletRequest request) throws IOException {
+		StringBuffer sb = new StringBuffer();
+		BufferedReader reader = request.getReader();
+		String line;
+		
+		while ((line = reader.readLine()) != null) {
+			sb.append(line);
+		}
+		
+		return sb.toString();
     }
 
     private void registerJDBCDriver() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        	// TODO: log critical
             e.printStackTrace();
         }
     }
 
-    private <T> boolean arrayHasNoNulls(T array[]) {
-        for (T elem : array) {
-            if (elem == null) {
-                return false;
-            }
-        }
-        return true;
+    private boolean arrayContainsNull(Object... objects) {
+    	return Arrays.asList(objects).contains(null);
     }
 }

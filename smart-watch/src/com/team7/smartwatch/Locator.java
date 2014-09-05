@@ -10,7 +10,10 @@ import java.util.TimeZone;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,7 +21,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -99,23 +101,28 @@ public class Locator {
 			// Create the post request.
 			HttpPost request = new HttpPost(POST_URL);
 			String patientID = "4";  // TODO: TESTING ONLY!
-			String latit = String.valueOf(lastLocation.getLatitude());
-			String longit = String.valueOf(lastLocation.getLongitude());
-			List<NameValuePair> pairs =
-					new ArrayList<NameValuePair>(3);
-			pairs.add(new BasicNameValuePair("patientID", patientID));
-			pairs.add(new BasicNameValuePair("latitude", latit));
-			pairs.add(new BasicNameValuePair("longitude", longit));
+			String latitude = String.valueOf(lastLocation.getLatitude());
+			String longitude = String.valueOf(lastLocation.getLongitude());
+			
+			JSONObject jObj = new JSONObject();
 			try {
-				request.setEntity(new UrlEncodedFormEntity(pairs));
+				jObj.put("patientID", patientID);
+				jObj.put("latitude", latitude);
+				jObj.put("longitude", longitude);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+			
+			try {
+				StringEntity se = new StringEntity(jObj.toString());
+				request.setEntity(se);
+				new NetworkTask().execute(request);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			// Execute the request asynchronously.
-			NetworkTask task = new NetworkTask();
-			task.execute(request);
 		}
 	}
 	
