@@ -3,11 +3,13 @@ package com.team7.smartwatch;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.*;
 
 
 
@@ -28,6 +30,18 @@ public class MenuActivity extends Activity {
 		//	getSupportFragmentManager().beginTransaction()
 		//			.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		//Instantiate panic button
+		Button panicButton = (Button)findViewById(R.id.panicButton);
+		
+		//Add listener and method that listener will call for button
+		panicButton.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v){
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+"0423787149"));
+                    startActivity(callIntent);
+			}
+		});
 	}
 
 	@Override

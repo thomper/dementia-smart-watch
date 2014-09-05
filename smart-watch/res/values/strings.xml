@@ -10,6 +10,7 @@
     <string name="button_location">My Location</string>
     <string name="button_setting">Settings</string>
     <string name="title_activity_main">Menu</string>
+    <string name="PANIC">PANIC</string>
 
 
 </resources>
