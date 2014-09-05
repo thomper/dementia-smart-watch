@@ -35,7 +35,6 @@ public class LocationUpdaterServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     		throws IOException, ServletException
     {
-    	// TODO: return JSON response instead of string.
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         int rowsUpdated = update(request);

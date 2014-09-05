@@ -117,6 +117,8 @@ public class Locator {
 			
 			try {
 				StringEntity se = new StringEntity(jObj.toString());
+				request.setHeader("Accept", "application/json");
+			    request.setHeader("Content-type", "application/json");
 				request.setEntity(se);
 				new NetworkTask().execute(request);
 			} catch (UnsupportedEncodingException e) {
