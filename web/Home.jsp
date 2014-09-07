@@ -8,7 +8,7 @@
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 		<%
-			//If not logged in - redirect to error page and cancel processing od remaining jsp
+			If not logged in - redirect to error page and cancel processing od remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
 		%>			
     </head>
@@ -17,30 +17,34 @@
 	<div id="container">
 		
 		<div id="header">
-			<div id="header-left">
-				<p>Location: Home</p>
+			<div id = "Title">
+				<h1> Dementia <span id = "blue">Assistant </span></h1>
+				<!--<h2> Independence and Peace of Mind Matters </h2>-->
+			</div>	
+			<div id="nav"> 
+				<ul>
+					<li><div><a href = 'index.jsp'> Home </a></div></li>
+					<li><div><a href = 'PatientList.jsp.jsp'> My Patients </a></div></li>
+					<li><div><a href = 'AccountDetails.jsp'> My Account </a></div></li>
+					<li><div><a href = 'logout.jsp'> Logout </a></div></li>
+				</ul>
 			</div>
-			<div id="header-right">
-				<p><a href="ChangePassword.jsp">Change PW</a> | <a href="Logout.jsp">Logout</a></p>
-			</div>
-			<div id="header-middle">
-				<p>DementiaWatch Web Client</p>
-			</div>			
 		</div>
+		<div id="alert">
+		</div>
+			
 	
 		<div id="content">
 		
 			<h1>Main Page</h1>
 			
-			<img src="images/watch.png" alt="watch.png">
-			<h2><a href="Map.jsp">Map</a></h2>
+			<img src="images/watch.png" alt="watch">
 			
-			<br>			
-			<h2><a href="PatientList.jsp">My Patient List</a> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; <a href="AccountDetails.jsp">My Account Details</a> </h2>
+			<br/>
 				
-		</div>	
+		</div> <!-- content -->	
 		
-	</div>
+	</div> <!-- container -->
     </body>
 </html>
 

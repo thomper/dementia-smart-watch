@@ -11,38 +11,64 @@ body {
 	margin: 0px;
 	padding: 0px;
 	font-size:0;
+	font: 18pt 'Veranda', 'Goudy Old Style', sans-serif;
 }
 #header {
-    height: 50px;
-    background: #F0F0F0;
-    border-bottom: 5px solid black;
+    text-align: center;
+	margin:0px;
+	padding:0px;
+    border-bottom: 1px #F0F0F0;
 	overflow: no-content;
-	padding-top: 1px;
-	padding-bottom: 50px;
-}
-#header-left{
-	font: 24pt 'Veranda', 'Goudy Old Style', sans-serif;
-    color: black;
 	text-align: center;
-    width: 30%;
-    float: left;
+	background-image: url("../images/gradient.jpg");
+	background-repeat: repeat-x;
+	background-position: bottom; 
+}
+#header {
+}
+#header div {
+display: inline-block;
+}
+#nav ul{
+list-style-position: inside;
+list-style: none;
+padding-left: 50px;
+margin-left: 0px;
+}
+#nav ul li {
+display: inline-block;
+list-style-type: none;
+padding: 0px 10px;
+}
+#nav ul li a {
+color: #555;
+text-decoration:none;	
+}
+#nav ul li a:hover {
+color: #5CE6E6;
+margin: 10px 0px;
+/*background: url('../images/underl.gif') repeat-x bottom;*/
+}
+
+
+
+
+
+
+
+
+#header-left{
+	width: 30%;
+	float: left;
 }
 #header-right {
-	font: 24pt 'Veranda', 'Goudy Old Style', sans-serif;
-	color: black;
-    text-align: center;
 	width: 30%;
     float: right;
 }
 #header-middle {
-	font: 24pt 'Veranda', 'Goudy Old Style', sans-serif;
-    color: #08a3d9;
-	text-align: center;
-    width: 40%;
+   width: 40%;
     margin-left: auto;
     margin-right: auto;
-	border-left: 5px dotted black;
-	border-right: 5px dotted black;
 	padding: 1px;
 }
 #content {
