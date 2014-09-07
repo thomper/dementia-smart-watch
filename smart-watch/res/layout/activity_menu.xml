@@ -33,19 +33,6 @@
         android:clickable="false"
         android:textSize="25sp" />
 
-    <Button
-        android:id="@+id/btnLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="myLocation"
-        android:text="@string/button_location" />
-
-    <Button
-        android:id="@+id/Setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_setting" />
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="50dp" />
