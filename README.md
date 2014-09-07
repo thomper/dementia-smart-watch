@@ -9,12 +9,12 @@ Android Build Instructions
 --------------------------
 In the repo root directory run:
 
-android update project -p ./smart-watch/
+android update project -p ./smart-watch/  
 android update test-project -m ../smart-watch/ -p ./smart-watchtests/
 
 Then in the smart-watchtests/ directory run:
 
-ant clean debug
+ant clean debug  
 ant installt test
 
 You will need to have a phone connected in debugging mode or an Android Virtual Device running for the tests to run.
