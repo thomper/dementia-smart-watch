@@ -26,7 +26,7 @@
 				java.sql.Connection conn;
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();
-				st.execute("DELETE FROM patients WHERE patientID =" + patientID);		
+				st.execute("DELETE FROM patients WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");		
 			}
 			response.sendRedirect("PatientList.jsp");
 		%>
