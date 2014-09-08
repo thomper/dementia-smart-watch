@@ -55,7 +55,6 @@ public class Locator {
 		public void onLocationChanged(Location loc) {
 			lastLocation = loc;
 			lastTime = new Date();
-			showLocation(); // Testing only, REMOVE
 			logLocation();
 			postLocation();
 		}
@@ -73,14 +72,6 @@ public class Locator {
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 			// TODO Auto-generated method stub
-		}
-
-		// This function for testing only, REMOVE!
-		private void showLocation() {
-			Toast.makeText(
-					context,
-					"Location changed - Lat: " + lastLocation.getLatitude() + " Lng: "
-							+ lastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
 		}
 
 		private void logLocation() {
