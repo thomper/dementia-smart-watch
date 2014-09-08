@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 04, 2014 at 12:25 PM
+-- Generation Time: Sep 08, 2014 at 06:34 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `carers` (
   `contactNum` varchar(10) NOT NULL,
   PRIMARY KEY (`carerID`),
   UNIQUE KEY `carerID` (`carerID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `carers`
@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS `carers` (
 INSERT INTO `carers` (`carerID`, `fName`, `lName`, `mobileNum`, `contactNum`) VALUES
 (1, 'louise', 'elliot', '11223344', '11223344'),
 (2, 'Paul', 'brand', '11223344', '22334455'),
-(3, 'jason', 'london', '33445566', '33445566');
+(3, 'jason', 'london', '33445566', '33445566'),
+(4, 'j', 'j', '1', '1');
 
 -- --------------------------------------------------------
 
@@ -66,11 +67,17 @@ CREATE TABLE IF NOT EXISTS `patientalerts` (
 --
 -- Triggers `patientalerts`
 --
-DROP TRIGGER IF EXISTS `insert_current_date`;
+DROP TRIGGER IF EXISTS `insert_alerts`;
 DELIMITER //
-CREATE TRIGGER `insert_current_date` BEFORE INSERT ON `patientalerts`
- FOR EACH ROW SET NEW.alertDate = DATE_FORMAT(now(),'%Y-%m-%d'),
-	NEW.alertTime = TIME_FORMAT(CURTIME(), '%H:%i:%s')
+CREATE TRIGGER `insert_alerts` BEFORE INSERT ON `patientalerts`
+ FOR EACH ROW BEGIN
+UPDATE patients
+SET patients.status = 'Distressed'
+WHERE patients.patientID = NEW.patientID;
+
+SET NEW.alertDate = DATE_FORMAT(now(),'%Y-%m-%d'),
+	NEW.alertTime = TIME_FORMAT(CURTIME(), '%H:%i:%s');
+END
 //
 DELIMITER ;
 
@@ -95,16 +102,22 @@ CREATE TABLE IF NOT EXISTS `patientcollapses` (
 --
 
 INSERT INTO `patientcollapses` (`patientID`, `collapseTime`, `collapseDate`, `collapseLat`, `collapseLong`) VALUES
-(1, '19:42:30', '2014-08-30', '0.0000000000', '0.0000000000');
+(2, '14:31:27', '2014-09-08', '1.1000000000', '1.1000000000');
 
 --
 -- Triggers `patientcollapses`
 --
-DROP TRIGGER IF EXISTS `insert_current_time`;
+DROP TRIGGER IF EXISTS `insert_collapses`;
 DELIMITER //
-CREATE TRIGGER `insert_current_time` BEFORE INSERT ON `patientcollapses`
- FOR EACH ROW SET NEW.collapseDate = DATE_FORMAT(now(),'%Y-%m-%d'),
-	NEW.collapseTime = TIME_FORMAT(CURTIME(), '%H:%i:%s')
+CREATE TRIGGER `insert_collapses` BEFORE INSERT ON `patientcollapses`
+ FOR EACH ROW BEGIN
+UPDATE patients
+SET patients.status = 'Collapsed'
+WHERE patients.patientID = NEW.patientID;
+
+SET NEW.collapseDate = DATE_FORMAT(now(),'%Y-%m-%d'),
+	NEW.collapseTime = TIME_FORMAT(CURTIME(), '%H:%i:%s');
+END
 //
 DELIMITER ;
 
@@ -144,7 +157,6 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
 --
 
 INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`, `retrievalTime`, `retrievalDate`) VALUES
-(1, '-27.4752990800', '152.9760412000', '10:21:46', '2014-09-04'),
 (2, '-27.5385548200', '153.0802628000', '10:21:46', '2014-09-04'),
 (3, '-27.4976428700', '152.9736471000', '10:21:46', '2014-09-04');
 
@@ -203,18 +215,18 @@ CREATE TABLE IF NOT EXISTS `patients` (
   UNIQUE KEY `patientID` (`patientID`),
   UNIQUE KEY `uniqueKey` (`uniqueKey`),
   KEY `carerID` (`carerID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `patients`
 --
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
-(1, 1, 'adam', 'langley', 'Male', 73, 'B', NULL, 'fine', '79 Evelyn Street', 'Grange', '9988776655', 'louise elliot', NULL, NULL, '11223344', '111111'),
-(2, 1, 'aaron', 'ramsey', 'Male', 88, 'A', NULL, 'fine', '322 Moggill Road', 'Indooroopilly', '8877665544', 'louise elliot', NULL, NULL, '11223344', '222222'),
+(2, 1, 'aaron', 'ramsey', 'Male', 88, 'A', NULL, 'Collapsed', '322 Moggill Road', 'Indooroopilly', '8877665544', 'louise elliot', NULL, NULL, '11223344', '222222'),
 (3, 2, 'geoff', 'free', 'Male', 64, 'O', NULL, 'fine', '79 Evelyn Street', 'Grange', '7766554433', 'Paul brand', NULL, NULL, '2233445566', '333333'),
 (4, 2, 'jessica', 'langley', 'Female', 99, 'AB', NULL, 'fine', '79 Evelyn Street', 'Grange', '6655443322', 'Paul Brand', NULL, NULL, '2233445566', '444444'),
-(5, 3, 'dawn', 'summers', 'Female', 73, 'A+', NULL, 'fine', '79 Evelyn Street', 'Grange', '5544332211', 'jason london', NULL, NULL, '3344556677', '555555');
+(5, 3, 'dawn', 'summers', 'Female', 73, 'A+', NULL, 'fine', '79 Evelyn Street', 'Grange', '5544332211', 'jason london', NULL, NULL, '3344556677', '555555'),
+(7, 4, 'j', 'j', 'Male', 16, 'O-', '1', 'OK', '1', '1', '11', '1', '1', '1', '1', 'dd98c001-8a1c-475c-bf46-ac481fdbdd69');
 
 -- --------------------------------------------------------
 
@@ -236,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `carerID` (`carerID`),
   KEY `patientID` (`patientID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `users`
@@ -245,7 +257,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`userID`, `patientID`, `carerID`, `email`, `userName`, `userPass`, `salt`) VALUES
 (1, NULL, 1, 'hello@gmail.com', 'hello123', 'hello123', '123'),
 (2, NULL, 2, 'hello123@gmail.com', 'hello', 'hello', '111'),
-(3, NULL, 3, 'hello234@gmail.com', 'hello234', 'hello234', '234');
+(3, NULL, 3, 'hello234@gmail.com', 'hello234', 'hello234', '234'),
+(4, NULL, 4, '1@1.com', 'j', '8161e767e1e85f0f37ad655caf1aad304073d8701bf2a9bbda60090e1e6cd125', '2e033eef-bcd2-4529-9111-74dff28aa093');
 
 --
 -- Triggers `users`
@@ -272,31 +285,31 @@ DELIMITER ;
 -- Constraints for table `patientalerts`
 --
 ALTER TABLE `patientalerts`
-  ADD CONSTRAINT `patientalerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientAlerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientcollapses`
 --
 ALTER TABLE `patientcollapses`
-  ADD CONSTRAINT `patientcollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientCollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientfences`
 --
 ALTER TABLE `patientfences`
-  ADD CONSTRAINT `patientfences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientFences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientloc`
 --
 ALTER TABLE `patientloc`
-  ADD CONSTRAINT `patientloc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientLoc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientpoints`
 --
 ALTER TABLE `patientpoints`
-  ADD CONSTRAINT `patientpoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientPoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patients`
