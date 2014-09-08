@@ -48,6 +48,7 @@ public class MenuActivity extends Activity {
 	
 	private void setupPanicButton() {
 		Button panicButton = (Button)findViewById(R.id.panicButton);
+		storeData();
 		panicButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -55,6 +56,57 @@ public class MenuActivity extends Activity {
                     startActivity(callIntent);
 			}
 		});
+	}
+	
+	//The method that's used to store the users data on the device
+	public void storeData(){
+		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
+		SharedPreferences.Editor editor = patientDetails.edit();
+		editor.putString("fName", "aaron");
+		editor.putString("lName", "ramsey");
+		editor.putString("gender", "Male");
+		editor.putString("age", "88");
+		editor.putString("bloodType", "A");
+		editor.putString("medication", "");
+		editor.putString("homeAddress", "322 Moggill Road");
+		editor.putString("homeSuburb", "Indooroopilly");
+		editor.putString("contactNum", "8877665544");
+		editor.putString("emergencyContactName", "louise elliot");
+		editor.putString("emergencyContactSuburb", "");
+		editor.putString("emergencyContactAddress", "");
+		editor.putString("emergencyContactNumber", "0423787149");
+
+		
+		//Apply Data
+		editor.apply();
+
+		
+	}
+	
+	//The method that's used to store the users data on the device
+	//NOTE:Doesn't store carerID, patientID, and status
+	public void storeData(String[] data){
+		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
+		SharedPreferences.Editor editor = patientDetails.edit();
+		editor.putString("fName", data[0]);
+		editor.putString("lName", data[1]);
+		editor.putString("gender", data[2]);
+		editor.putString("age", data[3]);
+		editor.putString("bloodType", data[4]);
+		editor.putString("medication", data[5]);
+		editor.putString("homeAddress", data[6]);
+		editor.putString("homeSuburb", data[7]);
+		editor.putString("contactNum", data[8]);
+		editor.putString("emergencyContactName", data[9]);
+		editor.putString("emergencyContactSuburb", data[10]);
+		editor.putString("emergencyContactAddress", data[11]);
+		editor.putString("emergencyContactNumber", data[12]);
+
+			
+		//Apply Data
+		editor.apply();
+
+			
 	}
 	
 	private void startTrackingLocation() {
