@@ -1,4 +1,4 @@
-g<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.ResultSet" %>
@@ -10,7 +10,7 @@ g<%@page contentType="text/html" pageEncoding="UTF-8"%>
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
         <title>UpdateAccountDetails</title>
 		<%
-			//If not logged in - redirect to error page and cancel processing od remaining jsp
+			//If not logged in - redirect to error page and cancel processing do remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("../Error.jsp?error=5"); return; }
 		%>	
     </head>
