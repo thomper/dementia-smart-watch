@@ -26,6 +26,6 @@
 				</ul>
 			</div>
 		</div>
-		<div id="alert">
-	</div>
+		<div id="alert" style="display: none;">>
+		</div>
 	
