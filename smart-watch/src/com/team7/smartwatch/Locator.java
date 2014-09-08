@@ -17,8 +17,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
+/** Locator provides access to the device's last known location and the
+ *  time at which the location was last updated. */
 public class Locator {
 
 	private Context context;
@@ -30,8 +31,6 @@ public class Locator {
 	private static final String TAG = Locator.class.getName();
 	private static final String POST_URL = "http://192.168.1.20:8080/updatelocation";
 
-	/** Locator provides access to the device's last known location and the
-	 *  time at which the location was last updated. */
 	public Locator(Context context) {
 		this.context = context;
 		locationListener = new MyLocationListener();
