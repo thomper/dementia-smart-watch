@@ -11,7 +11,7 @@
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 		<%
-			//If not logged in - redirect to error page and cancel processing od remaining jsp
+			//If not logged in - redirect to error page and cancel processing of remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
 		%>			
     </head>
@@ -48,8 +48,8 @@
 
 				while (rs.next()) {
 					patientID = rs.getString(1);
-					out.println("<p>PatientName: "+rs.getString(2)+" "+rs.getString(3)+" | Status: "+rs.getString(4)+" | <a href='Map.jsp?patientid="+
-						patientID+"'>Location</a> | <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> | Delete Patient</p>");
+					out.println("<p>Patients Name: "+rs.getString(2)+" "+rs.getString(3)+" | Status: "+rs.getString(4)+" | <a href='Map.jsp?patientid="+
+						patientID+"'>Location</a> | <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> | <a href='DeletePatient.jsp?patientid="+patientID+"'>Delete Patient</a></p>");
 					
 				}
 			%>
