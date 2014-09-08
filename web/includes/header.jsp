@@ -20,7 +20,7 @@
 			<div id="nav"> 
 				<ul>
 					<li><div><a href = 'index.jsp'> Home </a></div></li>
-					<li><div><a href = 'PatientList.jsp.jsp'> My Patients </a></div></li>
+					<li><div><a href = 'PatientList.jsp'> My Patients </a></div></li>
 					<li><div><a href = 'AccountDetails.jsp'> My Account </a></div></li>
 					<li><div><a href = 'logout.jsp'> Logout </a></div></li>
 				</ul>
