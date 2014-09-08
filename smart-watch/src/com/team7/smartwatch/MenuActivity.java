@@ -53,7 +53,7 @@ public class MenuActivity extends Activity {
 		panicButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+"0423787149"));
+                    callIntent.setData(Uri.parse("tel:"+retrieveNumber()));
                     startActivity(callIntent);
 			}
 		});
@@ -108,6 +108,12 @@ public class MenuActivity extends Activity {
 		editor.apply();
 
 			
+	}
+	
+	private String retrieveNumber(){
+		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
+		String number = patientDetails.getString("emergencyContactNumber", "");
+		return number;
 	}
 	
 	private void startTrackingLocation() {
