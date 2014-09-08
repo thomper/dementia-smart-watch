@@ -34,6 +34,9 @@
 				st.execute("UPDATE patients SET status = 'fine' WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");		
 			}
 			
+			conn.close();
+			st.close();
+			
 			if (checkPreviousPage.equals("List") == true) {
 				response.sendRedirect("PatientList.jsp");
 			} else { 

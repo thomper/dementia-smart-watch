@@ -77,6 +77,10 @@
 					out.println("<tr><td>ATTENTION!!!! &nbsp&nbsp<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " 			+ status + " click <a href='Map.jsp?patientid=" + patientID + "'>here</a> for current location</td><td>Triggered on: " + trigger + "</td><td><a href='ChangeStatus.jsp?patientid=" + patientID + "'>Dismiss</a></td></tr>");
 					out.println("</table>");
 				} while (rs.next());
+				rs.close();
+				conn.close();
+				st.close();
+				st2.close();
 			%>	
 		</div>
 	
