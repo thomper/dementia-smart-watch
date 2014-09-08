@@ -14,12 +14,17 @@
 	<body>
 		<%
 			String carerID = session.getAttribute("carerid").toString();
+			String checkPreviousPage = "";
 			int patientID = 0;
 			
 			try { 
 				patientID = Integer.parseInt(request.getParameter("patientid"));
 			}
-			catch (Exception e) { patientID = 0; }	
+			catch (Exception e) { patientID = 0; }
+
+			try {
+				checkPreviousPage = request.getParameter("page").toString();
+			} catch (Exception e) { checkPreviousPage = ""; }
 			
 			if (patientID != 0 ) {
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -28,7 +33,12 @@
 				Statement st = conn.createStatement();
 				st.execute("UPDATE patients SET status = 'fine' WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");		
 			}
-			response.sendRedirect("Home.jsp");
+			
+			if (checkPreviousPage.equals("List") == true) {
+				response.sendRedirect("PatientList.jsp");
+			} else { 
+				response.sendRedirect("Home.jsp");
+			}
 		%>
 	</body>
 </html>
