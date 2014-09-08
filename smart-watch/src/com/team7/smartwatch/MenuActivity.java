@@ -1,5 +1,6 @@
 package com.team7.smartwatch;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +54,7 @@ public class MenuActivity extends Activity {
 		storeData();
 		panicButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
+					sendText();
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:"+retrieveNumber()));
                     startActivity(callIntent);
@@ -108,6 +111,10 @@ public class MenuActivity extends Activity {
 		editor.apply();
 
 			
+	}
+	
+	@SuppressLint("UnlocalizedSms") public void sendText(){
+		SmsManager.getDefault().sendTextMessage(retrieveNumber(), null, "Your Patient is paniced!", null, null);
 	}
 	
 	private String retrieveNumber(){
