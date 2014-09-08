@@ -22,7 +22,7 @@
 	conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 	Statement st = conn.createStatement();
 	
-	ResultSet rs = st.executeQuery("SELECT fName, lName, status FROM patients WHERE carerID='"+carerID+"' & status!='fine';");
+	ResultSet rs = st.executeQuery("SELECT fName, lName, status FROM patients WHERE carerID='"+carerID+"' && status!='fine';");
 	
 	out.println("<table><tr><th>FirstName</th><th>Last Name</th><th>status</th>");
 	
