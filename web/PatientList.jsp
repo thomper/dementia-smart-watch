@@ -56,7 +56,7 @@
 			
 			<br><br><br>
 			<p>The above needs to be put in a nice table, ideally status would not be displayed as text, but if a patients status is not OK then their row in the table would be red.</p>
-			<p>Deleting patients not yet implemented. If someone wants to do this note:- patients can't exist without a carer, they are automatically assigned to the carer that created them</p>
+			<p>Deleting patients implemented - needs to work with AJAX (doesn't currently, I'll fix another time if someone else doesn't)</p>
 				
 		</div>	
 		
