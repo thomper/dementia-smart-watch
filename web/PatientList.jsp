@@ -111,7 +111,6 @@
 				
 		</div>	
 		
-	</div>
-    </body>
-</html>
+<jsp:include page = "includes/footer.jsp" flush = "true" />	
+
 
