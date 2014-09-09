@@ -20,17 +20,7 @@
     <body>
 	<div id="container">
 		
-		<div id="header">
-			<div id="header-left">
-				<p>Location: <a href="PatientList.jsp">Patient List</a> > Map</p>
-			</div>
-			<div id="header-right">
-				<p><a href="ChangePassword.jsp">Change PW</a> | <a href="Logout.jsp">Logout</a></p>
-			</div>
-			<div id="header-middle">
-				<p>DementiaWatch Web Client</p>
-			</div>			
-		</div>
+		<jsp:include page = "includes/header.jsp" flush = "true" />	
 	
 		<div id="content">		
 			
@@ -64,12 +54,13 @@
 						
 						Double lat = rs.getDouble(4);
 						Double longtitude = rs.getDouble(5);
+						Double fenceRadius = 100;
 						String status = rs.getString(3);
 						String name = rs.getString(1) + " " + rs.getString(2);%>
 						
 						<div id="mapcanvas" style="height:500px; width:800px; margin-left:auto; margin-right:auto;">
 							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-							<script>google.maps.event.addDomListener(window, 'load', initialize(<%=lat%>, <%=longtitude%>, '<%=name%>', '<%=status%>'));</script>
+							<script>google.maps.event.addDomListener(window, 'load', initialize(<%=lat%>, <%=longtitude%>, '<%=name%>', '<%=status%>', fenceRadius, <%=lat%>, <%=longtitude%>));</script>
 						</div>
 					<%}	else {%>
 						<p>There is currently no location data stored on this patient, please click <a href="PatientList.jsp">here</a> to return to your list of patients</p>
