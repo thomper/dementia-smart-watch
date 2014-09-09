@@ -59,13 +59,17 @@
 					String trigger = "";
 					
 					if (rs.getString(4).equals("Collapsed") == true) {
-						rs2 = st2.executeQuery("SELECT collapseDate, collapseTime FROM patientcollapses WHERE patientID='"+patientID+"'");
+						rs2 = st2.executeQuery("SELECT collapseDate, collapseTime FROM patientcollapses WHERE patientID='"+patientID+"' ORDER BY collapseDate DESC, collapseTime DESC");
+						rs2.next();
+						trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
 						rs2.close();
 						
 						status = "has collapsed and may need assistance";
 						
 					} else if (rs.getString(4).equals("Distressed") == true) {
-						rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"'");
+						rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
+						rs2.next();
+						trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
 						rs2.close();
 						
 						status = "has pressed the panic button and may need assistance";
