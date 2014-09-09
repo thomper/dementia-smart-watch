@@ -75,7 +75,7 @@
 					
 					out.println("<form class='pure-form pure-form-aligned' action='processing/UpdatePatientDetails.jsp?patientid="+patientID+"' method='post'>");
 						out.println("<fieldset>");
-							otu.println("<div class = 'left'>");
+							out.println("<div class = 'left'>");
 								out.println("<div class='pure-control-group'>");
 									out.println("<label for='patID'>Patient ID</label>");
 									out.println("<input name='patID' type='text' value='"+patientID+"' disabled>");
@@ -120,7 +120,7 @@
 								out.println("</div>");			
 							out.println("</div>");
 							
-							out.println("<div class='left'>);
+							out.println("<div class='left'>");
 								out.println("<div class='pure-control-group'>");
 									out.println("<label for='address'>Home Address</label>");
 									out.println("<input name='address' type='text' value='"+rs.getString(10)+"' maxlength='100' required>");

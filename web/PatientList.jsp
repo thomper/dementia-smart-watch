@@ -85,20 +85,20 @@
 			<%
 				rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");	
 
-								out.println("<table>");
+								out.println("<table align='center'>");
 					out.println("<tr>");
 						out.println("<td> Name </td> <td> Location </td> <td> Change Details </td> <td> Delete </td> ");
 					out.println("</tr>");
 
 				while (rs.next()) {
 					patientID = rs.getString(1);
-					if (rs.getString(4).equals("fine" == false) { 
+					if (rs.getString(4).equals("fine") == false) { 
 						out.println("<tr style='background-colour: red;'>");
 					} else { 
 						out.println("<tr style>");
 					}
 					out.println("<td>PatientName: "+rs.getString(2)+" "+rs.getString(3)+" </td><td> <a href='Map.jsp?patientid="+
-						patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td> Delete Patient</td>");
+						patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td><a href='DeletePatient.jsp?patientid=" + patientID + "'> Delete Patient</a></td>");
 					out.println("</tr>");					
 				}
 				out.println("</table>");
