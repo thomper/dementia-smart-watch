@@ -50,17 +50,7 @@
     <body>
 	<div id="container">
 		
-		<div id="header">
-			<div id="header-left">
-				<p>Location: <a href="PatientList.jsp">Patient List</a> > Update Patient</p>
-			</div>
-			<div id="header-right">
-				<p><a href="ChangePassword.jsp">Change PW</a> | <a href="Logout.jsp">Logout</a></p>				
-			</div>
-			<div id="header-middle">
-				<p>DementiaWatch Web Client</p>
-			</div>			
-		</div>
+		<jsp:include page = "includes/header.jsp" flush = "true" />	
 	
 		<div id="content">
 		
@@ -85,89 +75,92 @@
 					
 					out.println("<form class='pure-form pure-form-aligned' action='processing/UpdatePatientDetails.jsp?patientid="+patientID+"' method='post'>");
 						out.println("<fieldset>");
-						
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='patID'>Patient ID</label>");
-								out.println("<input name='patID' type='text' value='"+patientID+"' disabled>");
+							otu.println("<div class = 'left'>");
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='patID'>Patient ID</label>");
+									out.println("<input name='patID' type='text' value='"+patientID+"' disabled>");
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='firstName'>First Name</label>");
+									out.println("<input name='firstName' type='text' value='"+rs.getString(3)+"' maxlength='20' required>");
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='surname'>Surname</label>");
+									out.println("<input name='surname' type='text' value='"+rs.getString(4)+"' maxlength='30' required>");
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");							
+									out.println("<label for='gender'>Gender</label>");
+									out.println("<select name='gender'>");
+									if (rs.getString(5).equals("Male") == true) {
+										out.println("<option selected='Selected' value='Male'>Male</option>");
+										out.println("<option value='Female'>Female</option>");
+									} else {
+										out.println("<option value='Male'>Male</option>");
+										out.println("<option selected='Selected' value='Female'>Female</option>");
+									}
+									out.println("</select>");		
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='age'>Age</label>");
+									out.println("<input name='age' type='number' value='"+rs.getString(6)+"' min='1' max='125' required>");
+								out.println("</div>");							
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='bloodType'>Blood Type</label>");
+									out.println("<input name='bloodType' type='text' value='"+rs.getString(7)+"' maxlength='3'>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='medication'>Medication</label>");
+									out.println("<input name='medication' type='text' value='"+rs.getString(8)+"' maxlength='255'>");
+								out.println("</div>");			
 							out.println("</div>");
 							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='firstName'>First Name</label>");
-								out.println("<input name='firstName' type='text' value='"+rs.getString(3)+"' maxlength='20' required>");
-							out.println("</div>");
+							out.println("<div class='left'>);
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='address'>Home Address</label>");
+									out.println("<input name='address' type='text' value='"+rs.getString(10)+"' maxlength='100' required>");
+								out.println("</div>");		
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='suburb'>Home Suburb</label>");
+									out.println("<input name='suburb' type='text' value='"+rs.getString(11)+"' maxlength='20' required>");
+								out.println("</div>");									
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='conNum'>Contact Number</label>");
+									out.println("<input name='conNum' type='number' value='"+rs.getString(12)+"' maxlength='10' required>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergName'>Emergency Contact Name</label>");
+									out.println("<input name='emergName' type='text' value='"+rs.getString(13)+"' maxlength='50'>");
+								out.println("</div>");		
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergAddress'>Emergency Contact Address</label>");
+									out.println("<input name='emergAddress' type='text' value='"+rs.getString(14)+"' maxlength='100'>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergSuburb'>Emergency Contact Suburb</label>");
+									out.println("<input name='emergSuburb' type='text' value='"+rs.getString(15)+"' maxlength='20'>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergNum'>Emergency Contact Number</label>");
+									out.println("<input name='emergNum' type='number' value='"+rs.getString(16)+"' maxlength='10' required>");
+								out.println("</div>");	
+	
+								out.println("<div class='pure-control-group-3-4'>");
+									out.println("<label for='uniqueKey'><br><b>Unique Key:</b> "+rs.getString(17)+"</label>");
+								out.println("</div>");
+							out.println("</div");
 							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='surname'>Surname</label>");
-								out.println("<input name='surname' type='text' value='"+rs.getString(4)+"' maxlength='30' required>");
-							out.println("</div>");
-							
-							out.println("<div class='pure-control-group'>");							
-								out.println("<label for='gender'>Gender</label>");
-								out.println("<select name='gender'>");
-								if (rs.getString(5).equals("Male") == true) {
-									out.println("<option selected='Selected' value='Male'>Male</option>");
-									out.println("<option value='Female'>Female</option>");
-								} else {
-									out.println("<option value='Male'>Male</option>");
-									out.println("<option selected='Selected' value='Female'>Female</option>");
-								}
-								out.println("</select>");		
-							out.println("</div>");
-							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='age'>Age</label>");
-								out.println("<input name='age' type='number' value='"+rs.getString(6)+"' min='1' max='125' required>");
-							out.println("</div>");							
-							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='bloodType'>Blood Type</label>");
-								out.println("<input name='bloodType' type='text' value='"+rs.getString(7)+"' maxlength='3'>");
-							out.println("</div>");		
-
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='medication'>Medication</label>");
-								out.println("<input name='medication' type='text' value='"+rs.getString(8)+"' maxlength='255'>");
-							out.println("</div>");			
-							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='address'>Home Address</label>");
-								out.println("<input name='address' type='text' value='"+rs.getString(10)+"' maxlength='100' required>");
-							out.println("</div>");		
-							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='suburb'>Home Suburb</label>");
-								out.println("<input name='suburb' type='text' value='"+rs.getString(11)+"' maxlength='20' required>");
-							out.println("</div>");									
-							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='conNum'>Contact Number</label>");
-								out.println("<input name='conNum' type='number' value='"+rs.getString(12)+"' maxlength='10' required>");
-							out.println("</div>");		
-
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='emergName'>Emergency Contact Name</label>");
-								out.println("<input name='emergName' type='text' value='"+rs.getString(13)+"' maxlength='50'>");
-							out.println("</div>");		
-							
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='emergAddress'>Emergency Contact Address</label>");
-								out.println("<input name='emergAddress' type='text' value='"+rs.getString(14)+"' maxlength='100'>");
-							out.println("</div>");		
-
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='emergSuburb'>Emergency Contact Suburb</label>");
-								out.println("<input name='emergSuburb' type='text' value='"+rs.getString(15)+"' maxlength='20'>");
-							out.println("</div>");		
-
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='emergNum'>Emergency Contact Number</label>");
-								out.println("<input name='emergNum' type='number' value='"+rs.getString(16)+"' maxlength='10' required>");
-							out.println("</div>");	
-
-							out.println("<div class='pure-control-group-3-4'>");
-								out.println("<label for='uniqueKey'><br><b>Unique Key:</b> "+rs.getString(17)+"</label>");
-							out.println("</div>");
-
 							out.println("<div class='pure-controls'>");
 								out.println("<button type='submit' class='pure-button pure-button-primary'>Submit</button>");
 							out.println("</div>");
