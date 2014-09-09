@@ -6,8 +6,6 @@
 		
 			<h1>Main Page</h1>
 			
-	<jsp:include page = "processing/activeAlerts.jsp" flush = "true" />
-			
 			<img src="images/watch.png" alt="watch">
 			
 			<br/>
