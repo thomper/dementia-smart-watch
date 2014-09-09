@@ -54,7 +54,7 @@
 						
 						Double lat = rs.getDouble(4);
 						Double longtitude = rs.getDouble(5);
-						Double fenceRadius = 100;
+						Double fenceRadius = 100.00;
 						String status = rs.getString(3);
 						String name = rs.getString(1) + " " + rs.getString(2);%>
 						
