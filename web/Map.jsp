@@ -60,7 +60,7 @@
 						
 						<div id="mapcanvas" style="height:500px; width:800px; margin-left:auto; margin-right:auto;">
 							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-							<script>google.maps.event.addDomListener(window, 'load', initialize(<%=lat%>, <%=longtitude%>, '<%=name%>', '<%=status%>', fenceRadius, <%=lat%>, <%=longtitude%>));</script>
+							<script>google.maps.event.addDomListener(window, 'load', initialize(<%=lat%>, <%=longtitude%>, '<%=name%>', '<%=status%>', <%=fenceRadius%>, <%=lat%>, <%=longtitude%>));</script>
 						</div>
 					<%}	else {%>
 						<p>There is currently no location data stored on this patient, please click <a href="PatientList.jsp">here</a> to return to your list of patients</p>

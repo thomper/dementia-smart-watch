@@ -2,7 +2,7 @@
 function initialize(patientLat, patientLong, patientName, patientStatus, fenceRadius, fenceLat, fenceLng) {
 	var map_canvas = document.getElementById('mapcanvas');
 	var LatLng = new google.maps.LatLng(patientLat, patientLong);
-	var FenceLatLng = new google.maps.LatLng(fenceLat, fenceLong);
+	var FenceLatLng = new google.maps.LatLng(fenceLat, fenceLng);
 	//Create string for marker window
 	var patientString = '<div id="mapcontent">' +
       '<div id="siteNotice">' +
@@ -18,7 +18,7 @@ function initialize(patientLat, patientLong, patientName, patientStatus, fenceRa
 		center: LatLng,
 		zoom: 12,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
-	}
+	};
 	
 	//Circle Details
 	var fenceOptions = {
@@ -28,15 +28,15 @@ function initialize(patientLat, patientLong, patientName, patientStatus, fenceRa
 	      fillColor: '#FF0000',
 	      fillOpacity: 0.35,
 	      map: map,
-	      center: FenceLatLng;
-	      radius: fenceRadius;
+	      center: FenceLatLng,
+	      radius: fenceRadius
 	    };
 	    
 	//Creates a circle
 	var radialFence = new google.maps.Circle(fenceOptions);
 
 	//Creates map
-	var map = new google.maps.Map(map_canvas, map_options)
+	var map = new google.maps.Map(map_canvas, map_options);
 
 	var patientInfowindow = new google.maps.InfoWindow({
 	content: patientString});
