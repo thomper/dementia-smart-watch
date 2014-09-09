@@ -85,17 +85,29 @@
 			<%
 				rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");	
 
+								out.println("<table>");
+					out.println("<tr>");
+						out.println("<td> Name </td> <td> Location </td> <td> Change Details </td> <td> Delete </td> ");
+					out.println("</tr>");
+
 				while (rs.next()) {
 					patientID = rs.getString(1);
-					out.println("<p>Patients Name: "+rs.getString(2)+" "+rs.getString(3)+" | Status: "+rs.getString(4)+" | <a href='Map.jsp?patientid="+
-						patientID+"'>Location</a> | <a href='PatientDetails.jsp?patientid="+patientID+"'>View or Change Details</a> | <a href='DeletePatient.jsp?patientid="+patientID+"'>Delete Patient</a></p>");
-					
+					if (rs.getString(4).equals("fine" == false) { 
+						out.println("<tr style='background-colour: red;'>");
+					} else { 
+						out.println("<tr style>");
+					}
+					out.println("<td>PatientName: "+rs.getString(2)+" "+rs.getString(3)+" </td><td> <a href='Map.jsp?patientid="+
+						patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td> Delete Patient</td>");
+					out.println("</tr>");					
 				}
+				out.println("</table>");
+		
 			%>
 			
-			<br><br><br>
+			<!--<br><br><br>
 			<p>The above needs to be put in a nice table, ideally status would not be displayed as text, but if a patients status is not OK then their row in the table would be red.</p>
-			<p>Deleting patients implemented - needs to work with AJAX (doesn't currently, I'll fix another time if someone else doesn't)</p>
+			<p>Deleting patients implemented - needs to work with AJAX (doesn't currently, I'll fix another time if someone else doesn't)</p> -->
 				
 		</div>	
 		
