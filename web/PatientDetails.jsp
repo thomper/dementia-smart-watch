@@ -133,7 +133,7 @@
 								
 								out.println("<div class='pure-control-group'>");
 									out.println("<label for='conNum'>Contact Number</label>");
-									out.println("<input name='conNum' type='number' value='"+rs.getString(12)+"' maxlength='10' required>");
+									out.println("<input name='conNum' type='number' value='"+rs.getString(12)+"' min='0' max='9999999999' required>");
 								out.println("</div>");		
 	
 								out.println("<div class='pure-control-group'>");
@@ -153,7 +153,7 @@
 	
 								out.println("<div class='pure-control-group'>");
 									out.println("<label for='emergNum'>Emergency Contact Number</label>");
-									out.println("<input name='emergNum' type='number' value='"+rs.getString(16)+"' maxlength='10' required>");
+									out.println("<input name='emergNum' type='number' value='"+rs.getString(16)+"' min='0' max='9999999999' required>");
 								out.println("</div>");	
 	
 								out.println("<div class='pure-control-group-3-4'>");

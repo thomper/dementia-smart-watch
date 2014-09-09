@@ -96,12 +96,12 @@
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='mobile'>Mobile #</label>");
-								out.println("<input name='mobile' type='number' value='"+rs.getString(4)+"' maxlength='10' required>");
+								out.println("<input name='mobile' type='number' value='"+rs.getString(4)+"' min='0' max='9999999999' required>");
 							out.println("</div>");			
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='contactNum'>Alternate Contact #</label>");
-								out.println("<input name='contactNum' type='number' value='"+rs.getString(5)+"' maxlength='10' required>");
+								out.println("<input name='contactNum' type='number' value='"+rs.getString(5)+"' min='0' max='9999999999' required>");
 							out.println("</div>");	
 
 							out.println("<div class='pure-control-group'>");
