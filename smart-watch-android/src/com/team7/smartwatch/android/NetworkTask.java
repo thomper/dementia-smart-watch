@@ -1,4 +1,4 @@
-package com.team7.smartwatch;
+package com.team7.smartwatch.android;
 
 import java.io.IOException;
 

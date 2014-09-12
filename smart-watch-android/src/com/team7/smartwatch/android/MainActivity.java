@@ -1,4 +1,4 @@
-package com.team7.smartwatch;
+package com.team7.smartwatch.android;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,14 +17,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class MenuActivity extends Activity {
+import com.team7.smartwatch.android.R;
+
+public class MainActivity extends Activity {
 
 	Locator locator;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_menu);
+		setContentView(R.layout.activity_main);
 		lockOrientationToPortrait();
 		setupPanicButton();
 		startTrackingLocation();
@@ -33,7 +35,7 @@ public class MenuActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 

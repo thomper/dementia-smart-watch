@@ -9,10 +9,10 @@ Android Build Instructions
 --------------------------
 In the repo root directory run:
 
-android update project -p ./smart-watch/  
-android update test-project -m ../smart-watch/ -p ./smart-watchtests/
+android update project -p ./smart-watch-android/  
+android update test-project -m ../smart-watch-android/ -p ./smart-watch-android-tests/
 
-Then in the smart-watchtests/ directory run:
+Then in the smart-watch-android-tests/ directory run:
 
 ant clean debug  
 ant installt test

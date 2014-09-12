@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.team7.smartwatch.MenuActivity" >
+    tools:context="com.team7.smartwatch.MainActivity" >
 
     <item
         android:id="@+id/action_settings"

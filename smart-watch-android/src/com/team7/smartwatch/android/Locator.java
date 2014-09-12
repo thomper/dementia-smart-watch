@@ -1,4 +1,4 @@
-package com.team7.smartwatch;
+package com.team7.smartwatch.android;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import android.annotation.SuppressLint;
 import android.content.Context;
