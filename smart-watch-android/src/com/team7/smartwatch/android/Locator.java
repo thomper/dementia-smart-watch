@@ -28,12 +28,14 @@ public class Locator {
 	private LocationListener locationListener;
 	private Location lastLocation;
 	private Date lastTime;
+	private int patientID;
 	
 	private static final String TAG = Locator.class.getName();
 	private static final String POST_URL = "http://192.168.1.20:8080/updatelocation";
 
-	public Locator(Context context) {
+	public Locator(Context context, int patientID) {
 		this.context = context;
+		this.patientID = patientID;
 		locationListener = new MyLocationListener();
 		locationManager = (LocationManager) this.context
 				.getSystemService(Context.LOCATION_SERVICE);
@@ -86,7 +88,6 @@ public class Locator {
 			
 			// Create the post request.
 			HttpPost request = new HttpPost(POST_URL);
-			String patientID = "4";  // TODO: TESTING ONLY!
 			String latitude = String.valueOf(lastLocation.getLatitude());
 			String longitude = String.valueOf(lastLocation.getLongitude());
 			

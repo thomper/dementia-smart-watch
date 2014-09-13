@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="smartwatchshared" default="jar" basedir=".">
+
+	<target name="clean">
+		<delete dir="bin" />
+		<mkdir dir="bin" />
+		<delete dir="jar" />
+		<mkdir dir="jar" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<javac srcdir="src" destdir="bin" />
+	</target>
+
+        <target name="jar" depends="compile">
+                <jar destfile="jar/shared.jar" basedir="bin" />
+                <copy file="jar/shared.jar" tofile="../smart-watch-android/libs/shared.jar" />
+        </target>
+
+</project>

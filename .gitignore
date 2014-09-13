@@ -17,6 +17,7 @@ smart-watch-android/bin/
 smart-watch-android/gen/
 smart-watch-android-tests/bin/
 smart-watch-android-tests/gen/
+smart-watch-shared/bin/
 
 # Gradle files
 .gradle/

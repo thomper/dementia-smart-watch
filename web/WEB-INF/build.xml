@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="assistwatchservlets" default="compile" basedir=".">
+<!DOCTYPE xml>
+<project name="smartwatchservlets" default="compile" basedir=".">
 
 	<path id="project-classpath">
 		<fileset dir="lib" includes="*.jar" />
