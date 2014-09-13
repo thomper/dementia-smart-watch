@@ -1,4 +1,4 @@
-package com.team7.smartwatchservlets;
+package com.team7.smartwatch.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

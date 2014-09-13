@@ -6,7 +6,7 @@
  
    <servlet>
       <servlet-name>LocationUpdater</servlet-name>
-      <servlet-class>com.team7.smartwatchservlets.LocationUpdaterServlet</servlet-class>
+      <servlet-class>com.team7.smartwatch.server.LocationUpdaterServlet</servlet-class>
    </servlet>
  
    <servlet-mapping>
