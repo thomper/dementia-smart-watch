@@ -2,11 +2,9 @@ package com.team7.smartwatch.server;
 
 import com.team7.smartwatch.shared.Utility;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -21,9 +19,6 @@ import org.json.JSONObject;
 @SuppressWarnings("serial")
 public class LocationUpdaterServlet extends HttpServlet {
 
-    private final static String DB_NAME = "dementiawatch_db";
-    private final static String CONNECTION_STRING = "jdbc:mysql://localhost" +
-        ":3306/" + DB_NAME + "?user=agile374&password=dementia374";
     private final static String LOCATION_TABLE = "patientloc";
     private final static String REPLACE_STATEMENT =
         "REPLACE INTO " + LOCATION_TABLE +
@@ -47,13 +42,11 @@ public class LocationUpdaterServlet extends HttpServlet {
     }
 
     private int update(HttpServletRequest request) {
-        // TODO: Read db username and password from file.
         int rowsUpdated = 0;
         Connection conn = null;
 
         try {
-            registerJDBCDriver();
-            conn = DriverManager.getConnection(CONNECTION_STRING);
+            conn = DatabaseConnector.getConnection();
             PreparedStatement replaceLoc = conn.prepareStatement(REPLACE_STATEMENT);
             bindValues(replaceLoc, request);
             rowsUpdated = replaceLoc.executeUpdate();
@@ -81,7 +74,7 @@ public class LocationUpdaterServlet extends HttpServlet {
             throws BadPostParameterException {
     	
         try {
-        	JSONObject jObj = getJSON(request);
+        	JSONObject jObj = JSONConverter.getJSON(request);
             String patientID = jObj.getString("patientID");
             Double latitude = jObj.getDouble("latitude");
             Double longitude = jObj.getDouble("longitude");
@@ -103,7 +96,7 @@ public class LocationUpdaterServlet extends HttpServlet {
         } catch (SQLException e) {
         	// TODO: log
             e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
         	throw new BadPostParameterException();
         }
     }

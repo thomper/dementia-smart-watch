@@ -1,90 +1,139 @@
 body {
 	margin: 0px;
-	font: 18pt 'Veranda','Goudy Old Style',sans-serif;
+	font: 12pt 'Veranda','Goudy Old Style',sans-serif;
 }
 #container {
 	max-width: 100%;
-    border: 5px solid black;
 	margin: 0px;
 	padding: 0px;
 	font-size:0;
-	font: 18pt 'Veranda', 'Goudy Old Style', sans-serif;
+	font: 12pt 'Veranda', 'Goudy Old Style', sans-serif;
 }
+a {
+	text-decoration:none;		
+}
+
+
+/* header css*/
 #header {
-    text-align: center;
+    	text-align: center;
 	margin:0px;
 	padding:0px;
-    border-bottom: 1px #F0F0F0;
+    	border-bottom: 1px #F0F0F0;
 	overflow: no-content;
 	text-align: center;
 	background-image: url("../images/gradient.jpg");
 	background-repeat: repeat-x;
 	background-position: bottom; 
 }
-
-/* Navigation */
 #header div {
-display: inline-block;
+	display: inline-block;
 }
 #nav ul{
-list-style-position: inside;
-list-style: none;
-padding-left: 50px;
-margin-left: 0px;
+	list-style-position: inside;
+	list-style: none;
+	padding-left: 50px;
+	margin-left: 0px;
 }
 #nav ul li {
-display: inline-block;
-list-style-type: none;
-padding: 0px 10px;
+	display: inline-block;
+	list-style-type: none;
+	padding: 0px 10px;
 }
 #nav ul li a {
-color: #555;
-text-decoration:none;	
+	color: #555;
 }
 #nav ul li a:hover {
-color: #5CE6E6;
-margin: 10px 0px;
+	color: #00dbff;
+	margin: 10px 0px;
+}
+#alert{
+	background-color: #C85F39;
+	color: #fff;
+	clear:both;
+	text-align: center;
+}
+#alert a {
+	color: #fff;
+	font-weight: bold;
+}
+#alert img {
+	vertical-align: middle;
 }
 
+/* end of header css */
 
 
 
-
-
-
-
-/*#header-left{
-	width: 30%;
+/* form css */
+.left {
 	float: left;
+	padding:10px;
 }
-#header-right {
-	width: 30%;
-    float: right;
+.pure-controls{
+	clear: both;
+	margin:0px;	
 }
-#header-middle {
-   width: 40%;
-    margin-left: auto;
-    margin-right: auto;
-	padding: 1px;
-}*/
+.pure-form-aligned{
+	margin:0px;
+}
+.pure-form-aligned .pure-controls {
+    margin: 0px;
+}
+
+.pure-button-primary, .pure-button {
+	background-color: #00dbff;
+}
+.pure-form-aligned .pure-control-group label {
+	width: 13em;
+}
+/* end of form css */
+
+
+/* content css */
 h1 {
-	font-size: 25pt;
+	font-size: 20pt;
 }
-
-h2 {
-	font-size: 18pt;
+.blue {
+	color: #00dbff;
 }
-
 #content {
 	padding-top: 10px;
 	padding-bottom: 1px;
 	background: #F0F0F0 url(background.png) center center;
-    min-height: calc(100vh - 126px);
-	font: 18pt 'Veranda', 'Goudy Old Style', sans-serif;
+    	min-height: calc(100vh - 126px);
+	font: 12pt 'Veranda', 'Goudy Old Style', sans-serif;
 	text-align: center;
 }
+/* end of content css */
 
+
+/* table css */
+table {
+	margin: 0px auto 0px auto;
+}
+
+tr:first-child td{
+	font: #fff bold;
+	background-color: #00dbff;
+}
+
+tr:nth-child(even) {
+	background: #efefef}
+tr:nth-child(odd) {
+	background: #f7f7f7}
+td{
+	border: solid 1px #fff;
+	vertical-align:middle;
+	padding:15px 40px 15px 40px;
+	/*font-size:10px;*/
+	font-weight:normal;
+}
+/* end of table css*/
+
+/* footer css */
 #footer {
 	text-align:center;
 	font-size: 15pt;
 }
+/* end of footer css*/
