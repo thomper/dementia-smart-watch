@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 
     private boolean authenticate(HttpServletRequest request) {
         Connection conn = null;
-        String requestPasswordHash = null;
+        String requestPassword = null;
         String storedHash = null;
         String salt = null;
         
@@ -55,10 +55,10 @@ public class LoginServlet extends HttpServlet {
             // As we can't pass strings by reference, we use temporary arrays
             // instead.
             String[] arrayID = {""};
-            String[] arrayHash = {""};
-            getRequestCredentials(request, arrayID, arrayHash);
+            String[] arrayPassword = {""};
+            getRequestCredentials(request, arrayID, arrayPassword);
             String requestUserID = arrayID[0];
-            requestPasswordHash = arrayHash[0];
+            requestPassword = arrayPassword[0];
 
             bindValues(selectUser, requestUserID);
             ResultSet resultSet = selectUser.executeQuery();
@@ -85,19 +85,20 @@ public class LoginServlet extends HttpServlet {
             }
         }
         
-        if(Utility.arrayContainsNull(requestPasswordHash, storedHash, salt)) {
+        if(Utility.arrayContainsNull(requestPassword, storedHash, salt)) {
         	return false;
         }
-        return passwordHashIsCorrect(requestPasswordHash, storedHash, salt);
+        return passwordIsCorrect(requestPassword, storedHash, salt);
     }
     
-	private boolean passwordHashIsCorrect(String requestPasswordHash,
+	private boolean passwordIsCorrect(String requestPassword,
 			String storedHash, String salt) {
 
 		String requestHash = null;
 		
 		try {
-			requestHash = Utility.SHA256(requestPasswordHash + salt);
+			String passwordHash = Utility.SHA256(requestPassword);
+			requestHash = Utility.SHA256(passwordHash + salt);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			return false;
@@ -121,13 +122,13 @@ public class LoginServlet extends HttpServlet {
     }
     
 	private void getRequestCredentials(HttpServletRequest request,
-			String[] userID, String[] hash) throws BadPostParameterException {
+			String[] userID, String[] password) throws BadPostParameterException {
     	
         	JSONObject jObj;
 			try {
 				jObj = JSONConverter.getJSON(request);
 				userID[0] = String.valueOf(jObj.getInt("userID"));
-				hash[0] = jObj.getString("hash");
+				password[0] = jObj.getString("password");
 			} catch (IOException | JSONException e) {
 				e.printStackTrace();
 				throw new BadPostParameterException();
