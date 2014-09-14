@@ -14,5 +14,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/org.json-20131017.jar"/>
+	<classpathentry kind="src" path="/smart-watch-shared"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

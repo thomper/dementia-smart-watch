@@ -1,5 +1,7 @@
 package com.team7.smartwatchservlets;
 
+import com.team7.smartwatch.shared.Utility;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,7 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -85,7 +86,7 @@ public class LocationUpdaterServlet extends HttpServlet {
             Double latitude = jObj.getDouble("latitude");
             Double longitude = jObj.getDouble("longitude");
 
-            if (arrayContainsNull(patientID, latitude, longitude)) {
+            if (Utility.arrayContainsNull(patientID, latitude, longitude)) {
                 throw new BadPostParameterException();
             }
 
@@ -142,9 +143,5 @@ public class LocationUpdaterServlet extends HttpServlet {
         	// TODO: log critical
             e.printStackTrace();
         }
-    }
-
-    private boolean arrayContainsNull(Object... objects) {
-    	return Arrays.asList(objects).contains(null);
     }
 }

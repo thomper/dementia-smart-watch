@@ -2,6 +2,10 @@
 <!DOCTYPE xml>
 <project name="smartwatchservlets" default="compile" basedir=".">
 
+        <!-- We need to compile the smart-watch-shared project first so that we
+             have shared.jar in the libs directory. -->
+        <ant antfile="../smart-watch-shared/build.xml" dir="../../smart-watch-shared" />
+
 	<path id="project-classpath">
 		<fileset dir="lib" includes="*.jar" />
 	</path>
@@ -11,13 +15,7 @@
 		<mkdir dir="classes" />
 	</target>
 
-	<target name="copy-non-java-files">
-		<copy todir="classes" includeemptydirs="false">
-			<fileset dir="src" excludes="**/*.java" />
-		</copy>
-	</target>
-
-	<target name="compile" depends="clean,copy-non-java-files">
+	<target name="compile">
 		<javac srcdir="src" destdir="classes" classpathref="project-classpath" />
 	</target>
 
