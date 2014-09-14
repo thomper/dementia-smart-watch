@@ -6,17 +6,63 @@
              have shared.jar in the libs directory. -->
         <ant antfile="../smart-watch-shared/build.xml" dir="../../smart-watch-shared" />
 
+        <!-- Variables for smart-watch-server -->
+        <property name="src.dir" location="src" />
+        <property name="build.dir" location="classes" />
+
+        <!-- Variables for smart-watch-server-tests -->
+        <property name="test.src.dir" location="../../smart-watch-server-tests/src" />
+        <property name="test.build.dir" location="../../smart-watch-server-tests/bin" />
+        <property name="test.report.dir" location="../../smart-watch-server-tests/testreport" />
+
+        <path id="junit.classpath">
+                <pathelement location="../../lib/junit-4.11.jar" />
+                <pathelement location="../../lib/hamcrest-core-1.3.jar" />
+        </path>
+
 	<path id="project-classpath">
 		<fileset dir="lib" includes="*.jar" />
 	</path>
 
 	<target name="clean">
-		<delete dir="classes" />
-		<mkdir dir="classes" />
+		<delete dir="${build.dir}" />
+		<delete dir="${test.build.dir}" />
+		<delete dir="${test.report.dir}" />
 	</target>
 
-	<target name="compile">
-		<javac srcdir="src" destdir="classes" classpathref="project-classpath" />
+        <target name="makedir">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${test.build.dir}" />
+		<mkdir dir="${test.report.dir}" />
+        </target>
+
+
+	<target name="compile" depends="clean, makedir">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="project-classpath" />
 	</target>
+
+        <target name="compiletests" depends="compile">
+                <javac srcdir="${test.src.dir}" destdir = "${test.build.dir}">
+                        <classpath path="${build.dir}" />
+                        <classpath refid="junit.classpath" />
+                </javac>
+        </target>
+
+        <target name="test" depends="compiletests">
+                <junit printsummary="on" fork="true" haltonfailure="yes">
+                        <classpath refid="junit.classpath" />
+                        <classpath>
+                                <pathelement location="${test.build.dir}" />
+                                <pathelement location="${build.dir}" />
+                        </classpath>
+                        <formatter type="xml" />
+                        <batchtest todir="${test.report.dir}">
+                                <fileset dir="${test.build.dir}">
+                                        <include name="**/*Test*.class" />
+                                </fileset>
+                        </batchtest>
+
+                </junit>
+        </target>
 
 </project>
