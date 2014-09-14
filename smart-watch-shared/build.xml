@@ -1,21 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="smartwatchshared" default="jar" basedir=".">
 
+        <!-- Variables for smart-watch-shared -->
+        <property name="src.dir" location="src" />
+        <property name="build.dir" location="bin" />
+        <property name="jar.dir" location="jar" />
+
+        <!-- Variables for smart-watch-shared-tests -->
+        <property name="test.src.dir" location="../smart-watch-shared-tests/src" />
+        <property name="test.build.dir" location="../smart-watch-shared-tests/bin" />
+        <property name="test.report.dir" location="../smart-watch-shared-tests/testreport" />
+
+        <path id="test.lib.dir">
+                <pathelement location="../smart-watch-shared-tests/lib/shared.jar" />
+        </path>
+
+        <path id="junit.classpath">
+                <pathelement location="../lib/junit-4.11.jar" />
+                <pathelement location="../lib/hamcrest-core-1.3.jar" />
+        </path>
+
 	<target name="clean">
-		<delete dir="bin" />
-		<mkdir dir="bin" />
-		<delete dir="jar" />
-		<mkdir dir="jar" />
+		<delete dir="${build.dir}" />
+		<delete dir="${jar.dir}" />
+		<delete dir="${test.build.dir}" />
+		<delete dir="${test.report.dir}" />
 	</target>
 
-	<target name="compile" depends="clean">
-		<javac srcdir="src" destdir="bin" />
+        <target name="makedir">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${jar.dir}" />
+		<mkdir dir="${test.build.dir}" />
+		<mkdir dir="${test.report.dir}" />
+        </target>
+
+	<target name="compile" depends="clean, makedir">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" />
 	</target>
 
         <target name="jar" depends="compile">
-                <jar destfile="jar/shared.jar" basedir="bin" />
-                <copy file="jar/shared.jar" tofile="../smart-watch-android/libs/shared.jar" />
+                <jar destfile="${jar.dir}/shared.jar" basedir="${build.dir}" />
+                <copy file="${jar.dir}/shared.jar" tofile="../smart-watch-shared-tests/lib/shared.jar" />
+                <copy file="${jar.dir}/shared.jar" tofile="../smart-watch-android/libs/shared.jar" />
                 <copy file="jar/shared.jar" tofile="../web/WEB-INF/lib/shared.jar" />
+        </target>
+
+        <target name="compiletests" depends="jar">
+                <javac srcdir="${test.src.dir}" destdir = "${test.build.dir}">
+                        <classpath refid="test.lib.dir" />
+                        <classpath refid="junit.classpath" />
+                </javac>
+        </target>
+
+        <!-- JUnit tests -->
+        <target name="test" depends="compile, compiletests">
+                <junit printsummary="on" fork="true" haltonfailure="yes">
+                        <classpath refid="junit.classpath" />
+                        <classpath>
+                                <pathelement location="${test.build.dir}" />
+                                <pathelement location="${build.dir}" />
+                        </classpath>
+                        <formatter type="xml" />
+                        <batchtest todir="${test.report.dir}">
+                                <fileset dir="${test.build.dir}">
+                                        <include name="**/*Test*.class" />
+                                </fileset>
+                        </batchtest>
+
+                </junit>
         </target>
 
 </project>
