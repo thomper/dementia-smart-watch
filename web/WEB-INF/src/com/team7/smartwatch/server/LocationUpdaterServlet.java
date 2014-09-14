@@ -100,41 +100,4 @@ public class LocationUpdaterServlet extends HttpServlet {
         	throw new BadPostParameterException();
         }
     }
-    
-	private JSONObject getJSON(HttpServletRequest request)
-			throws BadPostParameterException {
-
-		JSONObject jObj;
-		String text;
-
-		try {
-			text = getRawText(request);
-			jObj = new JSONObject(text);
-		} catch (IOException e) {
-			throw new BadPostParameterException();
-		}
-
-		return jObj;
-	}
-
-    private String getRawText(HttpServletRequest request) throws IOException {
-		StringBuffer sb = new StringBuffer();
-		BufferedReader reader = request.getReader();
-		String line;
-		
-		while ((line = reader.readLine()) != null) {
-			sb.append(line);
-		}
-		
-		return sb.toString();
-    }
-
-    private void registerJDBCDriver() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-        	// TODO: log critical
-            e.printStackTrace();
-        }
-    }
 }
