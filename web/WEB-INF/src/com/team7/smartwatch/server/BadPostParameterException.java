@@ -1,4 +1,4 @@
-package com.team7.smartwatchservlets;
+package com.team7.smartwatch.server;
 
 @SuppressWarnings("serial")
 public class BadPostParameterException extends Exception {

@@ -1,4 +1,4 @@
-package com.team7.smartwatchservlets;
+package com.team7.smartwatch.server;
 
 import com.team7.smartwatch.shared.Utility;
 
