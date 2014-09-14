@@ -23,4 +23,9 @@ public class UtilityTest {
 	public void arrayContainsNull_ArrayWithNulls_True() {
 		assertTrue(Utility.arrayContainsNull("some text", null, "key:value"));
 	}
+
+	@Test
+	public void arrayContainsNull_ArrayAllNulls_True() {
+		assertTrue(Utility.arrayContainsNull(null, null, null, null, null, null));
+	}
 }
