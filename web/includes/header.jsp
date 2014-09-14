@@ -1,5 +1,40 @@
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<!DOCTYPE html>
+<html>
+ <head profile="http://www.w3.org/2005/10/profile">
+ <title>Home – DementiaWatch Web Client</title>
+ <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+ <link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
+ <link rel="stylesheet" type="text/css" href="css/mystyle.css">
+ <%
+ // If not logged in - redirect to error page and cancel processing od remaining jsp
+ if (session.getAttribute("userid") == null) { 
+	response.setStatus(response.SC_MOVED_TEMPORARILY);
+	response.setHeader("Error", "Error.jsp?error=5"); 
+	return; }
 
-	<body>
+ String carerID = session.getAttribute("carerid").toString();
+ String display = "none";
+ String patientID = "";
+
+ Class.forName("com.mysql.jdbc.Driver").newInstance();
+ java.sql.Connection conn;
+ conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+ Statement st = conn.createStatement();
+ ResultSet rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");
+
+ if (rs.next()) {
+ if (rs.getString(4).equals("fine") == false) {
+ display = "inline";
+ }
+ }
+ %>
+ </head>
+<body>
 	<div id="container">	
 		<div id="header">
 			<div id = "Title">
