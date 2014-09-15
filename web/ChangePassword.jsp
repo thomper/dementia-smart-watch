@@ -9,8 +9,8 @@
 		<title>Change Password – DementiaWatch Web Client</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
-		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 		<link rel="stylesheet" type="text/css" href="css/message.css">
 
 		<%

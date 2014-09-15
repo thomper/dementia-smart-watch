@@ -6,14 +6,15 @@
 		<title>Error! – DementiaWatch Web Client</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
+		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 		<script type="text/javascript">
 			function goBack() {
 				window.history.back()
 			}
 		</script>
     </head>
-    <body style="font: 18pt 'Veranda', 'Goudy Old Style', sans-serif; text-align: center; background: #F0F0F0; border: 5px solid black; height: calc(100vh - 26px);">
-		<h1>This is an error page – you screwed up =(</h1>
+    <body <!--style="font: 18pt 'Veranda', 'Goudy Old Style', sans-serif; text-align: center; background: #F0F0F0; border: 5px solid black; height: calc(100vh - 26px);"--> >
+		<h1> An error has occurred </h1>
 		<%	
 			int errorCause;
 			try { errorCause = Integer.parseInt(request.getParameter("error")); }

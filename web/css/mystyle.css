@@ -44,11 +44,11 @@ a {
 	color: #555;
 }
 #nav ul li a:hover {
-	color: #00dbff;
+	color: #31998D;
 	margin: 10px 0px;
 }
 #alert{
-	background-color: #C85F39;
+	background-color: #31998D;
 	color: #fff;
 	clear:both;
 	text-align: center;
@@ -58,9 +58,10 @@ a {
 	font-weight: bold;
 }
 #alert img {
-	vertical-align: middle;
+	vertical-align: top;
+	width: 20px;
+	height: 20px;
 }
-
 /* end of header css */
 
 
@@ -81,8 +82,8 @@ a {
     margin: 0px;
 }
 
-.pure-button-primary, .pure-button {
-	background-color: #00dbff;
+.pure-button-primary, .pure-button-selected, a.pure-button-primary, a.pure-button-selected {
+	background-color: #31998D;
 }
 .pure-form-aligned .pure-control-group label {
 	width: 13em;
@@ -95,7 +96,7 @@ h1 {
 	font-size: 20pt;
 }
 .blue {
-	color: #00dbff;
+	color: #31998D;
 }
 #content {
 	padding-top: 10px;
@@ -112,12 +113,10 @@ h1 {
 table {
 	margin: 0px auto 0px auto;
 }
-
 tr:first-child td{
 	font: #fff bold;
-	background-color: #00dbff;
+	background-color: #31998D;
 }
-
 tr:nth-child(even) {
 	background: #efefef}
 tr:nth-child(odd) {

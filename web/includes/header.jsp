@@ -66,7 +66,7 @@
 							status = "is lost and may need assistance.";
 						}
 						
-						out.println("<img src='images/exclamation.gif'/>");
+						out.println("<img src='images/exclamation2.gif' />");
 						out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='ChangeStatus.jsp?patientid=" + patientID + "'>Dismiss</a>");
 						out.println("<br/>");
 					} while (rs.next());
