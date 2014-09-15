@@ -62,14 +62,33 @@ a {
 	width: 20px;
 	height: 20px;
 }
+#headerC, #headerB {
+	overflow: auto;
+	text-align: center;
+	background-color:#fff;
+	border: 1px solid #31998D;
+}
+#headerC a, #headerC a:active, #headerC a:visited, #headerP a, #headerP a:active, #headerP a:visited{
+	color: #fff;
+}
+#headerC div, #headerP div{
+	width: 150px;
+	display: inline-block;	
+	margin: 10px;
+	padding: 0px;
+	border:1px solid #white;
+	background-color:#31998D;
+	color: #fff;
+	border-radius: 3px;
+}
 /* end of header css */
 
 
 
 /* form css */
 
-.content fieldset {
-	text: 10px;
+fieldset {
+	font-size: 12px;
 }
 
 .left {

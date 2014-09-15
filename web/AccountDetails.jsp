@@ -41,19 +41,7 @@
 		
     <%-- This will add the rest of the head tag and navigation and alerts --%>	
 	<jsp:include page = "includes/header.jsp" flush = "true" />
-				
-		
-		<div id="header2">
-			<div id="header-left">
-				<p>Location: <a href="Home.jsp">Home</a> > Account Details</p>
-			</div>
-			<div id="header-right">
-				<p><a href="ChangePassword.jsp">Change PW</a> | <a href="Logout.jsp">Logout</a></p>				
-			</div>
-			<div id="header-middle">
-				<p>DementiaWatch Web Client</p>
-			</div>			
-		</div>
+	<jsp:include page = "includes/headerA.jsp" flush = "true" />
 	
 		<div id="content">
 		

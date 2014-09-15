@@ -42,6 +42,7 @@
     
 	<%-- This will add the rest of the head tag and navigation and alerts --%>	
 	<jsp:include page = "includes/header.jsp" flush = "true" />
+	<jsp:include page = "includes/headerP.jsp" flush = "true" />
 				
 		<div id="header2">
 			<div id="header-left">
