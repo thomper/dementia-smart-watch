@@ -39,12 +39,11 @@
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
 		%>
-    </head>
-	
-    <body>
-	<div id="container">
-		
-		<div id="header">
+    
+	<%-- This will add the rest of the head tag and navigation and alerts --%>	
+	<jsp:include page = "includes/header.jsp" flush = "true" />
+				
+		<div id="header2">
 			<div id="header-left">
 				<p>Location: <a href="Home.jsp">Home</a> > My Patient</p>
 			</div>

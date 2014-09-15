@@ -15,14 +15,11 @@
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
 		%>			
-    </head>
-	
-    <body>
-	<div id="container">
-		
-		<jsp:include page = "includes/header.jsp" flush = "true" />	
-	
-		<div id="content">		
+    
+	<%-- This will add the rest of the head tag and navigation and alerts --%>	
+	<jsp:include page = "includes/header.jsp" flush = "true" />
+				
+		<div id="content">	
 			
 			<%
 				String carerID = session.getAttribute("carerid").toString();

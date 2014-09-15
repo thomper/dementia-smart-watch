@@ -30,11 +30,10 @@
 				}
 			}
 		%>			
-    </head>
-	
-    <body>
-	<div id="container">
-		<div id="header">
+    <%-- This will add the rest of the head tag and navigation and alerts --%>	
+	<jsp:include page = "includes/header.jsp" flush = "true" />
+				
+		<div id="header2">
 			<div id="header-left">
 				<p>Location: <a href="Home.jsp">Home</a> > My Patient List</p>
 			</div>
@@ -47,38 +46,7 @@
 		</div>
 	
 		<div id="content">
-			<div id="alert" style="display: <%=display%>">
-				<%		
-					do {
-						patientID = rs.getString(1);
-						Statement st2 = conn.createStatement();
-						ResultSet rs2 = null;
-						
-						String status = "";
-						String trigger = "";
-						
-						if (rs.getString(4).equals("Collapsed") == true) {
-							rs2 = st2.executeQuery("SELECT collapseDate, collapseTime FROM patientcollapses WHERE patientID='"+patientID+"'");
-							rs2.close();
-							
-							status = "has collapsed and may need assistance";
-							
-						} else if (rs.getString(4).equals("Distressed") == true) {
-							rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"'");
-							rs2.close();
-							
-							status = "has pressed the panic button and may need assistance";
-						} else {
-							status = "is lost and may need assistance";
-						}
-						
-						out.println("<table class='alertsTable' align='center'>");
-						out.println("<tr><td>ATTENTION!!!! &nbsp&nbsp<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " 			+ status + " click <a href='Map.jsp?patientid=" + patientID + "'>here</a> for current location</td><td>Triggered on: " + trigger + "</td><td><a href='ChangeStatus.jsp?patientid=" + patientID + "&page=List'>Dismiss</a></td></tr>");
-						out.println("</table>");
-					} while (rs.next());
-					rs.close();
-				%>	
-			</div>
+			
 			<h1>My Patient List</h1>
 			<h3><a href="AddPatient.jsp">Add New Patient</a></h3>
 			
