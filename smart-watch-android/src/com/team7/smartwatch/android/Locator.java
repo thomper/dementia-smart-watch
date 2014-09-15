@@ -31,7 +31,7 @@ public class Locator {
 	private int patientID;
 	
 	private static final String TAG = Locator.class.getName();
-	private static final String POST_URL = "http://192.168.1.20:8080/updatelocation";
+	private static final String POST_URL = "http://c5-ubu-ros:8080/updatelocation";
 
 	public Locator(Context context, int patientID) {
 		this.context = context;
