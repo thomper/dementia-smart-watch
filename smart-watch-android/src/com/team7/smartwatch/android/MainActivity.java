@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void setupPanicButton() {
-		Button panicButton = (Button)findViewById(R.id.panicButton);
+		Button panicButton = (Button)findViewById(R.id.detailsButton);
 		storeData();
 		panicButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){

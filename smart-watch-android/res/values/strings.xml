@@ -6,4 +6,20 @@
     <string name="button_setting">Settings</string>
     <string name="PANIC">PANIC</string>
 
+    <string name="fName_TAG">First Name:</string>
+    <string name="lName_TAG">Surname:</string>
+    <string name="blood_TAG">Blood Type:</string>
+    <string name="medication_TAG">Medication:</string>
+    <string name="emergency_Contact_TAG">Emergency Contact:</string>
+    <string name="residence_TAG">Residence:</string>
+    <string name="fName_Value">Unknown</string>
+    <string name="lName_Value">Unknown</string>
+    <string name="blood_Value">N/A</string>
+    <string name="medication_Value">Unknown</string>
+    <string name="emergency_Contact_Value">Unavailable</string>
+    <string name="residence_Value">Unavailable</string>
+    <string name="Details">Patient Details</string>
+    
+    
+    
 </resources>

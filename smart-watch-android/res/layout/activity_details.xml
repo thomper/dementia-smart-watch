@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1" >
+
+        <EditText
+            android:id="@+id/FNameTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="25dp"
+            android:ems="10"
+            android:text="@string/fName_TAG" >
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/FNameValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/FNameTag"
+            android:ems="10"
+            android:text="@string/fName_Value" />
+
+        <EditText
+            android:id="@+id/BloodTypeTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/LNameTag"
+            android:layout_marginTop="44dp"
+            android:ems="10"
+            android:text="@string/blood_TAG" />
+
+        <EditText
+            android:id="@+id/MedicationTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/BloodTypeTag"
+            android:ems="10"
+            android:text="@string/medication_TAG" />
+
+        <EditText
+            android:id="@+id/ECTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/MedicationTag"
+            android:layout_marginTop="47dp"
+            android:ems="10"
+            android:text="@string/emergency_Contact_TAG" />
+
+        <EditText
+            android:id="@+id/ResidenceTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ECTag"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:text="@string/residence_TAG" />
+
+        <EditText
+            android:id="@+id/ECValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ECTag"
+            android:ems="10"
+            android:inputType="phone"
+            android:text="@string/emergency_Contact_Value" />
+
+        <EditText
+            android:id="@+id/MedicationValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/MedicationTag"
+            android:ems="10"
+            android:text="@string/medication_Value" />
+
+        <EditText
+            android:id="@+id/BloodTypeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/BloodTypeTag"
+            android:layout_alignBottom="@+id/BloodTypeTag"
+            android:layout_alignParentRight="true"
+            android:ems="10"
+            android:text="@string/blood_Value" />
+
+        <EditText
+            android:id="@+id/LNameValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/LNameTag"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/lName_Value" />
+
+        <EditText
+            android:id="@+id/ResidenceValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ResidenceTag"
+            android:ems="10"
+            android:inputType="textPostalAddress"
+            android:text="@string/residence_Value" />
+
+        <EditText
+            android:id="@+id/LNameTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/FNameValue"
+            android:ems="10"
+            android:text="@string/lName_TAG" />
+
+    </RelativeLayout>
