@@ -48,7 +48,7 @@ a {
 	margin: 10px 0px;
 }
 #alert{
-	background-color: #31998D;
+	background-color: #C85F39;
 	color: #fff;
 	clear:both;
 	text-align: center;
@@ -67,6 +67,11 @@ a {
 
 
 /* form css */
+
+.content fieldset {
+	text: 10px;
+}
+
 .left {
 	float: left;
 	padding:10px;
@@ -102,9 +107,11 @@ h1 {
 	padding-top: 10px;
 	padding-bottom: 1px;
 	background: #F0F0F0 url(background.png) center center;
-    	min-height: calc(100vh - 126px);
+    min-height: calc(100vh - 126px);
 	font: 12pt 'Veranda', 'Goudy Old Style', sans-serif;
 	text-align: center;
+	overflow: auto;
+	width: 100%
 }
 /* end of content css */
 
@@ -134,5 +141,6 @@ td{
 #footer {
 	text-align:center;
 	font-size: 15pt;
+	clear: both;
 }
 /* end of footer css*/

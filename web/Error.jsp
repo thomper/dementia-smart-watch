@@ -13,8 +13,11 @@
 			}
 		</script>
     </head>
-    <body <!--style="font: 18pt 'Veranda', 'Goudy Old Style', sans-serif; text-align: center; background: #F0F0F0; border: 5px solid black; height: calc(100vh - 26px);"--> >
-		<h1> An error has occurred </h1>
+    <body style="font: 12pt 'Veranda', 'Goudy Old Style', sans-serif; text-align: center; background: #F0F0F0; height: calc(100vh - 26px);">
+		<div class = "container"> 
+		<div class = "content">
+			<h2> An error has occurred </h2>
+		
 		<%	
 			int errorCause;
 			try { errorCause = Integer.parseInt(request.getParameter("error")); }
@@ -49,7 +52,9 @@
 						 break;
 			}
 		%>	
-		<h3><a href="javascript:goBack()">Go Back</a></h3>
+			<h3><a href="javascript:goBack()">Go Back</a></h3>
+		</div >
+		</div>
     </body>
 </html>
 
