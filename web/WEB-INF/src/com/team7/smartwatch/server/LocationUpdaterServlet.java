@@ -1,11 +1,12 @@
 package com.team7.smartwatch.server;
 
+import com.team7.smartwatch.shared.Utility;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,16 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@SuppressWarnings("serial")
 public class LocationUpdaterServlet extends HttpServlet {
 
-    private final static String LOCATION_TABLE = "patientloc";
-    private final static String REPLACE_STATEMENT =
+	private static final long serialVersionUID = -7786496267895391536L;
+	private static final String LOCATION_TABLE = "patientloc";
+    private static final String REPLACE_STATEMENT =
         "REPLACE INTO " + LOCATION_TABLE +
         " (patientID, patientLat, patientLong, retrievalTime, retrievalDate) " +
         "values (?, ?, ?, ?, ?)";
-    private final static String SUCCESS_MESSAGE = "Location updated";
-    private final static String ERROR_MESSAGE = "ERROR: could not update location";
+    private static final String SUCCESS_MESSAGE = "Location updated";
+    private static final String ERROR_MESSAGE = "ERROR: could not update location";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -78,7 +79,7 @@ public class LocationUpdaterServlet extends HttpServlet {
             Double latitude = jObj.getDouble("latitude");
             Double longitude = jObj.getDouble("longitude");
 
-            if (arrayContainsNull(patientID, latitude, longitude)) {
+            if (Utility.arrayContainsNull(patientID, latitude, longitude)) {
                 throw new BadPostParameterException();
             }
 
@@ -98,9 +99,5 @@ public class LocationUpdaterServlet extends HttpServlet {
         } catch (IOException | JSONException e) {
         	throw new BadPostParameterException();
         }
-    }
-
-    private boolean arrayContainsNull(Object... objects) {
-    	return Arrays.asList(objects).contains(null);
     }
 }
