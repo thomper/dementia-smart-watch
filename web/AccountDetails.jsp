@@ -41,7 +41,7 @@
 		
     <%-- This will add the rest of the head tag and navigation and alerts --%>	
 	<jsp:include page = "includes/header.jsp" flush = "true" />
-	<jsp:include page = "includes/headerA.jsp" flush = "true" />
+	<jsp:include page = "includes/headerC.jsp" flush = "true" />
 	
 		<div id="content">
 		
