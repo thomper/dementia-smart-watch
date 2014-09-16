@@ -66,7 +66,4 @@
 			<p>Deleting patients implemented - needs to work with AJAX (doesn't currently, I'll fix another time if someone else doesn't)</p> -->
 				
 		</div>	
-		
-<jsp:include page = "includes/footer.jsp" flush = "true" />	
-
-
+	<jsp:include page = "includes/footer.jsp" flush = "true" />

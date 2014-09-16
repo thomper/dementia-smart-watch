@@ -66,7 +66,5 @@
 			<h4><a href="index.jsp">Back To Login<a></h4>
 					
 		</div>	
-		
-	</div>
-    </body>
-</html>
+	
+	<jsp:include page = "includes/headerC.jsp" flush = "true" />
