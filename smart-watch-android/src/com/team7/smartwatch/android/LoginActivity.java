@@ -36,7 +36,7 @@ import android.widget.Toast;
  */
 public class LoginActivity extends Activity {
 
-	private static final String TAG = Locator.class.getName();
+	private static final String TAG = LoginActivity.class.getName();
 	private static final String POST_URL = "http://c5-ubu-ros:8080/login";
 	private static final String SUCCESS_MESSAGE = "Login successful\n";
 
@@ -204,10 +204,11 @@ public class LoginActivity extends Activity {
 			HttpPost request = new HttpPost(POST_URL);
 			JSONObject jObj = new JSONObject();
 			try {
-				jObj.put("userID", Integer.valueOf(mUserID));
+				jObj.put("userID", mUserID);
 				jObj.put("password", mPassword);
 			} catch (JSONException e) {
 				Log.e(TAG, e.getLocalizedMessage());
+                return false;
 			}
 
 			// Set the request header.
@@ -219,6 +220,7 @@ public class LoginActivity extends Activity {
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+                return false;
 			}
 
 			// Send the request.
@@ -228,7 +230,7 @@ public class LoginActivity extends Activity {
 				return responseSuccess(response);
 			} catch (IOException e) {
 				Log.e(TAG, e.getLocalizedMessage());
-				return null;
+				return false;
 			} finally {
 				client.close();
 			}
@@ -242,14 +244,12 @@ public class LoginActivity extends Activity {
 			if (success) {
 				// TODO: Let user select which patient this device is for
 				// TODO: Keep track of session
-				Toast.makeText(getApplicationContext(), "Login succeeded",
-						   Toast.LENGTH_LONG).show();
+				Log.i(TAG, "Login succeeded");
 				// TODO: Start MainActivity, passing session and patient details
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 				startActivity(intent);
 			} else {
-				Toast.makeText(getApplicationContext(), "Login failed",
-						   Toast.LENGTH_LONG).show();
+				Log.i(TAG, "Login failed");
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
