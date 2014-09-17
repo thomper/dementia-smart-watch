@@ -32,12 +32,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * A login screen that offers login via patient ID/password.
+ * A login screen that offers login via username/password.
  */
 public class LoginActivity extends Activity {
 
 	private static final String TAG = LoginActivity.class.getName();
-	private static final String POST_URL = "http://c5-ubu-ros:8080/login";
+	private static final String POST_URL = "http://192.168.1.41:8080/login";
 	private static final String SUCCESS_MESSAGE = "Login successful\n";
 
 	/**
@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
 	private UserLoginTask mAuthTask = null;
 
 	// UI references.
-	private EditText mUserIDView;
+	private EditText mUsernameView;
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
@@ -57,7 +57,7 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
-		mUserIDView = (EditText) findViewById(R.id.userid);
+		mUsernameView = (EditText) findViewById(R.id.username);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
@@ -96,17 +96,17 @@ public class LoginActivity extends Activity {
 		}
 
 		// Reset errors.
-		mUserIDView.setError(null);
+		mUsernameView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
-		String userID = mUserIDView.getText().toString();
+		String username = mUsernameView.getText().toString();
 		String password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
 
-		// Check for a valid password, if the user entered one.
+		// Check for a valid password if the user entered one.
 		if (TextUtils.isEmpty(password)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
 			focusView = mPasswordView;
@@ -118,9 +118,9 @@ public class LoginActivity extends Activity {
 		}
 
 		// Check for a valid patient ID.
-		if (TextUtils.isEmpty(userID)) {
-			mUserIDView.setError(getString(R.string.error_field_required));
-			focusView = mUserIDView;
+		if (TextUtils.isEmpty(username)) {
+			mUsernameView.setError(getString(R.string.error_field_required));
+			focusView = mUsernameView;
 			cancel = true;
 		}
 
@@ -132,7 +132,7 @@ public class LoginActivity extends Activity {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(userID, password);
+			mAuthTask = new UserLoginTask(username, password);
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -189,11 +189,11 @@ public class LoginActivity extends Activity {
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-		private final String mUserID;
+		private final String mUsername;
 		private final String mPassword;
 
-		UserLoginTask(String userID, String password) {
-			mUserID = userID;
+		UserLoginTask(String username, String password) {
+			mUsername = username;
 			mPassword = password;
 		}
 
@@ -204,7 +204,7 @@ public class LoginActivity extends Activity {
 			HttpPost request = new HttpPost(POST_URL);
 			JSONObject jObj = new JSONObject();
 			try {
-				jObj.put("userID", mUserID);
+				jObj.put("username", mUsername);
 				jObj.put("password", mPassword);
 			} catch (JSONException e) {
 				Log.e(TAG, e.getLocalizedMessage());

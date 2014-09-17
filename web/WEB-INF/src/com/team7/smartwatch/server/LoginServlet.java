@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,13 +20,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4701061750449836620L;
+	private static final Logger logger =
+			Logger.getLogger(LoginServlet.class.getName());
 	private static final String USERS_TABLE = "users";
     private static final String SELECT_STATEMENT =
     		"SELECT userPass, salt FROM " + USERS_TABLE +
-    		" WHERE userID = ?";
+    		" WHERE userName = ?";
     private static final String SUCCESS_MESSAGE = "Login successful";
     private static final String ERROR_MESSAGE = "Authentication failed";
 
@@ -44,6 +49,7 @@ public class LoginServlet extends HttpServlet {
 
     private boolean authenticate(HttpServletRequest request) {
         Connection conn = null;
+        String requestUsername = null;
         String requestPassword = null;
         String storedHash = null;
         String salt = null;
@@ -54,18 +60,21 @@ public class LoginServlet extends HttpServlet {
             
             // As we can't pass strings by reference, we use temporary arrays
             // instead.
-            String[] arrayID = {""};
+            String[] arrayUsername = {""};
             String[] arrayPassword = {""};
-            getRequestCredentials(request, arrayID, arrayPassword);
-            String requestUserID = arrayID[0];
+            getRequestCredentials(request, arrayUsername, arrayPassword);
+            requestUsername = arrayUsername[0];
             requestPassword = arrayPassword[0];
 
-            bindValues(selectUser, requestUserID);
+            bindValues(selectUser, requestUsername);
             ResultSet resultSet = selectUser.executeQuery();
             if (resultSet.next()) {
             	storedHash = resultSet.getString("userPass");
             	salt = resultSet.getString("salt");
             } else {
+				logger.log(Level.INFO, "Failed login attempt from "
+						+ request.getRemoteAddr() + " for nonexistent username "
+						+ requestUsername + ".");
             	return false;
             }
         } catch (SQLException e) {
@@ -86,9 +95,22 @@ public class LoginServlet extends HttpServlet {
         }
         
         if(Utility.arrayContainsNull(requestPassword, storedHash, salt)) {
+        	logger.log(Level.INFO, "Error accessing user info from database.");
         	return false;
         }
-        return passwordIsCorrect(requestPassword, storedHash, salt);
+        
+        boolean correct = passwordIsCorrect(requestPassword, storedHash, salt);
+        if (correct) {
+			logger.log(Level.INFO,
+					"Successful login from " + request.getRemoteAddr()
+							+ " for user " + requestUsername + ".");
+        } else {
+			logger.log(Level.INFO,
+					"Failed login attempt from " + request.getRemoteAddr()
+							+ " for user " + requestUsername + ".");
+        }
+
+        return correct;
     }
     
 	private boolean passwordIsCorrect(String requestPassword,
@@ -107,12 +129,12 @@ public class LoginServlet extends HttpServlet {
 		return requestHash.equals(storedHash);
     }
 
-    private void bindValues(PreparedStatement selectUser, String userID)
+    private void bindValues(PreparedStatement selectUser, String username)
             throws BadPostParameterException {
     	
         try {
-            // TODO: validate userID
-            selectUser.setString(1, userID);
+            // TODO: validate username
+            selectUser.setString(1, username);
         } catch (SQLException e) {
         	// TODO: log
             e.printStackTrace();
@@ -122,12 +144,12 @@ public class LoginServlet extends HttpServlet {
     }
     
 	private void getRequestCredentials(HttpServletRequest request,
-			String[] userID, String[] password) throws BadPostParameterException {
+			String[] username, String[] password) throws BadPostParameterException {
     	
         	JSONObject jObj;
 			try {
 				jObj = JSONConverter.getJSON(request);
-				userID[0] = String.valueOf(jObj.getInt("userID"));
+				username[0] = jObj.getString("username");
 				password[0] = jObj.getString("password");
 			} catch (IOException | JSONException e) {
 				e.printStackTrace();
