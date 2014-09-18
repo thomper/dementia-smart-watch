@@ -37,12 +37,14 @@ public class DatabaseUserReader {
 	 * be null.
 	 * 
 	 * @param  selectStatement the SQL select statement to use.
-	 * @param  username the username to select by or null if userID is to be used.
-	 * @param  userID the user ID to select by or null if username is to be used.
+	 * @param  username the username to select by or null if userID is to be
+	 * 		   used.
+	 * @param  userID the user ID to select by or null if username is to be
+	 * 		   used.
 	 * @return the user read from the database, or null if the username or
-	 * 		   userID do not exist in the database.
+	 * 		   userID does not exist in the database or a database error is
+	 * 		   encountered.
 	 * @throws BadSQLParameterException if both userID and username are null.
-	 * @throws SQLException if encountered while attempting to read database.
 	 */
 	private static User readUser(String selectStatement, String username,
 			Integer userID) throws BadSQLParameterException {
@@ -65,7 +67,7 @@ public class DatabaseUserReader {
 			e.printStackTrace();
 			return null;
 		} finally {
-			closeDatabaseConnection(conn);
+			DatabaseConnector.closeConnection(conn);
 		}
 	}
 	
@@ -98,16 +100,4 @@ public class DatabaseUserReader {
 		return user;
 	}
 	
-	private static void closeDatabaseConnection(Connection conn) {
-
-			try {
-	            if (conn != null) {
-	            	conn.close();
-	            	conn = null;
-	            }
-			} catch (SQLException e) {
-				logger.log(Level.WARNING,
-						"Could not close database connection.");
-			}
-	}
 }

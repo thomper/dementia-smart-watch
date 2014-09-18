@@ -1,5 +1,7 @@
 package com.team7.smartwatch.shared;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -34,5 +36,12 @@ public class Utility {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+    
+    public static String StringFromStackTrace(Exception ex) {
+
+    	StringWriter stackTrace = new StringWriter();
+    	ex.printStackTrace(new PrintWriter(stackTrace));
+    	return stackTrace.toString();
     }
 }

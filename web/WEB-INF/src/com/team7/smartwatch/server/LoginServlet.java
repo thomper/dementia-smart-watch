@@ -38,22 +38,26 @@ public class LoginServlet extends HttpServlet {
 		}
 	}
 
+	/* Returns true if the request contains a matching username and password,
+	 * false otherwise.
+	 */
 	private boolean authenticate(HttpServletRequest request) {
-		// TODO: Refactor! Extract database and business logic code.
 
 		Credentials credentials = getRequestCredentials(request);
-		User user = getUser(credentials, request.getRemoteAddr());
-		if (credentials == null || user == null) {
+		if (credentials == null || credentials.username == null ||
+				credentials.password == null) {
 			return false;
 		}
 
-		boolean succeeded = credentials.passwordIsCorrect(user.salt,
-				user.storedHash);
+		User user = getUser(credentials);
+		boolean usernameExists = user != null;
+		boolean succeeded = usernameExists &&
+				credentials.passwordIsCorrect(user.salt, user.storedHash);
 		if (succeeded) {
 			HttpSession session = request.getSession();
-			session.setAttribute("userID", user.userID);
+			session.setAttribute("username", user.username);
 		}
-		logLoginAttempt(succeeded, credentials.username,
+		logLoginAttempt(succeeded, usernameExists, credentials.username,
 				request.getRemoteAddr());
 		return succeeded;
 	}
@@ -90,30 +94,28 @@ public class LoginServlet extends HttpServlet {
 	 * @return the user with filled out details or null if the user could not be
 	 * 		   read.
 	 */
-	private User getUser(Credentials credentials, String remoteAddress) {
+	private User getUser(Credentials credentials) {
 
 		User user = null;
 
 		try {
 			user = DatabaseUserReader
 					.readUserByUsername(credentials.username);
-			if (user == null) {
-				logger.log(Level.INFO, "Failed login attempt from " +
-						remoteAddress + " for nonexistent username " +
-						credentials.username + ".");
-			}
 		} catch (BadSQLParameterException e) {
-			logger.log(Level.SEVERE, "readUserByUsername called with two " +
-					"null arguments.");
+			logger.log(Level.SEVERE, "getUser called with null username");
 		}
 		
 		return user;
 	}
 	
-	private void logLoginAttempt(boolean succeeded, String username,
-			String remoteAddress) {
+	private void logLoginAttempt(boolean succeeded, boolean usernameExists,
+			String username, String remoteAddress) {
 
-		if (succeeded) {
+		if (!usernameExists) {
+            logger.log(Level.INFO, "Failed login attempt from " +
+                    remoteAddress + " for nonexistent username " +
+                    username + ".");
+		} else if (succeeded) {
 			logger.log(Level.INFO,
 					"Successful login from " + remoteAddress + " for user " +
 							username + ".");
