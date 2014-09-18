@@ -81,6 +81,31 @@ END
 //
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
+  `patientID` int(5) NOT NULL,
+  `alertTime` time NOT NULL DEFAULT '00:00:00',
+  `alertDate` date NOT NULL,
+  PRIMARY KEY (`patientID`,`alertTime`),
+  KEY `patientID` (`patientID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Triggers `patientalerts`
+--
+DROP TRIGGER IF EXISTS `insert_batteryalerts`;
+DELIMITER //
+CREATE TRIGGER `insert_batteryalerts` BEFORE INSERT ON `patientbatteryalerts`
+ FOR EACH ROW BEGIN
+UPDATE patients
+SET patients.status = 'Battery Low'
+WHERE patients.patientID = NEW.patientID;
+
+SET NEW.alertDate = DATE_FORMAT(now(),'%Y-%m-%d'),
+	NEW.alertTime = TIME_FORMAT(CURTIME(), '%H:%i:%s');
+END
+//
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
