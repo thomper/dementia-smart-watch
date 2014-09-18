@@ -29,7 +29,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * A login screen that offers login via username/password.
@@ -87,7 +86,7 @@ public class LoginActivity extends Activity {
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
-	 * If there are form errors (invalid patient ID, missing fields, etc.), the
+	 * If there are form errors (invalid username, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
@@ -117,7 +116,7 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		}
 
-		// Check for a valid patient ID.
+		// Check for a valid username.
 		if (TextUtils.isEmpty(username)) {
 			mUsernameView.setError(getString(R.string.error_field_required));
 			focusView = mUsernameView;
