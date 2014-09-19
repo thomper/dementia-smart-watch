@@ -4,100 +4,99 @@ import com.team7.smartwatch.shared.Utility;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LocationUpdaterServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -7786496267895391536L;
-	private static final String LOCATION_TABLE = "patientloc";
-    private static final String REPLACE_STATEMENT =
-        "REPLACE INTO " + LOCATION_TABLE +
-        " (patientID, patientLat, patientLong, retrievalTime, retrievalDate) " +
-        "values (?, ?, ?, ?, ?)";
+	private static final Logger logger = Logger
+			.getLogger(LocationUpdaterServlet.class.getName());
     private static final String SUCCESS_MESSAGE = "Location updated";
-    private static final String ERROR_MESSAGE = "ERROR: could not update location";
+    private static final String ERROR_MESSAGE = "Failed to update location";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-    		throws IOException, ServletException
-    {
+    		throws IOException, ServletException {
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        int rowsUpdated = update(request);
-        if (rowsUpdated == 0) {
-            out.println(ERROR_MESSAGE);
-        } else {
+        boolean succeeded = update(request);
+        if (succeeded) {
             out.println(SUCCESS_MESSAGE);
+        } else {
+            out.println(ERROR_MESSAGE);
         }
     }
-
-    private int update(HttpServletRequest request) {
-        int rowsUpdated = 0;
-        Connection conn = null;
-
-        try {
-            conn = DatabaseConnector.getConnection();
-            PreparedStatement replaceLoc = conn.prepareStatement(REPLACE_STATEMENT);
-            bindValues(replaceLoc, request);
-            rowsUpdated = replaceLoc.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (BadPostParameterException e) {
-            // TODO: log error?
-		} finally {
-			
-			// Close database connection.
-            try {
-                if (conn != null) {
-                    conn.close();
-                    conn = null;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return rowsUpdated;
-    }
-
-    private void bindValues(PreparedStatement replaceLoc, HttpServletRequest request)
-            throws BadPostParameterException {
+    
+    private class LocationUpdate {
     	
-        try {
-        	JSONObject jObj = JSONConverter.getJSON(request);
-            String patientID = jObj.getString("patientID");
-            Double latitude = jObj.getDouble("latitude");
-            Double longitude = jObj.getDouble("longitude");
+    	public int patientID;
+    	public double latitude;
+    	public double longitude;
+    	
+    	public boolean valid() {
+    		if (Utility.arrayContainsNull(patientID, latitude, longitude)) {
+    			return false;
+    		}
+    		if (patientID < 0) {
+    			return false;
+    		}
+    		if (Math.abs(latitude) > 90.0 || Math.abs(longitude) > 180) {
+    			return false;
+    		}
+    		return true;
+    	}
+    }
 
-            if (Utility.arrayContainsNull(patientID, latitude, longitude)) {
-                throw new BadPostParameterException();
-            }
+    /**
+     * 
+     * @param request
+     * @return true if the update was successful, false otherwise.
+     */
+    private boolean update(HttpServletRequest request) {
+    	
+    	LocationUpdate locationUpdate = getRequestDetails(request);
+    	if (locationUpdate == null) {
+    		return false;
+    	}
 
-            // TODO: validate parameters
-            replaceLoc.setInt(1, Integer.parseInt(patientID));
-            replaceLoc.setDouble(2, latitude);
-            replaceLoc.setDouble(3, longitude);
-            
-            // The time and date here will be ignored, as they are set by a
-            // mysql trigger. We still need to set them as something though
-            // because they are both defined NOT NULL.
-            replaceLoc.setTimestamp(4, new java.sql.Timestamp(0));
-            replaceLoc.setTimestamp(5, new java.sql.Timestamp(0));
-        } catch (SQLException e) {
-        	// TODO: log
-            e.printStackTrace();
-        } catch (IOException | JSONException e) {
-        	throw new BadPostParameterException();
-        }
+    	try {
+			boolean succeeded = DatabaseLocationWriter.writeLocation(
+					locationUpdate.patientID, locationUpdate.latitude,
+					locationUpdate.longitude);
+			return succeeded;
+		} catch (BadSQLParameterException e) {
+			logger.log(Level.SEVERE, Utility.StringFromStackTrace(e));
+			return false;
+		}
+    }
+    
+    private LocationUpdate getRequestDetails(HttpServletRequest request) {
+    
+		try {
+			JSONObject jObj;
+			jObj = JSONConverter.getJSON(request);
+			LocationUpdate locationUpdate = new LocationUpdate();
+			locationUpdate.patientID = jObj.getInt("patientID");
+			locationUpdate.latitude = jObj.getDouble("latitude");
+			locationUpdate.longitude = jObj.getDouble("longitude");
+	        if (!locationUpdate.valid()) {
+	        	logger.log(Level.INFO, "One or more of patientID, latitude, " +
+	        			"and longitude missing or invalid.");
+	        	return null;
+	        }
+	        return locationUpdate;
+		} catch (IOException e) {
+			logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
+			return null;
+		}
     }
 }
