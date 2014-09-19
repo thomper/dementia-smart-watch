@@ -21,17 +21,27 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-	private Locator locator;	
-	private Patient patient;
+	private static String mServerAddress;
+	private Locator mLocator;	
+	private Patient mPatient;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Get server address.
+		if (savedInstanceState == null) {
+			Bundle extras = getIntent().getExtras();
+			mServerAddress = extras.getString("SERVER_ADDRESS");
+		} else {
+			mServerAddress = (String) savedInstanceState
+					.getSerializable("SERVER_ADDRESS");
+		}
 
-		// patient will be passed to MainActivity by LoginActivity
-		patient = new Patient();
-		patient.ID = 4;
+		// mPatient will be passed to MainActivity by LoginActivity
+		mPatient = new Patient();
+		mPatient.ID = 4;
 		lockOrientationToPortrait();
 		setupPanicButton();
 		startTrackingLocation();
@@ -134,7 +144,7 @@ public class MainActivity extends Activity {
 		if (!gpsEnabled()) {
 			showDialogNoGps();
 		}
-		locator = new Locator(this, patient.ID);
+		mLocator = new Locator(this, mPatient.ID, mServerAddress);
 	}
 	
 	private boolean gpsEnabled() {

@@ -2,6 +2,8 @@ package com.team7.smartwatch.android;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -10,6 +12,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.team7.smartwatch.shared.Utility;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -22,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +41,8 @@ import android.widget.TextView;
 public class LoginActivity extends Activity {
 
 	private static final String TAG = LoginActivity.class.getName();
-	private static final String POST_URL = "http://192.168.1.41:8080/login";
+	private static final String SERVER_ADDRESS = "http://192.168.1.41:8080";
+	private static final String POST_URL = SERVER_ADDRESS + "/login";
 	private static final String SUCCESS_MESSAGE = "Login successful\n";
 
 	/**
@@ -111,7 +117,7 @@ public class LoginActivity extends Activity {
 			focusView = mPasswordView;
 			cancel = true;
 		} else if (!isPasswordValid(password)) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
+			mPasswordView.setError(getString(R.string.error_password_too_short));
 			focusView = mPasswordView;
 			cancel = true;
 		}
@@ -200,35 +206,18 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			// Create the request.
-			HttpPost request = new HttpPost(POST_URL);
-			JSONObject jObj = new JSONObject();
-			try {
-				jObj.put("username", mUsername);
-				jObj.put("password", mPassword);
-			} catch (JSONException e) {
-				Log.e(TAG, e.getLocalizedMessage());
-                return false;
-			}
-
-			// Set the request header.
-			try {
-				StringEntity se = new StringEntity(jObj.toString());
-				request.setHeader("Accept", "application/json");
-				request.setHeader("Content-type", "application/json");
-				request.setEntity(se);
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-                return false;
-			}
+			List<Pair<String, Object>> json = new ArrayList<Pair<String, Object>>();
+			json.add(Pair.create("username", (Object)mUsername));
+			json.add(Pair.create("password", (Object)mPassword));
+			HttpPost request = createRequestFromJSON(json, POST_URL);
 
 			// Send the request.
 			AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
 			try {
 				HttpResponse response = client.execute(request);
-				return responseSuccess(response);
+				return responseSucceeded(response);
 			} catch (IOException e) {
-				Log.e(TAG, e.getLocalizedMessage());
+				Log.e(TAG, Utility.StringFromStackTrace(e));
 				return false;
 			} finally {
 				client.close();
@@ -246,6 +235,7 @@ public class LoginActivity extends Activity {
 				Log.i(TAG, "Login succeeded");
 				// TODO: Start MainActivity, passing session and patient details
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+				intent.putExtra("SERVER_ADDRESS", SERVER_ADDRESS);
 				startActivity(intent);
 			} else {
 				Log.i(TAG, "Login failed");
@@ -262,7 +252,7 @@ public class LoginActivity extends Activity {
 		}
 		
 		/* Return true if the login succeeded, false otherwise. */
-		private boolean responseSuccess(HttpResponse response) {
+		private boolean responseSucceeded(HttpResponse response) {
 			try {
 				String responseStr = EntityUtils.toString(response.getEntity());
 				return responseStr.equals(SUCCESS_MESSAGE);
@@ -275,6 +265,32 @@ public class LoginActivity extends Activity {
 				e.printStackTrace();
 				return false;
 			}
+		}
+	}
+	
+	private HttpPost createRequestFromJSON(List<Pair<String, Object>> values,
+			String postUrl) {
+
+		// Create request and set header.
+		HttpPost request = new HttpPost(postUrl);
+        request.setHeader("Accept", "application/json");
+		request.setHeader("Content-type", "application/json");
+		
+		// Add JSON values.
+		JSONObject jObj = new JSONObject();
+		try {
+			for (Pair<String, Object> pair : values) {
+				jObj.put(pair.first, pair.second);
+			}
+			StringEntity se = new StringEntity(jObj.toString());
+			request.setEntity(se);
+			return request;
+		} catch (JSONException e) {
+			Log.e(TAG, Utility.StringFromStackTrace(e));
+            return null;
+		} catch (UnsupportedEncodingException e) {
+			Log.e(TAG, Utility.StringFromStackTrace(e));
+            return null;
 		}
 	}
 }
