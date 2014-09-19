@@ -1,17 +1,11 @@
 package com.team7.smartwatch.android;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.team7.smartwatch.shared.Utility;
 
@@ -20,8 +14,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -96,6 +88,7 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
+
 		if (mAuthTask != null) {
 			return;
 		}
@@ -130,14 +123,18 @@ public class LoginActivity extends Activity {
 		}
 
 		if (cancel) {
+
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
 			focusView.requestFocus();
 		} else {
+
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(username, password);
+			List<Pair<String, Object>> jsonList = createJSONList(username,
+					password);
+			mAuthTask = new UserLoginTask(TAG, jsonList, POST_URL);
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -145,6 +142,17 @@ public class LoginActivity extends Activity {
 	private boolean isPasswordValid(String password) {
 		// TODO: Replace this with your own logic
 		return password.length() > 4;
+	}
+	
+	private List<Pair<String, Object>> createJSONList(String username,
+			String password) {
+
+		List<Pair<String, Object>> jsonList =
+				new ArrayList<Pair<String, Object>>();
+		jsonList.add(Pair.create("username", (Object)username));
+		jsonList.add(Pair.create("password", (Object)password));
+		
+		return jsonList;
 	}
 
 	/**
@@ -181,6 +189,7 @@ public class LoginActivity extends Activity {
 						}
 					});
 		} else {
+
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -192,43 +201,21 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	public class UserLoginTask extends BasicNetworkTask {
 
-		private final String mUsername;
-		private final String mPassword;
+		UserLoginTask(String logTag, List<Pair<String, Object>> jsonList,
+				String postUrl) {
 
-		UserLoginTask(String username, String password) {
-			mUsername = username;
-			mPassword = password;
+			super(logTag, jsonList, postUrl);
 		}
 
 		@Override
-		protected Boolean doInBackground(Void... params) {
+		protected void onPostExecute(final HttpResponse response) {
 
-			// Create the request.
-			List<Pair<String, Object>> json = new ArrayList<Pair<String, Object>>();
-			json.add(Pair.create("username", (Object)mUsername));
-			json.add(Pair.create("password", (Object)mPassword));
-			HttpPost request = createRequestFromJSON(json, POST_URL);
-
-			// Send the request.
-			AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
-			try {
-				HttpResponse response = client.execute(request);
-				return responseSucceeded(response);
-			} catch (IOException e) {
-				Log.e(TAG, Utility.StringFromStackTrace(e));
-				return false;
-			} finally {
-				client.close();
-			}
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
 			mAuthTask = null;
 			showProgress(false);
-
+			
+			boolean success = responseSucceeded(response);
 			if (success) {
 				// TODO: Let user select which patient this device is for
 				// TODO: Keep track of session
@@ -250,47 +237,16 @@ public class LoginActivity extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 		}
-		
-		/* Return true if the login succeeded, false otherwise. */
+
 		private boolean responseSucceeded(HttpResponse response) {
+
 			try {
 				String responseStr = EntityUtils.toString(response.getEntity());
 				return responseStr.equals(SUCCESS_MESSAGE);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG, Utility.StringFromStackTrace(e));
 				return false;
 			}
-		}
-	}
-	
-	private HttpPost createRequestFromJSON(List<Pair<String, Object>> values,
-			String postUrl) {
-
-		// Create request and set header.
-		HttpPost request = new HttpPost(postUrl);
-        request.setHeader("Accept", "application/json");
-		request.setHeader("Content-type", "application/json");
-		
-		// Add JSON values.
-		JSONObject jObj = new JSONObject();
-		try {
-			for (Pair<String, Object> pair : values) {
-				jObj.put(pair.first, pair.second);
-			}
-			StringEntity se = new StringEntity(jObj.toString());
-			request.setEntity(se);
-			return request;
-		} catch (JSONException e) {
-			Log.e(TAG, Utility.StringFromStackTrace(e));
-            return null;
-		} catch (UnsupportedEncodingException e) {
-			Log.e(TAG, Utility.StringFromStackTrace(e));
-            return null;
 		}
 	}
 }

@@ -1,30 +1,25 @@
 package com.team7.smartwatch.android;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.team7.smartwatch.shared.Utility;
-
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 
 /** Locator provides access to the device's last known location and the
  *  time at which the location was last updated. */
@@ -86,71 +81,18 @@ public class Locator {
 		}
 	}
 
-	public class LocationUpdaterTask extends
-			AsyncTask<Void, Void, Boolean> {
+	public class LocationUpdaterTask extends BasicNetworkTask {
 			
-		@Override
-		protected Boolean doInBackground(Void... params) {
-					
-			// Create request.
-			HttpPost request = createRequest();
-			if (request == null) {
-				Log.e(TAG, "Error creating HTTP request.");
-				return false;
-			}
-
-			// Send request.
-			AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
-			try {
-				HttpResponse response = client.execute(request);
-				return responseSucceeded(response);
-			} catch (IOException e) {
-				Log.e(TAG, Utility.StringFromStackTrace(e));
-				return false;
-			} finally {
-				client.close();
-			}
+		public LocationUpdaterTask(String logTag,
+				List<Pair<String, Object>> jsonList, String postUrl) {
+			super(logTag, jsonList, postUrl);
 		}
-	
-	    @Override
-	    protected void onPostExecute(Boolean result) {
-	        
-	        if (result != null) {
-	        	if (result == false) {
-	        		Log.e(TAG, "Updating location failed.");
-	        	}
-	        }
-	    }
-	    
-	    /* Create a HTTP POST request with location update details in JSON. */
-	    private HttpPost createRequest() {
-    	
-				try {
-					HttpPost request = new HttpPost(mPostUrl);
-					request.setHeader("Accept", "application/json");
-				    request.setHeader("Content-type", "application/json");
-					JSONObject jObj = createJSON();
-					StringEntity se = new StringEntity(jObj.toString());
-					request.setEntity(se);
-					return request;
-				} catch (UnsupportedEncodingException e) {
-					Log.e(TAG, Utility.StringFromStackTrace(e));
-					return null;
-				}
-	    }
-	    
-	    private JSONObject createJSON() {
 
-			try {
-				JSONObject jObj = new JSONObject();
-				jObj.put("patientID", mPatientID);
-				jObj.put("latitude", mLastLocation.getLatitude());
-				jObj.put("longitude", mLastLocation.getLongitude());
-				return jObj;
-			} catch (JSONException e) {
-				Log.e(TAG, Utility.StringFromStackTrace(e));
-				return null;
-			}
+	    protected void onPostExecute(HttpResponse result) {
+	        
+        	if (!responseSucceeded(result)) {
+        		Log.e(TAG, "Updating location failed.");
+        	}
 	    }
 
 		private boolean responseSucceeded(HttpResponse response) {
@@ -177,7 +119,15 @@ public class Locator {
 
 	private void postLocation() {
 		
-            new LocationUpdaterTask().execute();
+		List<Pair<String, Object>> jsonList =
+				new ArrayList<Pair<String, Object>>();
+		jsonList.add(Pair.create("patientID", (Object)mPatientID));
+		jsonList.add(Pair.create("latitude",
+				(Object) mLastLocation.getLatitude()));
+		jsonList.add(Pair.create("longitude",
+				(Object) mLastLocation.getLongitude()));
+
+		new LocationUpdaterTask(TAG, jsonList, mPostUrl).execute();
 	}
 	
 	@SuppressLint("SimpleDateFormat")
