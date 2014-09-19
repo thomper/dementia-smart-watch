@@ -46,6 +46,7 @@ public class LocationUpdaterServlet extends HttpServlet {
     	public double longitude;
     	
     	public boolean valid() {
+
     		if (Utility.arrayContainsNull(patientID, latitude, longitude)) {
     			return false;
     		}
