@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LocationUpdaterServlet extends HttpServlet {
@@ -30,6 +31,8 @@ public class LocationUpdaterServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         boolean succeeded = update(request);
         if (succeeded) {
+        	logger.log(Level.INFO, "Location update received from " +
+        			request.getRemoteAddr() + ".");
             out.println(SUCCESS_MESSAGE);
         } else {
             out.println(ERROR_MESSAGE);
@@ -80,6 +83,9 @@ public class LocationUpdaterServlet extends HttpServlet {
     }
     
     private LocationUpdate getRequestDetails(HttpServletRequest request) {
+    	
+    	final String JSON_ERROR_MESSAGE = "One or more of patientID, " +
+    			"latitude, and longitude missing or invalid.";
     
 		try {
 			JSONObject jObj;
@@ -89,11 +95,13 @@ public class LocationUpdaterServlet extends HttpServlet {
 			locationUpdate.latitude = jObj.getDouble("latitude");
 			locationUpdate.longitude = jObj.getDouble("longitude");
 	        if (!locationUpdate.valid()) {
-	        	logger.log(Level.INFO, "One or more of patientID, latitude, " +
-	        			"and longitude missing or invalid.");
+	        	logger.log(Level.INFO, JSON_ERROR_MESSAGE);
 	        	return null;
 	        }
 	        return locationUpdate;
+		} catch (JSONException e) {
+	        logger.log(Level.INFO, JSON_ERROR_MESSAGE);
+	        return null;
 		} catch (IOException e) {
 			logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
 			return null;
