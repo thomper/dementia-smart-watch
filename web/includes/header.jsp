@@ -7,6 +7,7 @@
 	 String carerID = session.getAttribute("carerid").toString();
 	 String display = "none";
 	 String patientID = "";
+	 Integer count = 0;
 
 	 Class.forName("com.mysql.jdbc.Driver").newInstance();
 	 java.sql.Connection conn;
@@ -17,6 +18,7 @@
 	 if (rs.next()) {
 		if (rs.getString(4).equals("fine") == false) {
 			display = "block";
+			count = 1;
 		}
 	}
 %>
@@ -38,38 +40,40 @@
 				</div>
 			</div>
 			<div id="alert" style="display: <%=display%>;">
-				<%		
-					do {
-						patientID = rs.getString(1);
-						Statement st2 = conn.createStatement();
-						ResultSet rs2 = null;
-						
-						String status = "";
-						String trigger = "";
-						
-						if (rs.getString(4).equals("Collapsed") == true) {
-							rs2 = st2.executeQuery("SELECT collapseDate, collapseTime FROM patientcollapses WHERE patientID='"+patientID+"' ORDER BY collapseDate DESC, collapseTime DESC");
-							rs2.next();
-							trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
-							rs2.close();
+				<%	
+					if (count == 1) {
+						do {
+							patientID = rs.getString(1);
+							Statement st2 = conn.createStatement();
+							ResultSet rs2 = null;
 							
-							status = "has collapsed and may need assistance.";
+							String status = "";
+							String trigger = "";
 							
-						} else if (rs.getString(4).equals("Distressed") == true) {
-							rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
-							rs2.next();
-							trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
-							rs2.close();
+							if (rs.getString(4).equals("Collapsed") == true) {
+								rs2 = st2.executeQuery("SELECT collapseDate, collapseTime FROM patientcollapses WHERE patientID='"+patientID+"' ORDER BY collapseDate DESC, collapseTime DESC");
+								rs2.next();
+								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
+								rs2.close();
+								
+								status = "has collapsed and may need assistance.";
+								
+							} else if (rs.getString(4).equals("Distressed") == true) {
+								rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
+								rs2.next();
+								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
+								rs2.close();
+								
+								status = "has pressed the panic button and may need assistance.";
+							} else {
+								status = "is lost and may need assistance.";
+							}
 							
-							status = "has pressed the panic button and may need assistance.";
-						} else {
-							status = "is lost and may need assistance.";
-						}
-						
-						out.println("<img src='images/exclamation2.gif' />");
-						out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='ChangeStatus.jsp?patientid=" + patientID + "'>Dismiss</a>");
-						out.println("<br/>");
-					} while (rs.next());
+							out.println("<img src='images/exclamation2.gif' /></img>");
+							out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='ChangeStatus.jsp?patientid=" + patientID + "'>Dismiss</a>");
+							out.println("<br/>");
+						} while (rs.next());
+					}
 				%>	
 			</div>
 		

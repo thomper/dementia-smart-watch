@@ -8,6 +8,7 @@
 		<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
 		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
+		<script src="scripts/register.js" type="text/javascript"></script>
     </head>
 	
     <body>
@@ -33,34 +34,42 @@
 					<legend><b>Your Details:</b></legend>
 					
 					<label for="username">First Name</label>
-					<center><input name="fname" type="text" placeholder="First Name" maxlength="20" required></center>
+					<center><input id="firstName" name="fname" type="text" placeholder="First Name" onblur="checkFirstName();" maxlength='20' required>
+					<span id="firstNameMessage" class="firstNameMessage"></span></center>
 					
 					<label for="username">Last Name</label>
-					<center><input name="lname" type="text" placeholder="Last Name" maxlength="30" required></center>
+					<center><input id="lastName" name="lname" type="text" placeholder="Last Name" onblur="checkLastName(); return false;" maxlength='30' required>
+					<span id="lastNameMessage" class="lastNameMessage"></span></center>
 					
 					<label for="username">Mobile #</label>
-					<center><input name="mobile" type="number" placeholder="0412345678" min="0" max="9999999999" required></center>
+					<center><input id="mobile" name="mobile" type="number" onblur="checkMobile(); return false;" placeholder="0412345678" maxlength='10' required>
+					<span id="mobileMessage" class="mobileMessage"></span></center>
 					
 					<label for="username">Alternate Contact #</label>
-					<center><input name="contactnum" type="number" placeholder="0712345678" min="0" max="9999999999" required></center>
+					<center><input id="alternateMobile" name="contactnum" type="number" onblur="checkAlternateMobile(); return false;" placeholder="0712345678" maxlength='10' required>
+					<span id="alternateMobileMessage" class="alternateMobileMessage"></span></center>
 					
 					<legend><b>Account Details:</b></legend>
 					
 					<label for="email">Email Address</label>
-					<center><input name="email" type="email" placeholder="foo@bar.com" maxlength="50" required></center>
+					<center><input id="email" name="email" type="email" placeholder="foo@bar.com" onblur="checkEmail(); return false;" maxlength='50' required>
+					<span id="emailMessage" class="emailMessage"></span></center>
 					
 					<label for="username">User Name</label>
-					<center><input name="username" type="text" placeholder="Prefered Username" maxlength="15" required></center>
+					<center><input id="username" name="username" type="text" placeholder="Prefered Username" onblur="checkUsername(); return false;" maxlength='15' required>
+					<span id="usernameMessage" class="usernameMessage"></span></center>
 
 					<label for="password">Password</label>
-					<center><input name="password" type="password" placeholder="Password" maxlength="64" required></center>
+					<center><input id="password" name="password" type="password" placeholder="Password" onblur="checkPassword(); return false;" maxlength='20' required>
+					<span id="passwordMessage" class="passwordMessage"></span></center>
 					
 					<label for="password">Confirm Password</label>
-					<center><input name="confirmpassword" type="password" placeholder="Password Again" maxlength="64" required><center>
+					<center><input id="confirmPassword" name="confirmpassword" type="password" placeholder="Password Again" onblur="checkConfirmPassword(); return false;" maxlength='20' required>
+					<span id="confirmPasswordMessage" class="confirmPasswordMessage"></span><center>
 
-					<button type="submit" class="pure-button pure-button-primary">Create Account!</button>
+					<button type="submit" name="register" class="pure-button pure-button-primary" value="register">Create Account!</button>
 				</fieldset>
-			</form>	
+			</form>		
 			
 			<br>
 			<h4><a href="index.jsp">Back To Login<a></h4>
