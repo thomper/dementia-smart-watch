@@ -33,7 +33,7 @@
 				case 4:  out.println("<h3>Passwords do not match.</h3>");
 						 break;
 				case 5:  out.println("<h3>You are not logged in.</h3>");
-						 out.println("<a href='index.html'>Login</a>");
+						 out.println("<a href='index.jsp'>Login</a>");
 						 break;
 				case 6:  out.println("<h3>Someone else is using that email address.</h3>");
 						 break;
