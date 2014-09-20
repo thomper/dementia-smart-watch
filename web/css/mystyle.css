@@ -16,10 +16,10 @@ a {
 
 /* header css*/
 #header {
-    	text-align: center;
+    text-align: center;
 	margin:0px;
 	padding:0px;
-    	border-bottom: 1px #F0F0F0;
+    border-bottom: 1px #F0F0F0;
 	overflow: no-content;
 	text-align: center;
 	background-image: url("../images/gradient.jpg");
@@ -108,6 +108,7 @@ fieldset {
 
 .pure-button-primary, .pure-button-selected, a.pure-button-primary, a.pure-button-selected {
 	background-color: #31998D;
+	margin-top: 15px;
 }
 .pure-form-aligned .pure-control-group label {
 	width: 13em;

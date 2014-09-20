@@ -1,11 +1,11 @@
-	<div id="headerA">
-			<div id="header-left">
+	<div id="headerC">
+			<div>
 				<p><a href="AccountDetails.jsp">Update Account</a></p>
 			</div>
-			<div id="header-right">
+			<div>
 				<p><a href="ChangePassword.jsp">Change Password</a></p>				
 			</div>
-			<div id="header-middle">
+			<div>
 				<p><a href="Register.jsp">New Account</a></p>
 			</div>			
 	</div>
