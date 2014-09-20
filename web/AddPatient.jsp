@@ -144,4 +144,4 @@
 			
 		</div>	
 		
-	<jsp:include page = "includes/headerC.jsp" flush = "true" />
+	<jsp:include page = "includes/footer.jsp" flush = "true" />

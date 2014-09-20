@@ -30,4 +30,4 @@
 			<h2><a href="index.jsp">Click here to login</a></h2>
 		</div>	
 		
-	<jsp:include page = "includes/headerC.jsp" flush = "true" />
+	<jsp:include page = "includes/footer.jsp" flush = "true" />

@@ -54,6 +54,6 @@
 		%>	
 			<h3><a href="javascript:goBack()">Go Back</a></h3>
 		</div >
-	<jsp:include page = "includes/headerC.jsp" flush = "true" />
+	<jsp:include page = "includes/footer.jsp" flush = "true" />
 	
 
