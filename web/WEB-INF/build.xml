@@ -3,7 +3,7 @@
 <project name="smartwatchservlets" default="compile" basedir=".">
 
         <!-- We need to compile the smart-watch-shared project first so that we
-             have shared.jar in the libs directory. -->
+             have shared.jar in the ../../lib directory. -->
         <ant antfile="../smart-watch-shared/build.xml" dir="../../smart-watch-shared" />
 
         <!-- Variables for smart-watch-server -->
@@ -35,7 +35,6 @@
 		<mkdir dir="${test.build.dir}" />
 		<mkdir dir="${test.report.dir}" />
         </target>
-
 
 	<target name="compile" depends="clean, makedir">
 		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="project-classpath" />

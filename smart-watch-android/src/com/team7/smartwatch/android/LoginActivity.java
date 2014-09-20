@@ -217,8 +217,8 @@ public class LoginActivity extends Activity {
 			
 			boolean success = responseSucceeded(response);
 			if (success) {
-				// TODO: Let user select which patient this device is for
 				// TODO: Keep track of session
+				// TODO: Let user select which patient this device is for
 				Log.i(TAG, "Login succeeded");
 				// TODO: Start MainActivity, passing session and patient details
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);

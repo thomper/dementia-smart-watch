@@ -22,6 +22,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	private static String mServerAddress;
+	@SuppressWarnings("unused")
 	private Locator mLocator;	
 	private Patient mPatient;
 	
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
 
 		// mPatient will be passed to MainActivity by LoginActivity
 		mPatient = new Patient();
-		mPatient.ID = 4;
+		mPatient.patientID = 4;
 		lockOrientationToPortrait();
 		setupPanicButton();
 		startTrackingLocation();
@@ -144,7 +145,7 @@ public class MainActivity extends Activity {
 		if (!gpsEnabled()) {
 			showDialogNoGps();
 		}
-		mLocator = new Locator(this, mPatient.ID, mServerAddress);
+		mLocator = new Locator(this, mPatient.patientID, mServerAddress);
 	}
 	
 	private boolean gpsEnabled() {

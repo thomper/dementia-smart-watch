@@ -2,9 +2,9 @@ package com.team7.smartwatch.shared;
 
 public class User {
 
-	public int userID;
-	public int patientID;
-	public int carerID;
+	public Integer userID;
+	public Integer patientID;
+	public Integer carerID;
 	public String email;
 	public String username;
 	public String storedHash;

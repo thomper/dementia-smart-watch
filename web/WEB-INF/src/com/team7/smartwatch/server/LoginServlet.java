@@ -28,6 +28,7 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
+		// TODO: we should be using JSON instead of text for the response
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		boolean succeeded = authenticate(request);
@@ -55,7 +56,7 @@ public class LoginServlet extends HttpServlet {
 				credentials.passwordIsCorrect(user.salt, user.storedHash);
 		if (succeeded) {
 			HttpSession session = request.getSession();
-			session.setAttribute("username", user.username);
+			session.setAttribute("userID", user.userID);
 		}
 		logLoginAttempt(succeeded, usernameExists, credentials.username,
 				request.getRemoteAddr());
@@ -102,7 +103,7 @@ public class LoginServlet extends HttpServlet {
 			user = DatabaseUserReader
 					.readUserByUsername(credentials.username);
 		} catch (BadSQLParameterException e) {
-			logger.log(Level.SEVERE, "getUser called with null username");
+			logger.log(Level.SEVERE, e.getLocalizedMessage());
 		}
 		
 		return user;

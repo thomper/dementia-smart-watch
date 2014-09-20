@@ -6,13 +6,17 @@
         <property name="build.dir" location="bin" />
         <property name="jar.dir" location="jar" />
 
+        <path id="lib.dir">
+                <pathelement location="lib/org.json-20131017.jar" />
+        </path>
+
         <!-- Variables for smart-watch-shared-tests -->
         <property name="test.src.dir" location="../smart-watch-shared-tests/src" />
         <property name="test.build.dir" location="../smart-watch-shared-tests/bin" />
         <property name="test.report.dir" location="../smart-watch-shared-tests/testreport" />
 
         <path id="test.lib.dir">
-                <pathelement location="../smart-watch-shared-tests/lib/shared.jar" />
+                <pathelement location="jar/shared.jar" />
         </path>
 
         <path id="junit.classpath">
@@ -35,14 +39,15 @@
         </target>
 
 	<target name="compile" depends="clean, makedir">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}">
+                        <classpath refid="lib.dir" />
+                </javac>
 	</target>
 
         <target name="jar" depends="compile">
                 <jar destfile="${jar.dir}/shared.jar" basedir="${build.dir}" />
-                <copy file="${jar.dir}/shared.jar" tofile="../smart-watch-shared-tests/lib/shared.jar" />
                 <copy file="${jar.dir}/shared.jar" tofile="../smart-watch-android/libs/shared.jar" />
-                <copy file="jar/shared.jar" tofile="../web/WEB-INF/lib/shared.jar" />
+                <copy file="${jar.dir}/shared.jar" tofile="../web/WEB-INF/lib/shared.jar" />
         </target>
 
         <target name="compiletests" depends="jar">

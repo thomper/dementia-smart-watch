@@ -27,4 +27,14 @@
 		<servlet-name>Login</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PatientReader</servlet-name>
+		<servlet-class>com.team7.smartwatch.server.PatientReaderServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PatientReader</servlet-name>
+		<url-pattern>/readpatients</url-pattern>
+	</servlet-mapping>
 </web-app>

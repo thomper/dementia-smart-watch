@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.team7.smartwatch.shared.User;
+import com.team7.smartwatch.shared.Utility;
 
 public class DatabaseUserReader {
 
@@ -33,13 +34,13 @@ public class DatabaseUserReader {
 	
 	/**
 	 * Creates a User with fields filled out using the database row which has
-	 * the given username or user ID.  At most, one of userID and username may
+	 * the given username or user patientID.  At most, one of userID and username may
 	 * be null.
 	 * 
 	 * @param  selectStatement the SQL select statement to use.
 	 * @param  username the username to select by or null if userID is to be
 	 * 		   used.
-	 * @param  userID the user ID to select by or null if username is to be
+	 * @param  userID the user patientID to select by or null if username is to be
 	 * 		   used.
 	 * @return the user read from the database, or null if the username or
 	 * 		   userID does not exist in the database or a database error is
@@ -63,7 +64,8 @@ public class DatabaseUserReader {
 			return null;
 		} catch (SQLException e){
 			logger.log(Level.WARNING,
-					"Error accessing user info from database.");
+					"Error accessing user info from database: " +
+					Utility.StringFromStackTrace(e));
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -71,7 +73,7 @@ public class DatabaseUserReader {
 		}
 	}
 	
-	/* Place given username or user ID in a prepared statement. */
+	/* Place given username or user patientID in a prepared statement. */
 	private static void bindValues(PreparedStatement statement, String username,
 			Integer userID) throws SQLException, BadSQLParameterException {
 
@@ -90,8 +92,8 @@ public class DatabaseUserReader {
 		User user = new User();
 		
 		user.userID = resultSet.getInt("userID");
-		user.patientID = resultSet.getInt("patientID");
-		user.carerID = resultSet.getInt("carerID");
+		user.patientID = DatabaseUtility.getNullableInt(resultSet, "patientID");
+		user.carerID = DatabaseUtility.getNullableInt(resultSet, "carerID");
 		user.email = resultSet.getString("email");
 		user.username = resultSet.getString("userName");
 		user.storedHash = resultSet.getString("userPass");
