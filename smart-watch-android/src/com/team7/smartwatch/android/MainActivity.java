@@ -11,10 +11,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ public class MainActivity extends Activity {
 	@SuppressWarnings("unused")
 	private Locator mLocator;	
 	private Patient mPatient;
+	private MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,21 @@ public class MainActivity extends Activity {
 		setupPanicButton();
 		setupDetailsButton();
 		startTrackingLocation();
+		setupConnectionTracking();
+	}
+
+	private void setupConnectionTracking() {
+		Handler h = new Handler();
+		int delay = 10000; //milliseconds
+
+		h.postDelayed(new Runnable(){
+		    public void run(){
+		        if(!connectedToInternet()){
+		        	mp.start();
+		        }
+		    }
+		}, delay);
+		
 	}
 
 	@Override
