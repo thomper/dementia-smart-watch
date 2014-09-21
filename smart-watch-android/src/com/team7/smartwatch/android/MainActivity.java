@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -84,6 +86,14 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+	}
+	
+	//returns whether the phone is connected to the internet or not
+	private boolean connectedToInternet(){
+		ConnectivityManager connectivityManager 
+        = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 	}
 	
 	//The method that's used to store the patient's data on the device
