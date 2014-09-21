@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +23,7 @@ import android.util.Pair;
  * JSON encoded HTTP POST request.
  * 
  */
-public class BasicNetworkTask extends AsyncTask<Void, Void, HttpResponse> {
+public class BasicNetworkTask extends AsyncTask<HttpContext, Void, HttpResponse> {
 	
 	private String mLogTag;
 	private List<Pair<String, Object>> mJsonList;
@@ -37,7 +38,7 @@ public class BasicNetworkTask extends AsyncTask<Void, Void, HttpResponse> {
 	}
 	
 	@Override
-	protected HttpResponse doInBackground(Void... params) {
+	protected HttpResponse doInBackground(HttpContext... params) {
 				
 		// Create request.
 		HttpPost request = createRequest();
@@ -48,8 +49,9 @@ public class BasicNetworkTask extends AsyncTask<Void, Void, HttpResponse> {
 
 		// Send request.
 		AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+		HttpContext httpContext = params[0];
 		try {
-			return client.execute(request);
+			return client.execute(request, httpContext);
 		} catch (IOException e) {
 			Log.e(mLogTag, Utility.StringFromStackTrace(e));
 			return null;

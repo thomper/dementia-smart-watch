@@ -21,7 +21,6 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-	private static String mServerAddress;
 	@SuppressWarnings("unused")
 	private Locator mLocator;	
 	private Patient mPatient;
@@ -31,15 +30,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		// Get server address.
-		if (savedInstanceState == null) {
-			Bundle extras = getIntent().getExtras();
-			mServerAddress = extras.getString("SERVER_ADDRESS");
-		} else {
-			mServerAddress = (String) savedInstanceState
-					.getSerializable("SERVER_ADDRESS");
-		}
-
 		// mPatient will be passed to MainActivity by LoginActivity
 		mPatient = new Patient();
 		mPatient.patientID = 4;
@@ -145,7 +135,7 @@ public class MainActivity extends Activity {
 		if (!gpsEnabled()) {
 			showDialogNoGps();
 		}
-		mLocator = new Locator(this, mPatient.patientID, mServerAddress);
+		mLocator = new Locator(this, mPatient.patientID);
 	}
 	
 	private boolean gpsEnabled() {

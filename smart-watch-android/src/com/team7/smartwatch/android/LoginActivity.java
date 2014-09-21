@@ -32,9 +32,9 @@ import android.widget.TextView;
  */
 public class LoginActivity extends Activity {
 
+	private String mPostUrl;
+
 	private static final String TAG = LoginActivity.class.getName();
-	private static final String SERVER_ADDRESS = "http://192.168.1.41:8080";
-	private static final String POST_URL = SERVER_ADDRESS + "/login";
 	private static final String SUCCESS_MESSAGE = "Login successful\n";
 
 	/**
@@ -52,7 +52,9 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		
+		mPostUrl = Globals.get().SERVER_ADDRESS + "/login";
+		
 		// Set up the login form.
 		mUsernameView = (EditText) findViewById(R.id.username);
 
@@ -134,8 +136,8 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 			List<Pair<String, Object>> jsonList = createJSONList(username,
 					password);
-			mAuthTask = new UserLoginTask(TAG, jsonList, POST_URL);
-			mAuthTask.execute((Void) null);
+			mAuthTask = new UserLoginTask(TAG, jsonList, mPostUrl);
+			mAuthTask.execute(Globals.get().httpContext);
 		}
 	}
 
@@ -222,7 +224,7 @@ public class LoginActivity extends Activity {
 				Log.i(TAG, "Login succeeded");
 				// TODO: Start MainActivity, passing session and patient details
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-				intent.putExtra("SERVER_ADDRESS", SERVER_ADDRESS);
+				intent.putExtra("PATIENT_ID", 4);
 				startActivity(intent);
 			} else {
 				Log.i(TAG, "Login failed");

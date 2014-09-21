@@ -26,20 +26,21 @@ import android.util.Pair;
 public class Locator {
 
 	private Context mContext;
+	private int mPatientID;
+	private String mPostUrl;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
 	private Location mLastLocation;
 	private Date mLastTime;
-	private int mPatientID;
-	private static String mPostUrl;
 
 	private static final String SUCCESS_MESSAGE = "Location updated\n";
 	private static final String TAG = Locator.class.getName();
 
-	public Locator(Context context, int patientID, String serverAddress) {
-		this.mContext = context;
-		this.mPatientID = patientID;
-		mPostUrl = serverAddress + "/updatelocation";
+	public Locator(Context context, int patientID) {
+
+		mContext = context;
+		mPatientID = patientID;
+		mPostUrl = Globals.get().SERVER_ADDRESS + "/updatelocation";
 		mLocationListener = new MyLocationListener();
 		mLocationManager = (LocationManager) this.mContext
 				.getSystemService(Context.LOCATION_SERVICE);
@@ -48,10 +49,12 @@ public class Locator {
 	}
 	
 	public Location getLastLocation() {
+
 		return mLastLocation;
 	}
 
 	public Date getLastTime() {
+
 		return mLastTime;
 	}
 
@@ -127,7 +130,8 @@ public class Locator {
 		jsonList.add(Pair.create("longitude",
 				(Object) mLastLocation.getLongitude()));
 
-		new LocationUpdaterTask(TAG, jsonList, mPostUrl).execute();
+		new LocationUpdaterTask(TAG, jsonList, mPostUrl)
+				.execute(Globals.get().httpContext);
 	}
 	
 	@SuppressLint("SimpleDateFormat")
