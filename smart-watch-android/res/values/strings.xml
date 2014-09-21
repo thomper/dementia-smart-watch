@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Project Dementia Team 7</string>
     <string name="action_settings">Settings</string>
-    <string name="button_setting">Settings</string>
-    <string name="PANIC">PANIC</string>
-
-    <string name="fName_TAG">First Name:</string>
-    <string name="lName_TAG">Surname:</string>
-    <string name="blood_TAG">Blood Type:</string>
-    <string name="medication_TAG">Medication:</string>
-    <string name="emergency_Contact_TAG">Emergency Contact:</string>
-    <string name="residence_TAG">Residence:</string>
-    <string name="fName_Value">Unknown</string>
-    <string name="lName_Value">Unknown</string>
-    <string name="blood_Value">N/A</string>
-    <string name="medication_Value">Unknown</string>
-    <string name="emergency_Contact_Value">Unavailable</string>
-    <string name="residence_Value">Unavailable</string>
-    <string name="Details">Patient Details</string>
-    
-    
-    
+    <string name="button_settings">Settings</string>
 </resources>

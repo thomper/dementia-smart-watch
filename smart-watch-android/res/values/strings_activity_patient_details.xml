@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="patient_details_title">Patient Details</string>
+    <string name="first_name_label">First Name:</string>
+    <string name="first_name">Unknown</string>
+    <string name="last_name_label">Surname:</string>
+    <string name="last_name">Unknown</string>
+    <string name="blood_type_label">Blood Type:</string>
+    <string name="blood_type">N/A</string>
+    <string name="medication_label">Medication:</string>
+    <string name="medication">Unknown</string>
+    <string name="residence_label">Residence:</string>
+    <string name="residence">Unavailable</string>
+    <string name="emergency_contact_label">Emergency Contact:</string>
+    <string name="emergency_contact">Unavailable</string>
+</resources>

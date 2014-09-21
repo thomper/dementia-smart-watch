@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
 		mPatient.patientID = 4;
 		lockOrientationToPortrait();
 		setupPanicButton();
+		setupDetailsButton();
 		startTrackingLocation();
 	}
 
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -54,12 +56,13 @@ public class MainActivity extends Activity {
 	}
 	
 	private void lockOrientationToPortrait() {
+
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 	
 	private void setupPanicButton() {
-		Button panicButton = (Button)findViewById(R.id.detailsButton);
-		storeData();
+
+		Button panicButton = (Button)findViewById(R.id.panic_button);
 		panicButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
 					sendText();
@@ -70,8 +73,22 @@ public class MainActivity extends Activity {
 		});
 	}
 	
-	//The method that's used to store the users data on the device
-	public void storeData(){
+	private void setupDetailsButton() {
+
+		storeData();
+		Button detailsButton = (Button) findViewById(R.id.details_button);
+		detailsButton.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v){
+				Intent intent = new Intent(MainActivity.this,
+						PatientDetailsActivity.class);
+				startActivity(intent);
+			}
+		});
+	}
+	
+	//The method that's used to store the patient's data on the device
+	public void storeData() {
+
 		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
 		SharedPreferences.Editor editor = patientDetails.edit();
 		editor.putString("fName", "aaron");
@@ -87,38 +104,8 @@ public class MainActivity extends Activity {
 		editor.putString("emergencyContactSuburb", "");
 		editor.putString("emergencyContactAddress", "");
 		editor.putString("emergencyContactNumber", "0423787149");
-
 		
-		//Apply Data
 		editor.apply();
-
-		
-	}
-	
-	//The method that's used to store the users data on the device
-	//NOTE:Doesn't store carerID, patientID, and status
-	public void storeData(String[] data){
-		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
-		SharedPreferences.Editor editor = patientDetails.edit();
-		editor.putString("fName", data[0]);
-		editor.putString("lName", data[1]);
-		editor.putString("gender", data[2]);
-		editor.putString("age", data[3]);
-		editor.putString("bloodType", data[4]);
-		editor.putString("medication", data[5]);
-		editor.putString("homeAddress", data[6]);
-		editor.putString("homeSuburb", data[7]);
-		editor.putString("contactNum", data[8]);
-		editor.putString("emergencyContactName", data[9]);
-		editor.putString("emergencyContactSuburb", data[10]);
-		editor.putString("emergencyContactAddress", data[11]);
-		editor.putString("emergencyContactNumber", data[12]);
-
-			
-		//Apply Data
-		editor.apply();
-
-			
 	}
 	
 	@SuppressLint("UnlocalizedSms") public void sendText(){

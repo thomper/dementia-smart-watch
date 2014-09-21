@@ -7,10 +7,10 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/panicButton"
+        android:id="@+id/panic_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/PANIC" />
+        android:text="@string/panic_button" />
 
     <Space
         android:layout_width="match_parent"
@@ -21,13 +21,13 @@
         android:layout_height="wrap_content" />
 
     <AnalogClock
-        android:id="@+id/analogClock1"
+        android:id="@+id/analog_clock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false" />
 
     <TextClock
-        android:id="@+id/textClock1"
+        android:id="@+id/text_clock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"
@@ -38,10 +38,10 @@
         android:layout_height="50dp" />
 
     <Button
-        android:id="@+id/detailsButton"
+        android:id="@+id/details_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Details" />
+        android:text="@string/details_button" />
 
     <Space
         android:layout_width="match_parent"

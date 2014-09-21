@@ -20,22 +20,23 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/main_title" >
         </activity>
+        
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name"
+            android:label="@string/login_title"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
-            android:name=".PatientDetails"
-            android:label="@string/app_name" >
+            android:name=".PatientDetailsActivity"
+            android:label="@string/patient_details_title" >
         </activity>
     </application>
-
+    
 </manifest>
