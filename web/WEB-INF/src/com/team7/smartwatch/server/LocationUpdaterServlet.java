@@ -1,5 +1,6 @@
 package com.team7.smartwatch.server;
 
+import com.team7.smartwatch.shared.Patient;
 import com.team7.smartwatch.shared.Utility;
 
 import java.io.IOException;
@@ -67,11 +68,23 @@ public class LocationUpdaterServlet extends HttpServlet {
      */
     private boolean update(HttpServletRequest request) {
     	
+    	// Read and verify given location.
     	LocationUpdate locationUpdate = getRequestDetails(request);
     	if (locationUpdate == null) {
     		return false;
     	}
+    	
+    	// Check that user has permission to update this patient's location.
+    	Integer userID = SessionUtility.getUserID(request);
+    	boolean permitted = userIsCarerForPatient(userID,
+    			locationUpdate.patientID);
+    	if (!permitted) {
+			logNoPermission(request.getRemoteAddr(), userID,
+					locationUpdate.patientID);
+    		return false;
+    	}
 
+    	// Update the patient's location.
     	try {
 			boolean succeeded = DatabaseLocationWriter.writeLocation(
 					locationUpdate.patientID, locationUpdate.latitude,
@@ -107,5 +120,24 @@ public class LocationUpdaterServlet extends HttpServlet {
 			logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
 			return null;
 		}
+    }
+    
+    private boolean userIsCarerForPatient(Integer userID, Integer patientID) {
+    	
+    	if (userID == null || patientID == null) {
+    		return false;
+    	}
+
+		Patient patient = DatabasePatientReader
+				.readPatientByPatientID(patientID);
+		return (patient != null) && (patient.carerID == userID);
+    }
+    
+    private void logNoPermission(String address, int userID, int patientID) {
+    	
+    		logger.log(Level.INFO, address + " attempted to update location " +
+    				"of patient that they are not the carer for: patientID=" +
+    				String.valueOf(patientID) + ", userID=" +
+    				String.valueOf(userID) + ".");
     }
 }
