@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
   `patientLong` decimal(20,10) NOT NULL,
   `retrievalTime` time NOT NULL,
   `retrievalDate` date NOT NULL,
-  PRIMARY KEY (`patientID`),
+  PRIMARY KEY (`patientID`, `retrievalTime`),
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
