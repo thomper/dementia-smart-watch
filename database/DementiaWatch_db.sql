@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 08, 2014 at 06:34 AM
+-- Generation Time: Sep 21, 2014 at 02:11 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -36,16 +36,13 @@ CREATE TABLE IF NOT EXISTS `carers` (
   `contactNum` varchar(10) NOT NULL,
   PRIMARY KEY (`carerID`),
   UNIQUE KEY `carerID` (`carerID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `carers`
 --
 
 INSERT INTO `carers` (`carerID`, `fName`, `lName`, `mobileNum`, `contactNum`) VALUES
-(1, 'louise', 'elliot', '11223344', '11223344'),
-(2, 'Paul', 'brand', '11223344', '22334455'),
-(3, 'jason', 'london', '33445566', '33445566'),
 (4, 'j', 'j', '1', '1');
 
 -- --------------------------------------------------------
@@ -81,6 +78,12 @@ END
 //
 DELIMITER ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `patientbatteryalerts`
+--
+
 CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
   `patientID` int(5) NOT NULL,
   `alertTime` time NOT NULL DEFAULT '00:00:00',
@@ -90,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Triggers `patientalerts`
+-- Triggers `patientbatteryalerts`
 --
 DROP TRIGGER IF EXISTS `insert_batteryalerts`;
 DELIMITER //
@@ -121,13 +124,6 @@ CREATE TABLE IF NOT EXISTS `patientcollapses` (
   PRIMARY KEY (`patientID`,`collapseTime`),
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `patientcollapses`
---
-
-INSERT INTO `patientcollapses` (`patientID`, `collapseTime`, `collapseDate`, `collapseLat`, `collapseLong`) VALUES
-(2, '14:31:27', '2014-09-08', '1.1000000000', '1.1000000000');
 
 --
 -- Triggers `patientcollapses`
@@ -182,8 +178,7 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
 --
 
 INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`, `retrievalTime`, `retrievalDate`) VALUES
-(2, '-27.5385548200', '153.0802628000', '10:21:46', '2014-09-04'),
-(3, '-27.4976428700', '152.9736471000', '10:21:46', '2014-09-04');
+(6, '-27.4976428700', '152.9736471000', '10:21:46', '2014-09-04');
 
 --
 -- Triggers `patientloc`
@@ -247,11 +242,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
 --
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
-(2, 1, 'aaron', 'ramsey', 'Male', 88, 'A', NULL, 'Collapsed', '322 Moggill Road', 'Indooroopilly', '8877665544', 'louise elliot', NULL, NULL, '11223344', '222222'),
-(3, 2, 'geoff', 'free', 'Male', 64, 'O', NULL, 'fine', '79 Evelyn Street', 'Grange', '7766554433', 'Paul brand', NULL, NULL, '2233445566', '333333'),
-(4, 2, 'jessica', 'langley', 'Female', 99, 'AB', NULL, 'fine', '79 Evelyn Street', 'Grange', '6655443322', 'Paul Brand', NULL, NULL, '2233445566', '444444'),
-(5, 3, 'dawn', 'summers', 'Female', 73, 'A+', NULL, 'fine', '79 Evelyn Street', 'Grange', '5544332211', 'jason london', NULL, NULL, '3344556677', '555555'),
-(7, 4, 'j', 'j', 'Male', 16, 'O-', '1', 'OK', '1', '1', '11', '1', '1', '1', '1', 'dd98c001-8a1c-475c-bf46-ac481fdbdd69');
+(6, 4, 'Josh', 'Johnston', 'Male', 123, 'O+', 'stoofs', 'fine', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1');
 
 -- --------------------------------------------------------
 
@@ -273,16 +264,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `carerID` (`carerID`),
   KEY `patientID` (`patientID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`userID`, `patientID`, `carerID`, `email`, `userName`, `userPass`, `salt`) VALUES
-(1, NULL, 1, 'hello@gmail.com', 'hello123', 'hello123', '123'),
-(2, NULL, 2, 'hello123@gmail.com', 'hello', 'hello', '111'),
-(3, NULL, 3, 'hello234@gmail.com', 'hello234', 'hello234', '234'),
 (4, NULL, 4, '1@1.com', 'j', '8161e767e1e85f0f37ad655caf1aad304073d8701bf2a9bbda60090e1e6cd125', '2e033eef-bcd2-4529-9111-74dff28aa093');
 
 --
@@ -311,6 +299,12 @@ DELIMITER ;
 --
 ALTER TABLE `patientalerts`
   ADD CONSTRAINT `patientAlerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `patientbatteryalerts`
+--
+ALTER TABLE `patientbatteryalerts`
+  ADD CONSTRAINT `patientbatteryalerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientcollapses`
