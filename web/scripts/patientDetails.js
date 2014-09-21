@@ -64,7 +64,7 @@ function checkBloodType() {
 function checkMedication() {
 	var medication = document.getElementById("medication").value;
 	var medicationMessage = document.getElementById("medicationMessage");
-	var validChars = /^[a-zA-Z][-'a-zA-Z]+$/;
+	var validChars = /^[ ]*[A-Za-z0-9][-'A-Za-z0-9 ]*$/;
 	var validMed = medication.match(validChars);
 	if (validMed == null) {
 		medicationMessage.style.color = "#ff6666";
