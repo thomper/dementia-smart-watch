@@ -13,22 +13,6 @@
 		<%
 			//If not logged in - redirect to error page and cancel processing of remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
-			
-			String carerID = session.getAttribute("carerid").toString();
-			String display = "none";
-			String patientID = "";
-			
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			java.sql.Connection conn;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");
-
-			if (rs.next()) {
-				if (rs.getString(4).equals("fine") == false) {
-					display = "inline";
-				}
-			}
 		%>			
     <%-- This will add the rest of the head tag and navigation and alerts --%>	
 	<jsp:include page = "includes/header.jsp" flush = "true" />
