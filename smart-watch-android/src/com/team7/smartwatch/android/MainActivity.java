@@ -5,6 +5,9 @@ import com.team7.smartwatch.shared.Patient;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +32,7 @@ public class MainActivity extends Activity {
 	private Locator mLocator;	
 	private Patient mPatient;
 	private MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
+	final int NOTIF_ID = 4260;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +52,22 @@ public class MainActivity extends Activity {
 	private void setupConnectionTracking() {
 		Handler h = new Handler();
 		int delay = 10000; //milliseconds
-
+		
 		h.postDelayed(new Runnable(){
 		    public void run(){
+		    	NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		    	Notification note = new Notification(R.drawable.wififail, "No Connection", System.currentTimeMillis());
+		    	PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0,
+		    			new Intent(getApplicationContext(), MainActivity.class), 0);
+		    	
 		        if(!connectedToInternet()){
 		        	mp.start();
+		        	 note.setLatestEventInfo(getApplicationContext(), "No Connection", 
+		        			 "You need to connect to the internet.", intent);
+		        	 
+		        	 notifManager.notify(NOTIF_ID, note);
+		        }else{
+		        	notifManager.cancel(NOTIF_ID);
 		        }
 		    }
 		}, delay);
