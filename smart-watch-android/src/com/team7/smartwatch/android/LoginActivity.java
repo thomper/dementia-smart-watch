@@ -1,11 +1,14 @@
 package com.team7.smartwatch.android;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HttpContext;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.team7.smartwatch.shared.Utility;
 
@@ -14,11 +17,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.ParseException;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,10 +37,10 @@ import android.widget.TextView;
  */
 public class LoginActivity extends Activity {
 
-	private String mPostUrl;
-
 	private static final String TAG = LoginActivity.class.getName();
 	private static final String SUCCESS_MESSAGE = "Login successful\n";
+	private static final String POST_URL = Globals.get().SERVER_ADDRESS
+			+ "/login";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -53,11 +58,8 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		mPostUrl = Globals.get().SERVER_ADDRESS + "/login";
-		
 		// Set up the login form.
 		mUsernameView = (EditText) findViewById(R.id.username);
-
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -134,29 +136,17 @@ public class LoginActivity extends Activity {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			List<Pair<String, Object>> jsonList = createJSONList(username,
-					password);
-			mAuthTask = new UserLoginTask(TAG, jsonList, mPostUrl);
+			mAuthTask = new UserLoginTask(username, password);
 			mAuthTask.execute(Globals.get().httpContext);
 		}
 	}
 
 	private boolean isPasswordValid(String password) {
+
 		// TODO: Replace this with your own logic
 		return password.length() > 4;
 	}
 	
-	private List<Pair<String, Object>> createJSONList(String username,
-			String password) {
-
-		List<Pair<String, Object>> jsonList =
-				new ArrayList<Pair<String, Object>>();
-		jsonList.add(Pair.create("username", (Object)username));
-		jsonList.add(Pair.create("password", (Object)password));
-		
-		return jsonList;
-	}
-
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -203,28 +193,54 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends BasicNetworkTask {
+	public class UserLoginTask extends AsyncTask<HttpContext, Void, Boolean> {
 
-		UserLoginTask(String logTag, List<Pair<String, Object>> jsonList,
-				String postUrl) {
+		private final String mUsername;
+		private final String mPassword;
 
-			super(logTag, jsonList, postUrl);
+		UserLoginTask(String username, String password) {
+
+			mUsername = username;
+			mPassword = password;
 		}
 
 		@Override
-		protected void onPostExecute(final HttpResponse response) {
+		protected Boolean doInBackground(HttpContext... params) {
+
+			// Create the request.
+			HttpPost request = createRequest();
+			if (request == null) {
+				Log.e(TAG, "Error creating HTTP request");
+				return false;
+			}
+
+			// Send the request.
+			AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+			HttpContext httpContext = params[0];
+			try {
+				HttpResponse response = client.execute(request, httpContext);
+				return responseSucceeded(response);
+			} catch (IOException e) {
+				Log.e(TAG, Utility.StringFromStackTrace(e));
+				return false;
+			} finally {
+				client.close();
+			}
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
 
 			mAuthTask = null;
 			showProgress(false);
-			
-			boolean success = responseSucceeded(response);
+
 			if (success) {
-				// TODO: Keep track of session
-				// TODO: Let user select which patient this device is for
 				Log.i(TAG, "Login succeeded");
+				
+				// TODO: Let user select which patient this device is for
 				// TODO: Start MainActivity, passing session and patient details
-				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-				intent.putExtra("PATIENT_ID", 4);
+				Intent intent = new Intent(LoginActivity.this,
+						MainActivity.class);
 				startActivity(intent);
 			} else {
 				Log.i(TAG, "Login failed");
@@ -236,15 +252,54 @@ public class LoginActivity extends Activity {
 
 		@Override
 		protected void onCancelled() {
+
 			mAuthTask = null;
 			showProgress(false);
 		}
+		
+		private HttpPost createRequest() {
 
+			HttpPost request = AndroidUtility.createJSONHttpPost(POST_URL);
+			
+			// Get JSON.
+			JSONObject jObj = createJSON();
+			if (jObj == null) {
+				return null;
+			}
+
+			// Add JSON to request.
+			try {
+				StringEntity se = new StringEntity(jObj.toString());
+				request.setEntity(se);
+				return request;
+			} catch (UnsupportedEncodingException e) {
+				Log.e(TAG, Utility.StringFromStackTrace(e));
+	            return null;
+			}
+		}
+		
+		private JSONObject createJSON() {
+
+			try {
+				JSONObject jObj = new JSONObject();
+				jObj.put("username", mUsername);
+				jObj.put("password", mPassword);
+				return jObj;
+			} catch (JSONException e) {
+				Log.e(TAG, Utility.StringFromStackTrace(e));
+				return null;
+			}
+		}
+
+		/* Return true if the login succeeded, false otherwise. */
 		private boolean responseSucceeded(HttpResponse response) {
 
 			try {
-				String responseStr = EntityUtils.toString(response.getEntity());
+				String responseStr = AndroidUtility.StringFromHttpResponse(response);
 				return responseStr.equals(SUCCESS_MESSAGE);
+			} catch (ParseException e) {
+				Log.e(TAG, Utility.StringFromStackTrace(e));
+				return false;
 			} catch (IOException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
 				return false;

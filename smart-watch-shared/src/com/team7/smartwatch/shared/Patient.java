@@ -24,18 +24,37 @@ public class Patient {
 	
 	public Patient(JSONObject jObj) {
 		
+
+		// Built in types first.
 		patientID = jObj.getInt("patientID");
 		carerID = jObj.getInt("carerID");
 		firstName = jObj.getString("firstName");
 		lastName = jObj.getString("lastName");
-		gender = Gender.valueOf(jObj.getString("gender"));
 		age = jObj.getInt("age");
-		bloodType = BloodType.valueOf(jObj.getString("bloodType"));
 		medication = jObj.getString("medication");
-		status = PatientStatus.valueOf(jObj.getString("status"));
 		homeAddress = jObj.getString("homeAddress");
 		homeSuburb = jObj.getString("homeSuburb");
 		contactNum = jObj.getString("contactNum");
+
+		// Enums.
+		// TODO: this was a quick hack for the second progress report.
+		if (jObj.has("gender")) {
+			gender = Gender.valueOf(jObj.getString("gender"));
+		} else {
+			gender = null;
+		}
+
+		if (jObj.has("bloodType")) {
+			bloodType = BloodType.valueOf(jObj.getString("bloodType"));
+		} else {
+			bloodType = null;
+		}
+		
+		if (jObj.has("status")) {
+			status = PatientStatus.valueOf(jObj.getString("status"));
+		} else {
+			status = null;
+		}
 		
 		String emPrefix = "emergencyContact";
 		emergencyContact = new EmergencyContact();

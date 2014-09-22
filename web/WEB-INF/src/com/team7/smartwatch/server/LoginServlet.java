@@ -37,6 +37,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			out.println(ERROR_MESSAGE);
 		}
+		out.flush();
 	}
 
 	/* Returns true if the request contains a matching username and password,

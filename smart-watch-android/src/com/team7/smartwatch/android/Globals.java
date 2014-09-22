@@ -14,6 +14,9 @@ public class Globals {
 	
 	private Globals() {
 		
+		// TODO: move this to persistent storage, as it will be recreated under certain conditions
+		// TODO: (see http://portabledroid.wordpress.com/2012/05/04/singletons-in-android/)
+
 		// Create httpContext so that we have a cookie store.
 		httpContext = new BasicHttpContext();
 		httpContext.setAttribute(ClientContext.COOKIE_STORE,

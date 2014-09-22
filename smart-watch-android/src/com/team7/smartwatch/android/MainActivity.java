@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
 	@SuppressWarnings("unused")
 	private Locator mLocator;	
 	private Patient mPatient;
-	private MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
+	private MediaPlayer mp;
 	final int NOTIF_ID = 4260;
 	
 	@Override
@@ -41,12 +41,13 @@ public class MainActivity extends Activity {
 		
 		// mPatient will be passed to MainActivity by LoginActivity
 		mPatient = new Patient();
-		mPatient.patientID = 4;
+		mPatient.patientID = 8;
 		lockOrientationToPortrait();
 		setupPanicButton();
 		setupDetailsButton();
 		startTrackingLocation();
 		setupConnectionTracking();
+		mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
 	}
 
 	private void setupConnectionTracking() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_title"></string>
+    <string name="title_activity_main"></string>
 	<string name="panic_button">PANIC</string>    
 	<string name="details_button">Patient details</string>
 </resources>

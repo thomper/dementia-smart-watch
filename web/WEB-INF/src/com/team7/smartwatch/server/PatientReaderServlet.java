@@ -30,6 +30,8 @@ public class PatientReaderServlet extends HttpServlet {
 		// Get the logged in user, if any.
 		User user = getUser(request);
 		if (user == null) {
+                        logger.log(Level.INFO, request.getRemoteAddr() + " attempted " +
+                                "to read patient info when not logged in.");
 			return;
 		}
 		
@@ -37,16 +39,18 @@ public class PatientReaderServlet extends HttpServlet {
 		List<Patient> patients = DatabasePatientReader
 				.readPatientsByCarerID(user.carerID);
 		if (patients.size() == 0) {
+                        logger.log(Level.INFO, request.getRemoteAddr() + " read patient " +
+                                "info but has no patients assigned to them.");
 			return;
 		}
 
 		// Write the patients out as JSON.
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-        out.println(JSONFromPatientsList(patients).toString());
+        out.println(JSONFromPatientsList(patients));
         logger.log(Level.INFO, request.getRemoteAddr() + " read information " +
         		"on their " + String.valueOf(patients.size()) + " patient(s).");
-        out.close();
+        out.flush();
 	}
 	
 	/* Returns the User with the ID that has been stored in the request
@@ -75,7 +79,6 @@ public class PatientReaderServlet extends HttpServlet {
 		JSONArray jsonArray = new JSONArray();
 		
 		for (Patient patient : patients) {
-			System.out.println(patient.toJSON());
 			jsonArray.put(patient.toJSON());
 		}
 		

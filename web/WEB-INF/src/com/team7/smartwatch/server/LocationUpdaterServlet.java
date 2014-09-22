@@ -38,6 +38,7 @@ public class LocationUpdaterServlet extends HttpServlet {
         } else {
             out.println(ERROR_MESSAGE);
         }
+        out.flush();
     }
     
     private class LocationUpdate {
