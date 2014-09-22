@@ -17,14 +17,13 @@ a {
 /* header css*/
 #header {
     text-align: center;
-	margin:0px;
-	padding:0px;
+	margin:10px;
+	padding:5px;
     border-bottom: 1px #F0F0F0;
 	overflow: no-content;
 	text-align: center;
-	background-image: url("../images/gradient.jpg");
-	background-repeat: repeat-x;
-	background-position: bottom; 
+	background-color:#31998D;
+	color:#fff;
 }
 #header div {
 	display: inline-block;
@@ -41,10 +40,10 @@ a {
 	padding: 0px 10px;
 }
 #nav ul li a {
-	color: #555;
+	color: #fff;
 }
 #nav ul li a:hover {
-	color: #31998D;
+	color: #f0f0f0;
 	margin: 10px 0px;
 }
 #alert{
@@ -66,7 +65,10 @@ a {
 	overflow: auto;
 	text-align: center;
 	background-color:#fff;
-	border: 1px solid #31998D;
+	border: 1px solid #fff;
+	background-image: url("../images/gradient.jpg");
+	background-repeat: repeat-x;
+	background-position: bottom; 
 }
 #headerC a, #headerC a:active, #headerC a:visited, #headerP a, #headerP a:active, #headerP a:visited{
 	color: #fff;
@@ -88,12 +90,15 @@ a {
 /* form css */
 
 fieldset {
-	font-size: 12px;
+	font-size: 14px;
+	display:inline-block;
+	text-align:center;
 }
 
 .left {
 	float: left;
 	padding:10px;
+	display: inline-block; 
 }
 .pure-controls{
 	clear: both;
@@ -103,12 +108,13 @@ fieldset {
 	margin:0px;
 }
 .pure-form-aligned .pure-controls {
-    margin: 0px;
+   margin: 0px 0px 0px 0px;
 }
 
-.pure-button-primary, .pure-button-selected, a.pure-button-primary, a.pure-button-selected {
+.pure-button-primary, .pure-button-selected, a.pure-button-primary, a.pure-button-selected , pure-button, pure-button-primary{
 	background-color: #31998D;
 	margin-top: 15px;
+	clear:both;
 }
 .pure-form-aligned .pure-control-group label {
 	width: 13em;
@@ -141,7 +147,7 @@ table {
 	margin: 0px auto 0px auto;
 }
 tr:first-child td{
-	font: #fff bold;
+	color: #fff;
 	background-color: #31998D;
 }
 tr:nth-child(even) {
