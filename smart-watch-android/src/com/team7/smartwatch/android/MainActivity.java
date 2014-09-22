@@ -13,6 +13,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -32,7 +35,10 @@ public class MainActivity extends Activity {
 	private Locator mLocator;	
 	private Patient mPatient;
 	private MediaPlayer mp;
-	final int NOTIF_ID = 4260;
+	private final int NOTIF_ID = 4260;
+	private SensorManager mSensorManager;
+	private Sensor mSensor;
+	private boolean fallInitiate;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +49,51 @@ public class MainActivity extends Activity {
 		mPatient = new Patient();
 		mPatient.patientID = 8;
 		lockOrientationToPortrait();
+		mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
 		setupPanicButton();
 		setupDetailsButton();
 		startTrackingLocation();
 		setupConnectionTracking();
-		mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
+		initialiseFallDetection();
+	}
+	
+	//
+	public void onSensorChanged(SensorEvent event){
+		//xyz acceleration rate variables are created
+		  float x = event.values[0];
+		  float y = event.values[1];
+		  float z = event.values[2];
+		  
+		  //makes all values positive before adding together and square root them
+		  double sigma = x*x + y*y + z*z;
+		  sigma= java.lang.Math.sqrt(sigma);
+		  
+		  if(fallInitiate){
+			  if(sigma>=13){
+				  //PATIENT HAS FALLEN
+				  NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			    	Notification note = new Notification(R.drawable.wififail, "No Connection", System.currentTimeMillis());
+			    	PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0,
+			    			new Intent(getApplicationContext(), MainActivity.class), 0);
+			    	note.setLatestEventInfo(getApplicationContext(), "No Connection", 
+		        			 "You need to connect to the internet.", intent);
+			    	
+			  }else{
+				  fallInitiate=false;
+			  }
+		  }
+		  
+		  if(sigma<=7){
+			  fallInitiate=true;
+		  }
+		  
+		  
+		}
+
+	private void initialiseFallDetection() {
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		
 	}
 
 	private void setupConnectionTracking() {
@@ -56,6 +102,7 @@ public class MainActivity extends Activity {
 		
 		h.postDelayed(new Runnable(){
 		    public void run(){
+		    	
 		    	NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		    	Notification note = new Notification(R.drawable.wififail, "No Connection", System.currentTimeMillis());
 		    	PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0,
@@ -71,6 +118,7 @@ public class MainActivity extends Activity {
 		        	notifManager.cancel(NOTIF_ID);
 		        }
 		    }
+		    
 		}, delay);
 		
 	}
