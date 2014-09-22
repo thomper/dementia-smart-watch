@@ -1,5 +1,5 @@
 package com.team7.smartwatch.shared;
 
 public enum PatientStatus {
-	NORMAL, FALLEN, ALARMED;
+	FINE, FALLEN, DISTRESSED, BATTERY_LOW;
 }
