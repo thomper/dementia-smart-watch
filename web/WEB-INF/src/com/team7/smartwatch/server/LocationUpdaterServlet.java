@@ -43,7 +43,7 @@ public class LocationUpdaterServlet extends HttpServlet {
     
     private class LocationUpdate {
     	
-    	public int patientID;
+    	public Integer patientID;
     	public double latitude;
     	public double longitude;
     	
@@ -134,7 +134,7 @@ public class LocationUpdaterServlet extends HttpServlet {
 		return (patient != null) && (patient.carerID == userID);
     }
     
-    private void logNoPermission(String address, int userID, int patientID) {
+    private void logNoPermission(String address, Integer userID, Integer patientID) {
     	
     		logger.log(Level.INFO, address + " attempted to update location " +
     				"of patient that they are not the carer for: patientID=" +

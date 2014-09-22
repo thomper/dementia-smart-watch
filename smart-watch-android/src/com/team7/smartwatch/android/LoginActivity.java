@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
@@ -36,6 +37,10 @@ import android.widget.TextView;
  * A login screen that offers login via username/password.
  */
 public class LoginActivity extends Activity {
+	
+	private enum LoginError {
+		CONNECTION_REFUSED, PASSWORD_INCORRECT, OTHER
+	}
 
 	private static final String TAG = LoginActivity.class.getName();
 	private static final String SUCCESS_MESSAGE = "Login successful\n";
@@ -193,7 +198,7 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<HttpContext, Void, Boolean> {
+	public class UserLoginTask extends AsyncTask<HttpContext, Void, LoginError> {
 
 		private final String mUsername;
 		private final String mPassword;
@@ -204,14 +209,17 @@ public class LoginActivity extends Activity {
 			mPassword = password;
 		}
 
+		/* Attempts to log in, returns null if successful, or the error
+		 * encountered otherwise.
+		 */
 		@Override
-		protected Boolean doInBackground(HttpContext... params) {
+		protected LoginError doInBackground(HttpContext... params) {
 
 			// Create the request.
 			HttpPost request = createRequest();
 			if (request == null) {
 				Log.e(TAG, "Error creating HTTP request");
-				return false;
+				return LoginError.OTHER;
 			}
 
 			// Send the request.
@@ -219,22 +227,29 @@ public class LoginActivity extends Activity {
 			HttpContext httpContext = params[0];
 			try {
 				HttpResponse response = client.execute(request, httpContext);
-				return responseSucceeded(response);
+				if (responseSucceeded(response)) {
+					return null;
+				} else {
+					return LoginError.OTHER;
+				}
+			} catch (HttpHostConnectException e) {
+				Log.d(TAG, "Connection refused:\n" + Utility.StringFromStackTrace(e));
+				return LoginError.CONNECTION_REFUSED;
 			} catch (IOException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
-				return false;
+				return LoginError.OTHER;
 			} finally {
 				client.close();
 			}
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
+		protected void onPostExecute(final LoginError error) {
 
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) {
+			if (error == null) {
 				Log.i(TAG, "Login succeeded");
 				
 				// TODO: Let user select which patient this device is for
@@ -244,9 +259,7 @@ public class LoginActivity extends Activity {
 				startActivity(intent);
 			} else {
 				Log.i(TAG, "Login failed");
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				setErrorMessage(error);
 			}
 		}
 
@@ -255,6 +268,25 @@ public class LoginActivity extends Activity {
 
 			mAuthTask = null;
 			showProgress(false);
+		}
+		
+		private void setErrorMessage(LoginError error) {
+			
+			if (error == null) {
+				return;
+			}
+
+			if (error == LoginError.PASSWORD_INCORRECT) {
+				mPasswordView
+						.setError(getString(R.string.error_incorrect_password));
+			} else if (error == LoginError.CONNECTION_REFUSED) {
+				mPasswordView
+						.setError(getString(R.string.error_connection_refused));
+			} else if (error == LoginError.OTHER) {
+				mPasswordView
+						.setError(getString(R.string.error_unknown));
+			}
+			mPasswordView.requestFocus();
 		}
 		
 		private HttpPost createRequest() {

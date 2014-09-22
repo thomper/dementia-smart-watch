@@ -8,5 +8,7 @@
     <string name="error_password_too_short">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_connection_refused">Could not connect to login server</string>
+    <string name="error_unknown">An unknown error has occurred</string>
 
 </resources>

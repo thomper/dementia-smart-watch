@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
 		
 		// mPatient will be passed to MainActivity by LoginActivity
 		mPatient = new Patient();
-		mPatient.patientID = 8;
+		mPatient.patientID = 9;
 		lockOrientationToPortrait();
 		mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
 		setupPanicButton();
