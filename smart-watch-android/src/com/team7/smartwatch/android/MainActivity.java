@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 
 	private void setupConnectionTracking() {
 		Handler h = new Handler();
-		int delay = 10000; //milliseconds
+		int delay = 30000; //milliseconds
 		
 		h.postDelayed(new Runnable(){
 		    public void run(){
