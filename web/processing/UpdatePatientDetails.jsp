@@ -69,12 +69,13 @@
 				valid = false;
 			}
 
+/* @Josh. Dont think this should be here, causes DB error..
 			if (bloodType.contains("+")) {
 				bloodType = bloodType.replace("+", "_POS");
 			} else {
 				bloodType = bloodType.replace("-", "_NEG");
 			}
-			
+*/			
 			
 			//Note: This page handles processing for both Addpatient & PatientDetails
 			
