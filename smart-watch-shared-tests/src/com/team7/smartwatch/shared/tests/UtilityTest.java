@@ -13,7 +13,6 @@ public class UtilityTest {
 		assertFalse(Utility.arrayContainsNull());
 	}
 
-
 	@Test
 	public void arrayContainsNull_ArrayWithoutNulls_False() {
 		assertFalse(Utility.arrayContainsNull("some text", "Different text", "key:value"));

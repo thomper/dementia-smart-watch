@@ -37,13 +37,16 @@
         </target>
 
 	<target name="compile" depends="clean, makedir">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="project-classpath" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}">
+                        <classpath refid="project-classpath" />
+                </javac>
 	</target>
 
         <target name="compiletests" depends="compile">
                 <javac srcdir="${test.src.dir}" destdir = "${test.build.dir}">
                         <classpath path="${build.dir}" />
                         <classpath refid="junit.classpath" />
+                        <classpath refid="project-classpath" />
                 </javac>
         </target>
 
@@ -54,6 +57,7 @@
                                 <pathelement location="${test.build.dir}" />
                                 <pathelement location="${build.dir}" />
                         </classpath>
+                        <classpath refid="project-classpath" />
                         <formatter type="xml" />
                         <batchtest todir="${test.report.dir}">
                                 <fileset dir="${test.build.dir}">
