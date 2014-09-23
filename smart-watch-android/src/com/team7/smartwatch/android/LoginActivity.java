@@ -255,7 +255,7 @@ public class LoginActivity extends Activity {
 				// TODO: Let user select which patient this device is for
 				// TODO: Start MainActivity, passing session and patient details
 				Intent intent = new Intent(LoginActivity.this,
-						MainActivity.class);
+						PatientSelectorActivity.class);
 				startActivity(intent);
 			} else {
 				Log.i(TAG, "Login failed");

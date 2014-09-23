@@ -23,7 +23,6 @@ public class Patient {
 	}
 	
 	public Patient(JSONObject jObj) {
-		
 
 		// Built in types first.
 		patientID = jObj.getInt("patientID");

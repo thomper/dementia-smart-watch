@@ -10,7 +10,7 @@ public class Globals {
 	private static Globals globals = null;
 	
 	public HttpContext httpContext;
-	public final String SERVER_ADDRESS = "http://192.168.1.41:8080";
+	public final String SERVER_ADDRESS = "http://172.19.43.178:8080";
 	
 	private Globals() {
 		
