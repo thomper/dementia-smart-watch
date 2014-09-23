@@ -46,21 +46,6 @@ function checkAge() {
 	}
 }
 
-function checkBloodType() {
-	var bloodType = document.getElementById("bloodType").value;
-	var bloodTypeMessage = document.getElementById("bloodTypeMessage");
-	var bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
-	for (i = 0; i < bloodTypes.length; i++) {
-		if (bloodType == bloodTypes[i]) {
-			bloodTypeMessage.innerHTML = "";
-			break;
-		} else {
-			bloodTypeMessage.style.color = "#ff6666";
-			bloodTypeMessage.innerHTML = "&nbsp; Blood Type must be O+, O-, A+, A-, B+, B-, AB+, or AB-";
-		}
-	}
-}
-
 function checkMedication() {
 	var medication = document.getElementById("medication").value;
 	var medicationMessage = document.getElementById("medicationMessage");

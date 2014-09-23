@@ -69,6 +69,13 @@
 				valid = false;
 			}
 
+			if (bloodType.contains("+")) {
+				bloodType = bloodType.replace("+", "_POS");
+			} else {
+				bloodType = bloodType.replace("-", "_NEG");
+			}
+			
+			
 			//Note: This page handles processing for both Addpatient & PatientDetails
 			
 			if (valid) {
@@ -90,7 +97,7 @@
 					
 					st.executeUpdate("INSERT INTO patients VALUES (0, '"+carerID+"', '"+fName+"', '"+lName+
 						"', '"+request.getParameter("gender")+"', '"+age+"', '"+bloodType+
-						"',  '"+medication+"', 'fine', '"+address+
+						"',  '"+medication+"', 'FINE', '"+address+
 						"', '"+suburb+"', '"+conNum+"', '"+emergName+"', '"+emergAddress+
 						"', '"+emergSuburb+"', '"+emergNum+"', '"+uniqueKey+"');");
 					

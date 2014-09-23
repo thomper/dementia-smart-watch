@@ -31,7 +31,7 @@
 				java.sql.Connection conn;
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();
-				st.execute("UPDATE patients SET status = 'fine' WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");
+				st.execute("UPDATE patients SET status = 'FINE' WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");
 				conn.close();
 				st.close();				
 			}

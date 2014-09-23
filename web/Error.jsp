@@ -41,7 +41,7 @@
 						 break;
 				case 8:  out.println("<h3>That patientID does not exist.</h3>");
 						 break;
-				case 9:  //
+				case 9:  out.println("<h3>Some information you entered was invalid, please go back and correct it before resubmitting</h3>");
 						 break;
 				case 10: //
 						 break;

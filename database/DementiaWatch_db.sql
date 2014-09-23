@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2014 at 02:11 PM
+-- Generation Time: Sep 23, 2014 at 02:11 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `carers` (
   `contactNum` varchar(10) NOT NULL,
   PRIMARY KEY (`carerID`),
   UNIQUE KEY `carerID` (`carerID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `carers`
@@ -62,6 +62,14 @@ CREATE TABLE IF NOT EXISTS `patientalerts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Dumping data for table `patientalerts`
+--
+
+INSERT INTO `patientalerts` (`patientID`, `alertTime`, `alertDate`, `alertLat`, `alertLong`) VALUES
+(6, '20:44:04', '2014-09-22', '0.0000000000', '0.0000000000'),
+(7, '10:11:34', '2014-09-23', '0.0000000000', '0.0000000000');
+
+--
 -- Triggers `patientalerts`
 --
 DROP TRIGGER IF EXISTS `insert_alerts`;
@@ -69,7 +77,7 @@ DELIMITER //
 CREATE TRIGGER `insert_alerts` BEFORE INSERT ON `patientalerts`
  FOR EACH ROW BEGIN
 UPDATE patients
-SET patients.status = 'Distressed'
+SET patients.status = 'DISTRESSED'
 WHERE patients.patientID = NEW.patientID;
 
 SET NEW.alertDate = DATE_FORMAT(now(),'%Y-%m-%d'),
@@ -93,6 +101,14 @@ CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Dumping data for table `patientbatteryalerts`
+--
+
+INSERT INTO `patientbatteryalerts` (`patientID`, `alertTime`, `alertDate`) VALUES
+(6, '11:11:50', '2014-09-22'),
+(6, '20:50:15', '2014-09-22');
+
+--
 -- Triggers `patientbatteryalerts`
 --
 DROP TRIGGER IF EXISTS `insert_batteryalerts`;
@@ -100,7 +116,7 @@ DELIMITER //
 CREATE TRIGGER `insert_batteryalerts` BEFORE INSERT ON `patientbatteryalerts`
  FOR EACH ROW BEGIN
 UPDATE patients
-SET patients.status = 'Battery Low'
+SET patients.status = 'BATTERY_LOW'
 WHERE patients.patientID = NEW.patientID;
 
 SET NEW.alertDate = DATE_FORMAT(now(),'%Y-%m-%d'),
@@ -126,6 +142,14 @@ CREATE TABLE IF NOT EXISTS `patientcollapses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Dumping data for table `patientcollapses`
+--
+
+INSERT INTO `patientcollapses` (`patientID`, `collapseTime`, `collapseDate`, `collapseLat`, `collapseLong`) VALUES
+(6, '20:44:16', '2014-09-22', '0.0000000000', '0.0000000000'),
+(7, '20:45:52', '2014-09-22', '0.0000000000', '0.0000000000');
+
+--
 -- Triggers `patientcollapses`
 --
 DROP TRIGGER IF EXISTS `insert_collapses`;
@@ -133,7 +157,7 @@ DELIMITER //
 CREATE TRIGGER `insert_collapses` BEFORE INSERT ON `patientcollapses`
  FOR EACH ROW BEGIN
 UPDATE patients
-SET patients.status = 'Collapsed'
+SET patients.status = 'FALLEN'
 WHERE patients.patientID = NEW.patientID;
 
 SET NEW.collapseDate = DATE_FORMAT(now(),'%Y-%m-%d'),
@@ -169,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
   `patientLong` decimal(20,10) NOT NULL,
   `retrievalTime` time NOT NULL,
   `retrievalDate` date NOT NULL,
-  PRIMARY KEY (`patientID`, `retrievalTime`),
+  PRIMARY KEY (`patientID`,`retrievalTime`),
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -220,9 +244,9 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `lName` varchar(30) NOT NULL,
   `gender` enum('Male','Female') NOT NULL DEFAULT 'Male',
   `age` int(3) NOT NULL,
-  `bloodType` varchar(3) DEFAULT NULL,
+  `bloodType` enum('O_POS','O_NEG','A_POS','A_NEG','B_POS','B_NEG','AB_POS','AB_NEG') DEFAULT NULL,
   `medication` varchar(255) DEFAULT NULL,
-  `status` char(10) DEFAULT NULL,
+  `status` enum('FINE','DISTRESSED','FALLEN','BATTERY_LOW') DEFAULT 'FINE',
   `homeAddress` varchar(100) NOT NULL,
   `homeSuburb` varchar(20) NOT NULL,
   `contactNum` varchar(10) NOT NULL,
@@ -242,7 +266,8 @@ CREATE TABLE IF NOT EXISTS `patients` (
 --
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
-(6, 4, 'Josh', 'Johnston', 'Male', 123, 'O+', 'stoofs', 'fine', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1');
+(6, 4, 'Josh', 'Johnston', 'Female', 123, 'A_NEG', 'stoofs', 'BATTERY_LOW', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1'),
+(7, 4, 'jason', 'johnston', 'Male', 123, 'O_POS', 'hello', 'DISTRESSED', '123 hello', 'hello', '12345678', 'hello', 'dawn street', 'yay', '12345678', 'cf0874d4-6264-4647-a707-29a422a4434c');
 
 -- --------------------------------------------------------
 
@@ -264,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `carerID` (`carerID`),
   KEY `patientID` (`patientID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `users`

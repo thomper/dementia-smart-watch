@@ -1,9 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
 	<head profile="http://www.w3.org/2005/10/profile">

@@ -66,12 +66,8 @@
 					
 					out.println("<form class='pure-form pure-form-aligned' action='processing/UpdateAccountDetails.jsp' method='post'>");
 						out.println("<fieldset>");
-						
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='carerID'>Carer ID</label>");
-								out.println("<input name='carerID' type='text' value='"+rs.getString(1)+"' disabled>");
-							out.println("</div>");
-							
+								out.println("<input name='carerID' type='hidden' value='"+rs.getString(1)+"' disabled>");
+
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='firstName'>First Name</label>");
 								out.println("<input name='firstName' type='text' value='"+rs.getString(2)+"' maxlength='20' required>");
@@ -84,12 +80,12 @@
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='mobile'>Mobile #</label>");
-								out.println("<input name='mobile' type='number' value='"+rs.getString(4)+"' min='0' max='9999999999' required>");
+								out.println("<input name='mobile' type='text' value='"+rs.getString(4)+"' required>");
 							out.println("</div>");			
 
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='contactNum'>Alternate Contact #</label>");
-								out.println("<input name='contactNum' type='number' value='"+rs.getString(5)+"' min='0' max='9999999999' required>");
+								out.println("<input name='contactNum' type='text' value='"+rs.getString(5)+"' required>");
 							out.println("</div>");	
 
 							out.println("<div class='pure-control-group'>");

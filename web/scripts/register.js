@@ -112,7 +112,6 @@ function checkPassword() {
 	}
 }
 
-
 //Check that the passwords match - adds span text to right of input to confirm
 function checkConfirmPassword() {
     var password = document.getElementById("password");

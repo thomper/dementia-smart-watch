@@ -52,15 +52,12 @@
 			<h1>Create New Patient</h1>
 			
 			<%			
-
+			
+				String[] bloodTypes = {"O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"};
+			
 				out.println("<form class='pure-form pure-form-aligned' action='processing/UpdatePatientDetails.jsp?patientid=0' method='post'>");
 					out.println("<fieldset>");
-						out.println("<div class = 'left'>");
-							out.println("<div class='pure-control-group'>");
-								out.println("<label for='patID'>Patient ID</label>");
-								out.println("<input name='patID' type='text' disabled>");
-							out.println("</div>");
-							
+						out.println("<div class = 'left'>");						
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='firstName'>First Name</label>");
 								out.println("<input name='firstName' id='firstName' type='text' onblur='checkFirstName();' maxlength='20' required>");
@@ -83,30 +80,33 @@
 							
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='age'>Age</label>");
-								out.println("<input name='age' id='age' type='number' onblur='checkAge();' min='1' max='125' required>");
+								out.println("<input name='age' id='age' type='text' onblur='checkAge();' required>");
 								out.println("<span id='ageMessage'></span>");
 							out.println("</div>");							
 							
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='bloodType'>Blood Type</label>");
-								out.println("<input name='bloodType' id='bloodType' type='text' onblur='checkBloodType();' maxlength='3'>");
-								out.println("<span id='bloodTypeMessage'></span>");
+								out.println("<select name='bloodType'>");
+									for (Integer i=0; i < bloodTypes.length; i++) {
+										out.println("<option value='" + bloodTypes[i] + "'>" + bloodTypes[i] + "</option>");
+									}
+								out.println("</select>");
 							out.println("</div>");		
 	
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='medication'>Medication</label>");
 								out.println("<input name='medication' id='medication' type='text' onblur='checkMedication();' maxlength='255'>");
 								out.println("<span id='medicationMessage'></span>");
-							out.println("</div>");			
-						out.println("</div>");
-						
-						out.println("<div class='left'>");
+							out.println("</div>");
+
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='address'>Home Address</label>");
 								out.println("<input name='address' id='address' type='text' onblur='checkAddress();' maxlength='100' required>");
 								out.println("<span id='addressMessage'></span>");
-							out.println("</div>");		
-							
+							out.println("</div>");								
+						out.println("</div>");
+						
+						out.println("<div class='left'>");								
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='suburb'>Home Suburb</label>");
 								out.println("<input name='suburb' id='suburb' type='text' onblur='checkSuburb();' maxlength='20' required>");
@@ -115,7 +115,7 @@
 							
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='conNum'>Contact Number</label>");
-								out.println("<input name='conNum' id='conNum' type='number' onblur='checkConNum();' min='0' max='9999999999' required>");
+								out.println("<input name='conNum' id='conNum' type='text' onblur='checkConNum();' required>");
 								out.println("<span id='conNumMessage'></span>");
 							out.println("</div>");		
 	
@@ -139,7 +139,7 @@
 	
 							out.println("<div class='pure-control-group'>");
 								out.println("<label for='emergNum'>Emergency Contact Number</label>");
-								out.println("<input name='emergNum' id='emergNum' type='number' onblur='checkEmergNum();' min='0' max='9999999999' required>");
+								out.println("<input name='emergNum' id='emergNum' type='text' onblur='checkEmergNum();' required>");
 								out.println("<span id='emergNumMessage'></span>");
 							out.println("</div>");
 						out.println("</div");

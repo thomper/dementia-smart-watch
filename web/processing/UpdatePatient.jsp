@@ -21,7 +21,7 @@ g<%@page contentType="text/html" pageEncoding="UTF-8"%>
 			catch (Exception e) { response.sendRedirect("../Error.jsp?error=666"); } //Unreachable if page called correctly
 			
 			String carerID = session.getAttribute("carerid").toString();
-		
+					
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			java.sql.Connection conn;
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=root");
