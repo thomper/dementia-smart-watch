@@ -9,12 +9,13 @@ public class Globals {
 	
 	private static Globals globals = null;
 	
-	public HttpContext httpContext;
+	public final HttpContext httpContext;
 	public final String SERVER_ADDRESS = "http://172.19.43.178:8080";
 	
 	private Globals() {
 		
-		// TODO: move this to persistent storage, as it will be recreated under certain conditions
+		// TODO: Move this to persistent storage, as it will be recreated under
+		//		 certain conditions, causing us to lose the session cookie.
 		// TODO: (see http://portabledroid.wordpress.com/2012/05/04/singletons-in-android/)
 
 		// Create httpContext so that we have a cookie store.

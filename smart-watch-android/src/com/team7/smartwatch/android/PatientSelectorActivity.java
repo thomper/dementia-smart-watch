@@ -48,6 +48,7 @@ public class PatientSelectorActivity extends Activity {
 		@Override
 		void onPatientsRead() {
 			
+			// Create selections list
 			for (Patient patient: mPatients) {
 				Log.e("TEST", patient.firstName + " " + patient.lastName);
 			}

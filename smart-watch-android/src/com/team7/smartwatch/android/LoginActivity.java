@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
@@ -39,7 +40,7 @@ import android.widget.TextView;
 public class LoginActivity extends Activity {
 	
 	private enum LoginError {
-		CONNECTION_REFUSED, PASSWORD_INCORRECT, OTHER
+		CONNECTION_REFUSED, CONNECTION_TIMEOUT, PASSWORD_INCORRECT, OTHER
 	}
 
 	private static final String TAG = LoginActivity.class.getName();
@@ -233,8 +234,13 @@ public class LoginActivity extends Activity {
 					return LoginError.OTHER;
 				}
 			} catch (HttpHostConnectException e) {
-				Log.d(TAG, "Connection refused:\n" + Utility.StringFromStackTrace(e));
+				Log.d(TAG, "Connection refused:\n"
+						+ Utility.StringFromStackTrace(e));
 				return LoginError.CONNECTION_REFUSED;
+			} catch (ConnectTimeoutException e) {
+				Log.d(TAG, "Connection timed out:\n"
+						+ Utility.StringFromStackTrace(e));
+				return LoginError.CONNECTION_TIMEOUT;
 			} catch (IOException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
 				return LoginError.OTHER;
@@ -282,6 +288,9 @@ public class LoginActivity extends Activity {
 			} else if (error == LoginError.CONNECTION_REFUSED) {
 				mPasswordView
 						.setError(getString(R.string.error_connection_refused));
+			} else if (error == LoginError.CONNECTION_TIMEOUT) {
+				mPasswordView
+						.setError(getString(R.string.error_connection_timeout));
 			} else if (error == LoginError.OTHER) {
 				mPasswordView
 						.setError(getString(R.string.error_unknown));
