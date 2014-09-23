@@ -176,7 +176,8 @@ CREATE TABLE IF NOT EXISTS `patientfences` (
   `patientID` int(5) NOT NULL,
   `fenceLat` decimal(20,10) NOT NULL,
   `fenceLong` decimal(20,10) NOT NULL,
-  `fenceRadius` int(2) NOT NULL,
+  `radiusLat` decimal(20,10) NOT NULL,
+  `radiusLong` decimal(20,10) NOT NULL,
   PRIMARY KEY (`patientID`,`fenceLat`,`fenceLong`),
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
