@@ -49,6 +49,9 @@ public class PatientDetailsActivity extends Activity {
 
 		tv = (TextView)findViewById(R.id.last_name);
 		tv.setText(patientDetails.getString("lName", ""));
+		
+		tv = (TextView)findViewById(R.id.phone);
+		tv.setText(patientDetails.getString("contactNum", ""));
 
 		tv = (TextView)findViewById(R.id.blood_type);
 		tv.setText(patientDetails.getString("bloodType", ""));
@@ -65,8 +68,10 @@ public class PatientDetailsActivity extends Activity {
 		tv = (TextView)findViewById(R.id.emergency_contact);
 		String emergencyContact = patientDetails.getString("emergencyContactName", "") + "\n" +
 				patientDetails.getString("emergencyContactAddress", "") + "\n" +
-				patientDetails.getString("emergencyContactSuburb", "") + "\n" +
-				patientDetails.getString("emergencyContactNumber", "");
+				patientDetails.getString("emergencyContactSuburb", "");
 		tv.setText(emergencyContact);
+		
+		tv = (TextView)findViewById(R.id.emergency_number);
+		tv.setText(patientDetails.getString("emergencyContactNumber", ""));
 	}
 }
