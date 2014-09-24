@@ -17,4 +17,11 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style parent="android:Theme.Light" name="ThemeSelector">
+		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+	</style>
+
+	<style name="WindowTitleBackground">
+		<item name="android:background">#31998D</item>
+	</style>
 </resources>
