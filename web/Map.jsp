@@ -34,10 +34,10 @@
 			ResultSet rs = null;
 			if (patientID == 0){ 				
 				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients NATURAL JOIN "+
-					"patientLoc WHERE carerID = '"+carerID+"'");
+					"patientloc WHERE carerID = '"+carerID+"'");
 			} else {
 				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients NATURAL JOIN "+
-				"patientLoc WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
+				"patientloc WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
 			Double patientLat = 0.00;  
 			Double patientLng = 0.00; 

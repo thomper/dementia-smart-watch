@@ -324,7 +324,7 @@ DELIMITER ;
 -- Constraints for table `patientalerts`
 --
 ALTER TABLE `patientalerts`
-  ADD CONSTRAINT `patientAlerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientalerts_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientbatteryalerts`
@@ -336,25 +336,25 @@ ALTER TABLE `patientbatteryalerts`
 -- Constraints for table `patientcollapses`
 --
 ALTER TABLE `patientcollapses`
-  ADD CONSTRAINT `patientCollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientcollapses_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientfences`
 --
 ALTER TABLE `patientfences`
-  ADD CONSTRAINT `patientFences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientfences_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientloc`
 --
 ALTER TABLE `patientloc`
-  ADD CONSTRAINT `patientLoc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientloc_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patientpoints`
 --
 ALTER TABLE `patientpoints`
-  ADD CONSTRAINT `patientPoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientpoints_ibfk_1` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `patients`

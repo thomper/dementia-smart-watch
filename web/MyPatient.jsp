@@ -176,7 +176,7 @@
 					out.println("</form>");			
 					
 					Statement st2 = conn.createStatement();
-					ResultSet rs2 = st2.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients JOIN patientLoc on patientLoc.patientID = patients.patientID WHERE patientLoc.patientID=" + rs.getString(1));					
+					ResultSet rs2 = st2.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients JOIN patientloc on patientloc.patientID = patients.patientID WHERE patientloc.patientID=" + rs.getString(1));					
 
 					if (rs2.next()) {
 						
