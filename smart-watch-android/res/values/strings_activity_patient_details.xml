@@ -13,4 +13,8 @@
     <string name="residence">Unavailable</string>
     <string name="emergency_contact_label">Emergency Contact:</string>
     <string name="emergency_contact">Unavailable</string>
+    <string name="phone_label">Phone Number:</string>
+    <string name="phone">Unavailable</string>
+    <string name="emergency_number_label">Emergency Number:</string>
+    <string name="emergency_number">Unavailable</string>
 </resources>

@@ -23,6 +23,17 @@
             android:text="@string/last_name"
             android:padding="3dip" />
 	</TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="@string/phone_label"
+            android:padding="3dip" />
+        
+		<TextView
+            android:id="@+id/phone"
+            android:text="@string/phone"
+            android:padding="3dip" />
+	</TableRow>
 	
     <TableRow>
 		<TextView
@@ -63,4 +74,15 @@
             android:text="@string/emergency_contact"
             android:padding="3dip" />
     </TableRow>
+    
+    <TableRow>
+        <TextView
+            android:text="@string/emergency_number_label"
+            android:padding="3dip" />
+        
+		<TextView
+            android:id="@+id/emergency_number"
+            android:text="@string/emergency_number"
+            android:padding="3dip" />
+	</TableRow>
 </TableLayout>
