@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
   `patientID` int(5) NOT NULL,
   `alertTime` time NOT NULL DEFAULT '00:00:00',
   `alertDate` date NOT NULL,
+  `batteryLevel` varchar(10) NOT NULL,
   PRIMARY KEY (`patientID`,`alertTime`),
   KEY `patientID` (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -105,8 +106,8 @@ CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
 --
 
 INSERT INTO `patientbatteryalerts` (`patientID`, `alertTime`, `alertDate`) VALUES
-(6, '11:11:50', '2014-09-22'),
-(6, '20:50:15', '2014-09-22');
+(6, '11:11:50', '2014-09-22', '20%'),
+(6, '20:50:15', '2014-09-22', '15%');
 
 --
 -- Triggers `patientbatteryalerts`
@@ -247,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `age` int(3) NOT NULL,
   `bloodType` enum('O_POS','O_NEG','A_POS','A_NEG','B_POS','B_NEG','AB_POS','AB_NEG') DEFAULT NULL,
   `medication` varchar(255) DEFAULT NULL,
-  `status` enum('FINE','DISTRESSED','FALLEN','BATTERY_LOW') DEFAULT 'FINE',
+  `status` enum('FINE','DISTRESSED','FALLEN','BATTERY_LOW', 'LOST') DEFAULT 'FINE',
   `homeAddress` varchar(100) NOT NULL,
   `homeSuburb` varchar(20) NOT NULL,
   `contactNum` varchar(10) NOT NULL,

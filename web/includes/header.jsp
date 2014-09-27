@@ -56,13 +56,17 @@
 								
 								status = "has pressed the panic button and may need assistance.";
 							} else if (rs.getString(4).equals("BATTERY_LOW") == true) {
-								rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientbatteryalerts WHERE patientID = '"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
+								rs2 = st2.executeQuery("SELECT alertDate, alertTime, batteryLevel FROM patientbatteryalerts WHERE patientID = '"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
 								rs2.next();
 								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
 								rs2.close();
 								
-								status = "devices battery is low and needs charging";
-							} else {
+								status = "devices battery is low and needs charging, current level: " + rs2.getString(3);
+							} else if (rs.getString(4).equals("LOST") == true) {
+								rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
+								rs2.next();
+								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
+								rs2.close();
 								status = "is lost and may need assistance.";
 							}
 							
