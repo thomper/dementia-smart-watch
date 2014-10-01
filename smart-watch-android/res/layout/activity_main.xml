@@ -46,5 +46,11 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="20dp" />
+    
+        <Button
+        android:id="@+id/battery_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_battery" />
 
 </LinearLayout>
