@@ -183,7 +183,7 @@
 								out.println("<div class='pure-control-group-3-4'>");
 									out.println("<label for='uniqueKey'><br><b>Unique Key:</b> "+rs.getString(17)+"</label>");
 								out.println("</div>");
-							out.println("</div");
+							out.println("</div>");
 							
 							out.println("<div class='pure-controls'>");
 								out.println("<button type='submit' class='pure-button pure-button-primary'>Submit</button>");
