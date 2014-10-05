@@ -1,3 +1,6 @@
+import java.lang.Math;
+
+
 <%!
 	private static class Geo{
 		private Double lat = 0.00;
