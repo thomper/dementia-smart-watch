@@ -33,20 +33,21 @@
 			Statement st = conn.createStatement();
 			ResultSet rs = null;
 			if (patientID == 0){ 				
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients NATURAL JOIN "+
-					"patientloc WHERE carerID = '"+carerID+"'");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients  JOIN "+
+					"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
 			} else {
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong FROM patients NATURAL JOIN "+
-				"patientloc WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients JOIN "+
+				"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
 			Double patientLat = 0.00;  
 			Double patientLng = 0.00; 
 			String name = "";
-			String status;
+			String status = "";
 			Double fenceLat = 0.00; 
 			Double fenceLng = 0.00;
-			Double fenceRad;
-			
+			Double radiusLat = 0.00;
+			Double radiusLong = 0.00;
+			Double fenceRad = 0.00; // must kill
 		%> 	
 		
 		<script>
@@ -60,9 +61,15 @@
 				 patientLng = rs.getDouble(5);
 				 name = rs.getString(1) + " " + rs.getString(2);
 				 status = rs.getString(3);
-				 fenceLat = rs.getDouble(4); 
-				 fenceLng = rs.getDouble(5);
-				 fenceRad = 100.00; //
+				 if (rs.getDouble(6) == 0){; 
+					fenceLat = rs.getDouble(4);  //new value TODO: use GEO class
+					fenceLng = rs.getDouble(6); //new value TODO: use GEO class
+				 } else {
+					fenceLat = rs.getDouble(6); 
+					fenceLng = rs.getDouble(7);
+				 }
+				 
+				 fenceRad = 100.00; //must kill
 				
 		%>		
 				fenceMap['<%=name%>'] = {
