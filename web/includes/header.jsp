@@ -12,6 +12,26 @@
 	 Statement st = conn.createStatement();
 	 ResultSet rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");
 %>
+<script type="text/javascript">
+	function changeStatus(patientID) {
+		var xmlhttp;
+		
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+				window.location.reload();
+			}
+		}
+		
+		xmlhttp.open("GET", "ChangeStatus.jsp?patientid="+patientID, true);
+		xmlhttp.send();
+	}
+</script>
 	</head>
 	<body>
 		<div id="container">	
@@ -71,10 +91,10 @@
 							}
 							
 							out.println("<img src='images/exclamation2.gif' /></img>");
-							out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='ChangeStatus.jsp?patientid=" + patientID + "'>Dismiss</a>");
+							out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='javascript:changeStatus(" + patientID + ")'>Dismiss</a>");
 							out.println("<br/>");
 						}
-					} while (rs.next());
+					}
 				%>	
 			</div>
 		
