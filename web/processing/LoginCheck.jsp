@@ -56,7 +56,7 @@
 				response.sendRedirect("../Home.jsp");
 			}
 			else {
-				response.sendRedirect("../Error.jsp?error=2");
+				response.sendRedirect("../Error.jsp?error=1");
 			}
 			
 		}
