@@ -87,7 +87,7 @@
 						"', homeSuburb='"+suburb+"', contactNum='"+conNum+
 						"', emergencyContactName='"+emergName+"', emergencyContactAddress='"+emergAddress+
 						"', emergencyContactSuburb='"+emergSuburb+"', emergencyContactNum='"+emergNum+
-						"' WHERE patientID='"+patientID+"';");
+						"' WHERE patientID='"+patientID+"' AND carerID = '" + carerID + "';");
 					
 					response.sendRedirect("../PatientDetails.jsp?patientid="+patientID+"&success=1");						
 				}
@@ -107,7 +107,7 @@
 				st.close();
 				conn.close();	
 			} else {
-				response.sendRedirect("../Error.jsp?error=9");
+				response.sendRedirect("../Error.jsp?error=2");
 			}
 		%>
     </body>

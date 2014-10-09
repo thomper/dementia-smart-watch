@@ -68,7 +68,7 @@
 				java.sql.Connection conn;
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();
-				ResultSet rs = st.executeQuery("SELECT * FROM patients WHERE patientID='"+patientID+"'");	
+				ResultSet rs = st.executeQuery("SELECT * FROM patients WHERE patientID='"+patientID+"' AND carerID = '" + carerID + "'");	
 				
 				if (rs.next()) {
 					
@@ -183,7 +183,7 @@
 								out.println("<div class='pure-control-group-3-4'>");
 									out.println("<label for='uniqueKey'><br><b>Unique Key:</b> "+rs.getString(17)+"</label>");
 								out.println("</div>");
-							out.println("</div>");
+							out.println("</div");
 							
 							out.println("<div class='pure-controls'>");
 								out.println("<button type='submit' class='pure-button pure-button-primary'>Submit</button>");
