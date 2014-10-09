@@ -31,6 +31,26 @@
 		xmlhttp.open("GET", "ChangeStatus.jsp?patientid="+patientID, true);
 		xmlhttp.send();
 	}
+	
+	function displayAlerts() {
+		var xmlhttp;
+		
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+				document.getElementById("alert").innerHTML=xmlhttp.responseText;
+				setTimeout(displayAlerts, 5000);
+			}
+		}
+		
+		xmlhttp.open("GET", "AlertDisplay.jsp", true);
+		xmlhttp.send();
+	}
 </script>
 	</head>
 	<body>
@@ -49,52 +69,7 @@
 					</ul>
 				</div>
 			</div>
+			<script type="text/javascript">displayAlerts();</script>
 			<div id="alert" style="display: block;">
-				<%	
-					while (rs.next()) {	
-						if (rs.getString(4).equals("FINE") == false) {
-							patientID = rs.getString(1);
-							Statement st2 = conn.createStatement();
-							ResultSet rs2 = null;
-							
-							String status = "";
-							String trigger = "";
-							
-							if (rs.getString(4).equals("FALLEN") == true) {
-								rs2 = st2.executeQuery("SELECT collapseDate, collapseTime FROM patientcollapses WHERE patientID='"+patientID+"' ORDER BY collapseDate DESC, collapseTime DESC");
-								rs2.next();
-								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
-								rs2.close();
-								
-								status = "has collapsed and may need assistance.";
-								
-							} else if (rs.getString(4).equals("DISTRESSED") == true) {
-								rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
-								rs2.next();
-								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
-								rs2.close();
-								
-								status = "has pressed the panic button and may need assistance.";
-							} else if (rs.getString(4).equals("BATTERY_LOW") == true) {
-								rs2 = st2.executeQuery("SELECT alertDate, alertTime, batteryLevel FROM patientbatteryalerts WHERE patientID = '"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
-								rs2.next();
-								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
-								
-								status = "devices battery is low and needs charging, current level: " + rs2.getString(3);
-								rs2.close();
-							} else if (rs.getString(4).equals("LOST") == true) {
-								rs2 = st2.executeQuery("SELECT alertDate, alertTime FROM patientalerts WHERE patientID='"+patientID+"' ORDER BY alertDate DESC, alertTime DESC");
-								rs2.next();
-								trigger = rs2.getDate(1).toString() + " " + rs2.getTime(2).toString();
-								rs2.close();
-								status = "is lost and may need assistance.";
-							}
-							
-							out.println("<img src='images/exclamation2.gif' /></img>");
-							out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='javascript:changeStatus(" + patientID + ")'>Dismiss</a>");
-							out.println("<br/>");
-						}
-					}
-				%>	
 			</div>
 		
