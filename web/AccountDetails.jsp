@@ -122,99 +122,109 @@
 						String userID = session.getAttribute("userid").toString();
 					
 						java.sql.Connection conn;
-						conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-						Statement st = conn.createStatement();
 						
-						ResultSet rs = st.executeQuery("SELECT COUNT(*), userID FROM users WHERE email='"+email+"';");
-						int emailCount = 100;
-						String checkID = "";
-						while (rs.next()) { 
-							emailCount = Integer.parseInt(rs.getString(1));
-							checkID = rs.getString(2);
-						}
-						
-						if (emailCount >= 1 && !checkID.equals(userID) ) {
-							//Someone else is using that email
-							response.sendRedirect("../Error.jsp?error=6");
-						}
-						else {
-							st.executeUpdate("UPDATE carers SET fName='"+fName+"', lName='"+lName+"', mobileNum='"+mobile+"', contactNum='"+conNum+"' WHERE carerID='"+carerID+"';");
+						try {
+							conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+							Statement st = conn.createStatement();
+							
+							ResultSet rs = st.executeQuery("SELECT COUNT(*), userID FROM users WHERE email='"+email+"';");
+							int emailCount = 100;
+							String checkID = "";
+							while (rs.next()) { 
+								emailCount = Integer.parseInt(rs.getString(1));
+								checkID = rs.getString(2);
+							}
+							
+							if (emailCount >= 1 && !checkID.equals(userID) ) {
+								//Someone else is using that email
+								response.sendRedirect("../Error.jsp?error=6");
+							}
+							else {
+								st.executeUpdate("UPDATE carers SET fName='"+fName+"', lName='"+lName+"', mobileNum='"+mobile+"', contactNum='"+conNum+"' WHERE carerID='"+carerID+"';");
+									
+								st.executeUpdate("UPDATE users SET email='"+email+"' WHERE userID='"+userID+"';");
+	
+								submitted = null;
 								
-							st.executeUpdate("UPDATE users SET email='"+email+"' WHERE userID='"+userID+"';");
-
-							submitted = null;
-							
-							out.println("<script src='scripts/jquery-2.1.1.min.js'></script>");
-							out.println("<script type='text/javascript'>");
-								out.println("$(document).ready(function() {");
-									out.println("$('#message').fadeIn('slow');");
-									out.println("$('#message a.close-notify').click(function() {");
-										out.println("$('#message').fadeOut('slow');");
-										out.println("return false;");
+								out.println("<script src='scripts/jquery-2.1.1.min.js'></script>");
+								out.println("<script type='text/javascript'>");
+									out.println("$(document).ready(function() {");
+										out.println("$('#message').fadeIn('slow');");
+										out.println("$('#message a.close-notify').click(function() {");
+											out.println("$('#message').fadeOut('slow');");
+											out.println("return false;");
+										out.println("});");
 									out.println("});");
-								out.println("});");
-							out.println("</script>");
+								out.println("</script>");
+							}
+								
+							rs.close();
+							st.close();
+							conn.close();
+						} catch (Exception e) {
+							response.sendRedirect("Error.jsp?error=9");
 						}
-							
-						rs.close();
-						st.close();
-						conn.close();
 					}
 				} 
 				
 				if (submitted == null) {
 					java.sql.Connection conn2;
-					conn2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-					Statement st2 = conn2.createStatement();
-					ResultSet rs2 = st2.executeQuery("SELECT c.*, u.email FROM carers c, users u WHERE c.carerID='"+carerID+"' AND  u.carerID='"+carerID+"';");			
 					
-					if(rs2.next()) {		
-						out.println("<form class='pure-form pure-form-aligned' action='AccountDetails.jsp' method='post'>");
-							out.println("<fieldset>");
-									out.println("<input name='carerID' type='hidden' value='"+carerID+"' disabled>");
-	
-								out.println("<div class='pure-control-group'>");
-									out.println("<label for='firstName'>First Name</label>");
-									out.println("<input id='firstName' name='firstName' type='text' onblur='checkFirstName();' value='"+rs2.getString(2)+"' maxlength='20' required>");
-									out.println("<span id='firstNameMessage' class='firstNameMessage'></span>");
-								out.println("</div>");
-								
-								out.println("<div class='pure-control-group'>");
-									out.println("<label for='lastName'>Last Name</label>");
-									out.println("<input id='lastName' name='lastName' type='text' onblur='checkLastName();' value='"+rs2.getString(3)+"' maxlength='30' required>");
-									out.println("<span id='lastNameMessage' class='lastNameMessage'></span>");
-								out.println("</div>");		
-	
-								out.println("<div class='pure-control-group'>");
-									out.println("<label for='mobile'>Mobile #</label>");
-									out.println("<input id='mobile' name='mobile' type='text' onblur='checkMobile();' value='"+rs2.getString(4)+"' required>");
-									out.println("<span id='mobileMessage' class='mobileMessage'></span>");
-								out.println("</div>");			
-	
-								out.println("<div class='pure-control-group'>");
-									out.println("<label for='contactNum'>Alternate Contact #</label>");
-									out.println("<input id='alternateMobile' name='contactNum' type='text' onblur='checkAlternateMobile();' value='"+rs2.getString(5)+"' required>");
-									out.println("<span id='alternateMobileMessage' class='alternateMobileMessage'></span>");
-								out.println("</div>");	
-	
-								out.println("<div class='pure-control-group'>");
-									out.println("<label for='email'>Email Address</label>");
-									out.println("<input id='email' name='email' type='email' onblur='checkEmail();' value='"+rs2.getString(6)+"' maxlength='50' required>");
-									out.println("<span id='emailMessage' class='emailMessage'></span>");
-								out.println("</div>");							
-	
-								out.println("<input name='submitted' type='hidden' value='submitted'>");
-								
-								out.println("<div class='pure-controls'>");
-									out.println("<button type='submit' class='pure-button pure-button-primary'>Update</button>");
-								out.println("</div>");
-								
-							out.println("</fieldset>");
-						out.println("</form>");							
-					}				
-					rs2.close();				
-					st2.close();
-					conn2.close();	
+					try {
+						conn2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+						Statement st2 = conn2.createStatement();
+						ResultSet rs2 = st2.executeQuery("SELECT c.*, u.email FROM carers c, users u WHERE c.carerID='"+carerID+"' AND  u.carerID='"+carerID+"';");			
+						
+						if(rs2.next()) {		
+							out.println("<form class='pure-form pure-form-aligned' action='AccountDetails.jsp' method='post'>");
+								out.println("<fieldset>");
+										out.println("<input name='carerID' type='hidden' value='"+carerID+"' disabled>");
+		
+									out.println("<div class='pure-control-group'>");
+										out.println("<label for='firstName'>First Name</label>");
+										out.println("<input id='firstName' name='firstName' type='text' onblur='checkFirstName();' value='"+rs2.getString(2)+"' maxlength='20' required>");
+										out.println("<span id='firstNameMessage' class='firstNameMessage'></span>");
+									out.println("</div>");
+									
+									out.println("<div class='pure-control-group'>");
+										out.println("<label for='lastName'>Last Name</label>");
+										out.println("<input id='lastName' name='lastName' type='text' onblur='checkLastName();' value='"+rs2.getString(3)+"' maxlength='30' required>");
+										out.println("<span id='lastNameMessage' class='lastNameMessage'></span>");
+									out.println("</div>");		
+		
+									out.println("<div class='pure-control-group'>");
+										out.println("<label for='mobile'>Mobile #</label>");
+										out.println("<input id='mobile' name='mobile' type='text' onblur='checkMobile();' value='"+rs2.getString(4)+"' required>");
+										out.println("<span id='mobileMessage' class='mobileMessage'></span>");
+									out.println("</div>");			
+		
+									out.println("<div class='pure-control-group'>");
+										out.println("<label for='contactNum'>Alternate Contact #</label>");
+										out.println("<input id='alternateMobile' name='contactNum' type='text' onblur='checkAlternateMobile();' value='"+rs2.getString(5)+"' required>");
+										out.println("<span id='alternateMobileMessage' class='alternateMobileMessage'></span>");
+									out.println("</div>");	
+		
+									out.println("<div class='pure-control-group'>");
+										out.println("<label for='email'>Email Address</label>");
+										out.println("<input id='email' name='email' type='email' onblur='checkEmail();' value='"+rs2.getString(6)+"' maxlength='50' required>");
+										out.println("<span id='emailMessage' class='emailMessage'></span>");
+									out.println("</div>");							
+		
+									out.println("<input name='submitted' type='hidden' value='submitted'>");
+									
+									out.println("<div class='pure-controls'>");
+										out.println("<button type='submit' class='pure-button pure-button-primary'>Update</button>");
+									out.println("</div>");
+									
+								out.println("</fieldset>");
+							out.println("</form>");							
+						}				
+						rs2.close();				
+						st2.close();
+						conn2.close();	
+					} catch (Exception e) {
+						response.sendRedirect("Error.jsp?error=9");
+					}
 				}					
 				
 			%>			

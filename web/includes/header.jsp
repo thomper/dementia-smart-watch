@@ -8,9 +8,13 @@
 
 	 Class.forName("com.mysql.jdbc.Driver").newInstance();
 	 java.sql.Connection conn;
-	 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-	 Statement st = conn.createStatement();
-	 ResultSet rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");
+	 try {
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");
+	 } catch (Exception e) {
+		response.sendRedirect("assignment/Error.jsp?error=9");
+	 }
 %>
 <script type="text/javascript">
 	function changeStatus(patientID) {
