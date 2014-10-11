@@ -46,7 +46,7 @@
 							out.println("<tr style>");
 						}
 						out.println("<td>"+rs3.getString(2)+" "+rs3.getString(3)+" </td><td> <a href='Map.jsp?patientid="+
-							patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td><a href='DeletePatient.jsp?patientid=" + patientID + "'> Delete Patient</a></td>");
+							patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td><a href='DeletePatient.jsp?patientid=" + patientID + "'> Remove Patient</a></td>");
 						out.println("</tr>");					
 					}
 					out.println("</table>");
