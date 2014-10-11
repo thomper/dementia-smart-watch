@@ -27,33 +27,29 @@
 			<%
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 				java.sql.Connection conn2;
-				
-				try {
-					conn2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-					Statement st2 = conn2.createStatement();
-					ResultSet rs3 = st2.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");	
-	
-						out.println("<table align='center'>");
-						out.println("<tr>");
-							out.println("<td> Name </td> <td> Location </td> <td> Change Details </td> <td> Delete </td> ");
-						out.println("</tr>");
-						
-					while (rs3.next()) {
-						String patientID = rs3.getString(1);
-						if (rs3.getString(4).equals("FINE")) { 
-							out.println("<tr style='background-colour: green;'>");
-						} else { 
-							out.println("<tr style>");
-						}
-						out.println("<td>"+rs3.getString(2)+" "+rs3.getString(3)+" </td><td> <a href='Map.jsp?patientid="+
-							patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td><a href='DeletePatient.jsp?patientid=" + patientID + "'> Delete Patient</a></td>");
-						out.println("</tr>");					
+				conn2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+				Statement st2 = conn2.createStatement();
+				ResultSet rs3 = st2.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");	
+
+					out.println("<table align='center'>");
+					out.println("<tr>");
+						out.println("<td> Name </td> <td> Location </td> <td> Change Details </td> <td> Delete </td> ");
+					out.println("</tr>");
+					
+				while (rs3.next()) {
+					String patientID = rs3.getString(1);
+					if (rs3.getString(4).equals("FINE")) { 
+						out.println("<tr style='background-colour: green;'>");
+					} else { 
+						out.println("<tr style>");
 					}
-					out.println("</table>");
-				} catch (Exception e) {
-					response.sendRedirect("../Error.jsp?error=9");
+					out.println("<td>"+rs3.getString(2)+" "+rs3.getString(3)+" </td><td> <a href='Map.jsp?patientid="+
+						patientID+"'>Location</a> </td><td> <a href='PatientDetails.jsp?patientid="+patientID+"'>Change Details</a> </td><td><a href='DeletePatient.jsp?patientid=" + patientID + "'> Delete Patient</a></td>");
+					out.println("</tr>");					
 				}
+				out.println("</table>");
 		
-			%>	
+			%>
+			
 		</div>	
 	<jsp:include page = "includes/footer.jsp" flush = "true" />

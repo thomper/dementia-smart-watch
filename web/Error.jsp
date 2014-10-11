@@ -24,9 +24,9 @@
 			catch (Exception e) { errorCause = 0; }
 				
 			switch (errorCause) {
-				case 1:  out.println("<h3>Username or password is invalid, please try again.</h3>");
+				case 1:  out.println("<h3>That username does not exist.</h3>");
 						 break;
-				case 2: out.println("<h3>Some information you entered was incorrect, please go back and try again.</h3>");
+				case 2:  out.println("<h3>Invalid password.</h3>");
 						 break;
 				case 3:  out.println("<h3>Either that username or email address is already in use.</h3>");
 						 break;
@@ -39,9 +39,15 @@
 						 break;
 				case 7:  out.println("<h3>You entered your password incorrectly.</h3>");
 						 break;
-				case 8:  out.println("<h3>That patient does not exist.</h3>");
+				case 8:  out.println("<h3>That patientID does not exist.</h3>");
 						 break;
-				case 9:  out.println("<h3>Failed to connect to server, something has gone wrong, please try again</h3>");
+				case 9:  out.println("<h3>Some information you entered was invalid, please go back and correct it before resubmitting</h3>");
+						 break;
+				case 10: //
+						 break;
+				case 11: //
+						 break;
+				case 12: //
 						 break;
 				default: out.println("<h3>Unknown error.........</h3>");
 						 break;

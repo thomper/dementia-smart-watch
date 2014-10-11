@@ -66,144 +66,140 @@
 			
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 				java.sql.Connection conn;
-				try {
-					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-					Statement st = conn.createStatement();
-					ResultSet rs = st.executeQuery("SELECT * FROM patients WHERE patientID='"+patientID+"' AND carerID = '" + carerID + "'");	
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery("SELECT * FROM patients WHERE patientID='"+patientID+"' AND carerID = '" + carerID + "'");	
+				
+				if (rs.next()) {
 					
-					if (rs.next()) {
-						
-						out.println("<form class='pure-form pure-form-aligned' action='processing/UpdatePatientDetails.jsp?patientid="+patientID+"' method='post'>");
-							out.println("<fieldset>");
-								out.println("<div class = 'left'>");
-										out.println("<input name='patID' type='hidden' value='"+patientID+"' disabled>");
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='firstName'>First Name</label>");
-										out.println("<input name='firstName' id='firstName' type='text' value='"+rs.getString(3)+"' onblur='checkFirstName();' maxlength='20' required>");
-										out.println("<span id='firstNameMessage'></span>");
-									out.println("</div>");
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='surname'>Surname</label>");
-										out.println("<input name='surname' id='lastName'type='text' value='"+rs.getString(4)+"' onblur='checkLastName();' maxlength='30' required>");
-										out.println("<span id='lastNameMessage'></span>");
-									out.println("</div>");
-									
-									out.println("<div class='pure-control-group'>");							
-										out.println("<label for='gender'>Gender</label>");
-										out.println("<select name='gender'>");
-										if (rs.getString(5).equals("Male") == true) {
-											out.println("<option selected='Selected' value='Male'>Male</option>");
-											out.println("<option value='Female'>Female</option>");
-										} else {
-											out.println("<option value='Male'>Male</option>");
-											out.println("<option selected='Selected' value='Female'>Female</option>");
-										}
-										out.println("</select>");								
-									out.println("</div>");
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='age'>Age</label>");
-										out.println("<input name='age' id='age' type='text' value='"+rs.getString(6)+"' onblur='checkAge();' required>");
-										out.println("<span id='ageMessage'></span>");
-									out.println("</div>");	
-	
-									String bloodType = rs.getString(7);
-									String[] bloodTypes = {"O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"};
-									
-									if (bloodType.contains("_POS")) {
-										bloodType = bloodType.replace("_POS", "+");
+					out.println("<form class='pure-form pure-form-aligned' action='processing/UpdatePatientDetails.jsp?patientid="+patientID+"' method='post'>");
+						out.println("<fieldset>");
+							out.println("<div class = 'left'>");
+									out.println("<input name='patID' type='hidden' value='"+patientID+"' disabled>");
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='firstName'>First Name</label>");
+									out.println("<input name='firstName' id='firstName' type='text' value='"+rs.getString(3)+"' onblur='checkFirstName();' maxlength='20' required>");
+									out.println("<span id='firstNameMessage'></span>");
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='surname'>Surname</label>");
+									out.println("<input name='surname' id='lastName'type='text' value='"+rs.getString(4)+"' onblur='checkLastName();' maxlength='30' required>");
+									out.println("<span id='lastNameMessage'></span>");
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");							
+									out.println("<label for='gender'>Gender</label>");
+									out.println("<select name='gender'>");
+									if (rs.getString(5).equals("Male") == true) {
+										out.println("<option selected='Selected' value='Male'>Male</option>");
+										out.println("<option value='Female'>Female</option>");
 									} else {
-										bloodType = bloodType.replace("_NEG", "-");
+										out.println("<option value='Male'>Male</option>");
+										out.println("<option selected='Selected' value='Female'>Female</option>");
 									}
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='bloodType'>Blood Type</label>");
-										out.println("<select name='bloodType'>");
-										for (Integer i=0; i < bloodTypes.length; i++) {
-											if (bloodTypes[i].equals(bloodType) == true) {
-												out.println("<option selected='selected' value='"+bloodTypes[i]+"'>"+bloodTypes[i]+"</option>");
-											} else {
-												out.println("<option value='" + bloodTypes[i] + "'>" + bloodTypes[i] + "</option>");
-											}
+									out.println("</select>");								
+								out.println("</div>");
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='age'>Age</label>");
+									out.println("<input name='age' id='age' type='text' value='"+rs.getString(6)+"' onblur='checkAge();' required>");
+									out.println("<span id='ageMessage'></span>");
+								out.println("</div>");	
+
+								String bloodType = rs.getString(7);
+								String[] bloodTypes = {"O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"};
+								
+								if (bloodType.contains("_POS")) {
+									bloodType = bloodType.replace("_POS", "+");
+								} else {
+									bloodType = bloodType.replace("_NEG", "-");
+								}
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='bloodType'>Blood Type</label>");
+									out.println("<select name='bloodType'>");
+									for (Integer i=0; i < bloodTypes.length; i++) {
+										if (bloodTypes[i].equals(bloodType) == true) {
+											out.println("<option selected='selected' value='"+bloodTypes[i]+"'>"+bloodTypes[i]+"</option>");
+										} else {
+											out.println("<option value='" + bloodTypes[i] + "'>" + bloodTypes[i] + "</option>");
 										}
-										out.println("</select>");
-									out.println("</div>");	
-		
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='medication'>Medication</label>");
-										out.println("<input name='medication' id='medication' type='text' value='"+rs.getString(8)+"' onblur='checkMedication();' maxlength='255'>");
-										out.println("<span id='medicationMessage'></span>");
-									out.println("</div>");
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='address'>Home Address</label>");
-										out.println("<input name='address' id='address' type='text' value='"+rs.getString(10)+"' onblur='checkAddress();' maxlength='100' required>");
-										out.println("<span id='addressMessage'></span>");
-									out.println("</div>");									
+									}
+									out.println("</select>");
+								out.println("</div>");	
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='medication'>Medication</label>");
+									out.println("<input name='medication' id='medication' type='text' value='"+rs.getString(8)+"' onblur='checkMedication();' maxlength='255'>");
+									out.println("<span id='medicationMessage'></span>");
 								out.println("</div>");
 								
-								out.println("<div class='left'>");							
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='suburb'>Home Suburb</label>");
-										out.println("<input name='suburb' id='suburb' type='text' value='"+rs.getString(11)+"' onblur='checkSuburb();' maxlength='20' required>");
-										out.println("<span id='suburbMessage'></span>");
-									out.println("</div>");									
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='conNum'>Contact Number</label>");
-										out.println("<input name='conNum' id='conNum' type='text' value='"+rs.getString(12)+"' onblur='checkConNum();' required>");
-										out.println("<span id='conNumMessage'></span>");
-									out.println("</div>");		
-		
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='emergName'>Emergency Contact Name</label>");
-										out.println("<input name='emergName' id='emergName' type='text' value='"+rs.getString(13)+"' onblur='checkEmergName();' maxlength='50'>");
-										out.println("<span id='emergNameMessage'></span>");
-									out.println("</div>");		
-									
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='emergAddress'>Emergency Contact Address</label>");
-										out.println("<input name='emergAddress' id='emergAddress' type='text' value='"+rs.getString(14)+"' onblur='checkEmergAddress();' maxlength='100'>");
-										out.println("<span id='emergAddressMessage'></span>");
-									out.println("</div>");		
-		
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='emergSuburb'>Emergency Contact Suburb</label>");
-										out.println("<input name='emergSuburb' id='emergSuburb' type='text' value='"+rs.getString(15)+"' onblur='checkEmergSuburb();' maxlength='20'>");
-										out.println("<span id='emergSuburbMessage'></span>");
-									out.println("</div>");		
-		
-									out.println("<div class='pure-control-group'>");
-										out.println("<label for='emergNum'>Emergency Contact Number</label>");
-										out.println("<input name='emergNum' id='emergNum' type='text' value='"+rs.getString(16)+"' onblur='checkEmergNum();' required>");
-										out.println("<span id='emergNumMessage'></span>");
-									out.println("</div>");	
-		
-									out.println("<div class='pure-control-group-3-4'>");
-										out.println("<label for='uniqueKey'><br><b>Unique Key:</b> "+rs.getString(17)+"</label>");
-									out.println("</div>");
-								out.println("</div");
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='address'>Home Address</label>");
+									out.println("<input name='address' id='address' type='text' value='"+rs.getString(10)+"' onblur='checkAddress();' maxlength='100' required>");
+									out.println("<span id='addressMessage'></span>");
+								out.println("</div>");									
+							out.println("</div>");
+							
+							out.println("<div class='left'>");							
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='suburb'>Home Suburb</label>");
+									out.println("<input name='suburb' id='suburb' type='text' value='"+rs.getString(11)+"' onblur='checkSuburb();' maxlength='20' required>");
+									out.println("<span id='suburbMessage'></span>");
+								out.println("</div>");									
 								
-								out.println("<div class='pure-controls'>");
-									out.println("<button type='submit' class='pure-button pure-button-primary'>Submit</button>");
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='conNum'>Contact Number</label>");
+									out.println("<input name='conNum' id='conNum' type='text' value='"+rs.getString(12)+"' onblur='checkConNum();' required>");
+									out.println("<span id='conNumMessage'></span>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergName'>Emergency Contact Name</label>");
+									out.println("<input name='emergName' id='emergName' type='text' value='"+rs.getString(13)+"' onblur='checkEmergName();' maxlength='50'>");
+									out.println("<span id='emergNameMessage'></span>");
+								out.println("</div>");		
+								
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergAddress'>Emergency Contact Address</label>");
+									out.println("<input name='emergAddress' id='emergAddress' type='text' value='"+rs.getString(14)+"' onblur='checkEmergAddress();' maxlength='100'>");
+									out.println("<span id='emergAddressMessage'></span>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergSuburb'>Emergency Contact Suburb</label>");
+									out.println("<input name='emergSuburb' id='emergSuburb' type='text' value='"+rs.getString(15)+"' onblur='checkEmergSuburb();' maxlength='20'>");
+									out.println("<span id='emergSuburbMessage'></span>");
+								out.println("</div>");		
+	
+								out.println("<div class='pure-control-group'>");
+									out.println("<label for='emergNum'>Emergency Contact Number</label>");
+									out.println("<input name='emergNum' id='emergNum' type='text' value='"+rs.getString(16)+"' onblur='checkEmergNum();' required>");
+									out.println("<span id='emergNumMessage'></span>");
+								out.println("</div>");	
+	
+								out.println("<div class='pure-control-group-3-4'>");
+									out.println("<label for='uniqueKey'><br><b>Unique Key:</b> "+rs.getString(17)+"</label>");
 								out.println("</div>");
-								
-							out.println("</fieldset>");
-						out.println("</form>");			
-						
-					}
-					else {
-						response.sendRedirect("Error.jsp?error=8");
-					}
+							out.println("</div");
+							
+							out.println("<div class='pure-controls'>");
+								out.println("<button type='submit' class='pure-button pure-button-primary'>Submit</button>");
+							out.println("</div>");
+							
+						out.println("</fieldset>");
+					out.println("</form>");			
 					
-					rs.close();
-					st.close();
-					conn.close();
-				} catch (Exception e) {
-					response.sendRedirect("../Error.jsp?error=9");
-				}					
+				}
+				else {
+					response.sendRedirect("Error.jsp?error=8");
+				}
+				
+				rs.close();
+				st.close();
+				conn.close();	
 				
 			%>						
 

@@ -17,14 +17,10 @@
 	if (patientID != 0 ) {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		java.sql.Connection conn;
-		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-			Statement st = conn.createStatement();
-			st.execute("UPDATE patients SET status = 'FINE' WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");
-			conn.close();
-			st.close();
-		} catch (Exception e) {
-			response.sendRedirect("../Error.jsp?error=9");
-		}			
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+		Statement st = conn.createStatement();
+		st.execute("UPDATE patients SET status = 'FINE' WHERE patientID = " + patientID + " AND carerID = '" + carerID + "'");
+		conn.close();
+		st.close();				
 	}
 %>

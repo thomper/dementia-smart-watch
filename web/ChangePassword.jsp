@@ -52,94 +52,89 @@
 					
 					Class.forName("com.mysql.jdbc.Driver").newInstance();
 					java.sql.Connection conn;
-					
-					try {
-						conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-						Statement st = conn.createStatement();			
-						ResultSet rs = st.executeQuery("SELECT userPass, salt FROM users WHERE userID='"+userID+"';");
-				
-						if (rs.next()) { 
-							storedHash = rs.getString(1);
-							salt = rs.getString(2);
-							
-							md.update(oldPW.getBytes());	
-							byte byteData[] = md.digest();
-							for (int i = 0; i < byteData.length; i++) {
-								sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-							}
-							oldPWHash = sb.toString();
-							
-							md.update((oldPWHash+salt).getBytes());	
-							byteData = md.digest();
-							sb = new StringBuffer();
-							for (int i = 0; i < byteData.length; i++) {
-								sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-							}
-							oldPWHash = sb.toString();
-							
-							if (!oldPWHash.equals(storedHash)) {
-								oldPasswordMessage = "You entered your current password incorrectly";
-								valid = false;
-							}
-							
-							if (!newPW.equals(cNewPW)) {
-								passwordMessage = "Your new password does not match";
-								valid = false;
-							}
-							
-							String usernamePasswordReg = "^[a-zA-Z0-9]+$";
-							
-							if (!cNewPW.matches(usernamePasswordReg) || cNewPW.length() < 6) {
-								valid = false;
-							}
-						}				
+					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
+					Statement st = conn.createStatement();			
+					ResultSet rs = st.executeQuery("SELECT userPass, salt FROM users WHERE userID='"+userID+"';");
+			
+					if (rs.next()) { 
+						storedHash = rs.getString(1);
+						salt = rs.getString(2);
 						
-						if (!valid) {
-							submitted = null;
-						} else {
-							String newPWHash = "";
-							
-							md.update(newPW.getBytes());	
-							byte byteData[] = md.digest();
-							sb = new StringBuffer();
-							for (int i = 0; i < byteData.length; i++) {
-								sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-							}
-							newPWHash = sb.toString();
-				
-							md.update((newPWHash+salt).getBytes());	
-							byteData = md.digest();
-							sb = new StringBuffer();
-							for (int i = 0; i < byteData.length; i++) {
-								sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-							}
-							newPWHash = sb.toString();	
-							
-							st.executeUpdate("UPDATE users SET userPass='"+newPWHash+"' WHERE userID='"+userID+"';");				
-							
-							rs.close();
-							st.close();
-							conn.close();
-						
-							out.println("<script src='scripts/jquery-2.1.1.min.js'></script>");
-							out.println("<script type='text/javascript'>");
-								out.println("$(document).ready(function() {");
-									out.println("$('#message').fadeIn('slow');");
-									out.println("$('#message a.close-notify').click(function() {");
-										out.println("$('#message').fadeOut('slow');");
-										out.println("return false;");
-									out.println("});");
-								out.println("});");
-							out.println("</script>");
-							
-							oldPasswordMessage = "";
-							passwordMessage = "";
-							confirmPasswordMessage = "";
-							
-							submitted = null;
+						md.update(oldPW.getBytes());	
+						byte byteData[] = md.digest();
+						for (int i = 0; i < byteData.length; i++) {
+							sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
 						}
-					} catch (Exception e) {
-						response.sendRedirect("../Error.jsp?error=9");
+						oldPWHash = sb.toString();
+						
+						md.update((oldPWHash+salt).getBytes());	
+						byteData = md.digest();
+						sb = new StringBuffer();
+						for (int i = 0; i < byteData.length; i++) {
+							sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+						}
+						oldPWHash = sb.toString();
+						
+						if (!oldPWHash.equals(storedHash)) {
+							oldPasswordMessage = "You entered your current password incorrectly";
+							valid = false;
+						}
+						
+						if (!newPW.equals(cNewPW)) {
+							passwordMessage = "Your new password does not match";
+							valid = false;
+						}
+						
+						String usernamePasswordReg = "^[a-zA-Z0-9]+$";
+						
+						if (!cNewPW.matches(usernamePasswordReg) || cNewPW.length() < 6) {
+							valid = false;
+						}
+					}				
+					
+					if (!valid) {
+						submitted = null;
+					} else {
+						String newPWHash = "";
+						
+						md.update(newPW.getBytes());	
+						byte byteData[] = md.digest();
+						sb = new StringBuffer();
+						for (int i = 0; i < byteData.length; i++) {
+							sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+						}
+						newPWHash = sb.toString();
+			
+						md.update((newPWHash+salt).getBytes());	
+						byteData = md.digest();
+						sb = new StringBuffer();
+						for (int i = 0; i < byteData.length; i++) {
+							sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+						}
+						newPWHash = sb.toString();	
+						
+						st.executeUpdate("UPDATE users SET userPass='"+newPWHash+"' WHERE userID='"+userID+"';");				
+						
+						rs.close();
+						st.close();
+						conn.close();
+					
+						out.println("<script src='scripts/jquery-2.1.1.min.js'></script>");
+						out.println("<script type='text/javascript'>");
+							out.println("$(document).ready(function() {");
+								out.println("$('#message').fadeIn('slow');");
+								out.println("$('#message a.close-notify').click(function() {");
+									out.println("$('#message').fadeOut('slow');");
+									out.println("return false;");
+								out.println("});");
+							out.println("});");
+						out.println("</script>");
+						
+						oldPasswordMessage = "";
+						passwordMessage = "";
+						confirmPasswordMessage = "";
+						
+						submitted = null;
 					}
 				}
 				
