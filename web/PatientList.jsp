@@ -35,7 +35,7 @@
 	
 						out.println("<table align='center'>");
 						out.println("<tr>");
-							out.println("<td> Name </td> <td> Location </td> <td> Change Details </td> <td> Delete </td> ");
+							out.println("<td> Name </td> <td> Location </td> <td> Change Details </td> <td> Remove </td> ");
 						out.println("</tr>");
 						
 					while (rs3.next()) {
