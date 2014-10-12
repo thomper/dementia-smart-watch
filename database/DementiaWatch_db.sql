@@ -269,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
 (6, 4, 'Josh', 'Johnston', 'Female', 123, 'A_NEG', 'stoofs', 'FINE', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1'),
-(7, 4, 'jason', 'johnston', 'Male', 123, 'O_POS', 'hello', 'DISTRESSED', '123 hello', 'hello', '12345678', 'hello', 'dawn street', 'yay', '12345678', 'cf0874d4-6264-4647-a707-29a422a4434c');
+(8, 4, 'jason', 'johnston', 'Male', 123, 'O_POS', 'hello', 'FINE', '123 hello', 'hello', '12345678', 'hello', 'dawn street', 'yay', '12345678', 'cf0874d4-6264-4647-a707-29a422a4434c');
 
 -- --------------------------------------------------------
 
