@@ -26,7 +26,7 @@
 			switch (errorCause) {
 				case 1:  out.println("<h3>Username or password is invalid, please try again.</h3>");
 						 break;
-				case 2: out.println("<h3>Some information you entered was incorrect, please go back and try again.</h3>");
+				case 2: out.println("<h3>Some information you entered was invalid, please go back and try again.</h3>");
 						 break;
 				case 3:  out.println("<h3>Either that username or email address is already in use.</h3>");
 						 break;
