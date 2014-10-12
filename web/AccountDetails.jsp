@@ -51,7 +51,7 @@
 					boolean valid = true;
 					
 					String emailReg = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$";
-					String nameReg = "^[a-zA-Z][-'''a-zA-Z]+$";
+					String nameReg = "^[a-zA-Z][-\' a-zA-Z]+$";
 					String numberReg = "^(\\+|\\d)[0-9]{7,16}$";
 					
 					if (!fName.matches(nameReg)) {
