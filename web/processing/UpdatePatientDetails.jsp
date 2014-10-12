@@ -34,7 +34,7 @@
 			String emergSuburb = request.getParameter("emergSuburb");
 			String emergNum = request.getParameter("emergNum");
 			
-			String nameReg = "^[a-zA-Z][ -'a-zA-Z]+$";
+			String nameReg = "^[a-zA-Z][-'''a-zA-Z]+$";
 			String numberReg = "^(\\+|\\d)[0-9]{7,16}$";
 			String addressReg = "^[A-Za-z0-9][ A-Za-z0-9]*$";
 			String suburbReg = "^[A-Za-z][A-Za-z]*$";
@@ -44,8 +44,7 @@
 		
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			java.sql.Connection conn;
-			
-			try {
+
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();	
 				
@@ -111,9 +110,7 @@
 				} else {
 					response.sendRedirect("../Error.jsp?error=2");
 				}
-			} catch (Exception e) {
-			response.sendRedirect("../Error.jsp?error=9");
-			}
+
 		%>
     </body>
 </html>

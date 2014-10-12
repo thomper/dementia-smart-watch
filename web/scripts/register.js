@@ -2,7 +2,7 @@
 function checkFirstName() {
 	var firstName = document.getElementById("firstName").value;
     var firstNameMessage = document.getElementById("firstNameMessage");
-    var validChars = /^[a-zA-Z][-'a-zA-Z]+$/;//regex expression for letters upper/lower and hyphen or apostrophe
+    var validChars = /^[a-zA-Z][-'''a-zA-Z]+$/;//regex expression for letters upper/lower and hyphen or apostrophe
 	var validFirstName = firstName.match(validChars);//check that firstname input follows the regex
 	//if regex fails display message to user or leave message blank
 	if (validFirstName == null) {
@@ -19,7 +19,7 @@ function checkFirstName() {
 function checkLastName() {
 	var lastName = document.getElementById("lastName").value;
     var lastNameMessage = document.getElementById("lastNameMessage");
-    var validChars = /^[a-zA-Z][-'a-zA-Z]+$/;
+    var validChars = /^[a-zA-Z][-'''a-zA-Z]+$/;
 	var validLastName = lastName.match(validChars);
 	if (validLastName == null) {
 		lastNameMessage.style.color = "#ff6666";
