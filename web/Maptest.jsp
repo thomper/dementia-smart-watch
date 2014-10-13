@@ -12,7 +12,9 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-	    	
+	<script type="javascript" src="scripts/googleMaps.js"></script>
+	
+	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
 			if (session.getAttribute("userid") == null) { response.sendRedirect("Error.jsp?error=5"); return; }
@@ -54,9 +56,32 @@
 		var fenceMap = {};
 		var fence;
 		var marker;
-		var infoWindows
-		var inforWindowsIndex = 0;
-	<%			
+		
+	$(document).ready(function() {
+    var mapCenter = new google.maps.LatLng(47.6145, -122.3418); //Google map Coordinates
+    var map;
+
+    map_initialize(); // initialize google map
+    
+    //############### Google Map Initialize ##############
+    function map_initialize()
+    {
+        var googleMapOptions = 
+        { 
+            center: mapCenter, // map center
+            zoom: 17, //zoom level, 0 = earth view to higher value
+            panControl: true, //enable pan Control
+            zoomControl: true, //enable zoom control
+            zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL //zoom control size
+        },
+            scaleControl: true, // enable scale control
+            mapTypeId: google.maps.MapTypeId.ROADMAP // google map type
+        };
+    
+        map = new google.maps.Map(document.getElementById("google_map"), googleMapOptions);         
+       
+		<%			
 			while (rs.next()) {
 				 patientLat = rs.getDouble(4); 
 				 patientLng = rs.getDouble(5);
@@ -72,93 +97,42 @@
 				 
 				 fenceRad = 100.00; //must kill
 				
-		%>		
-				patientMap['<%=name%>'] = {
-				  center: new google.maps.LatLng(<%=patientLat%>, <%=patientLng%>),
-				  name: '<%=name%>',
-				};
+		%>
+				var mapPos = new google.maps.LatLng(<%=fenceLat%>,<%=fenceLng%>);
+				var mapTitle = '<%= name%>';
+				var mapDesc = '<%=status%>';
 				
-				fenceMap['<%=name%>'] = {
-				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
-				  radius: <%=fenceRad%>
-				   // infoWindow: new google.maps.InfoWindow({  content: '<p><div class="save"><form action="" method="POST" name="SaveMarker" id="SaveMarker">Fence for <%=name%></form></div></p><button name="save-marker" class="save-marker">Save Marker Details</button>' })
-				};
-				
-				i++;
-				
-			<% } //end While%>
+	   
+        //drop a new marker on right click
+        google.maps.event.addListener(map, 'rightclick', function(event) {
+            //Edit form to be displayed with new marker
+            var EditForm = '<p><div class="marker-edit">'+
+            '<form action="" method="POST" name="SaveMarker" id="SaveMarker">'+
+            '<label for="pName"><span>Place Name :</span><input type="text" name="pName" class="save-name" placeholder="Enter Title" maxlength="40" /></label>'+
+            '<label for="pDesc"><span>Description :</span><textarea name="pDesc" class="save-desc" placeholder="Enter Address" maxlength="150"></textarea></label>'+
+            '<label for="pType"><span>Type :</span> <select name="pType" class="save-type"><option value="restaurant">Rastaurant</option><option value="bar">Bar</option>'+
+            '<option value="house">House</option></select></label>'+
+            '</form>'+
+            '</div></p><button name="save-marker" class="save-marker">Save Marker Details</button>';
 
-		function initialize(centerLat, centerLng) {
-			  // Create the map.
-			  var mapOptions = {
-				<% if (patientID != 0) { %>
-					zoom: 18,
-				<% } else { %>
-					zoom: 15,
-				<% } %>
-				center: new google.maps.LatLng(centerLat, centerLng),				
-				mapTypeId: google.maps.MapTypeId.TERRAIN
-			  };
+            //call create_marker() function
+            create_marker(mapPos, mapTitle, EditForm,  false, true, true);
+        });
+		<% } %>
+        		
+    }
+});
 
-			  var map = new google.maps.Map(document.getElementById('map-canvas'),
-				  mapOptions);
+</script>
 
-					
-				  
-				  
-			  // Construct the circle for each value in patientMap.
-			  // Note: We scale the area of the circle based on the population.
-			 for (var fence in fenceMap) {
-				var fenceOptions = {
-				  strokeColor: '#FF0000',
-				  strokeOpacity: 0.8,
-				  strokeWeight: 2,
-				  fillColor: '#FF0000',
-				  fillOpacity: 0.35,
-				  map: map,
-				  center: fenceMap[fence].center,
-				  radius: fenceMap[fence].radius,
-				  editable: true,
-				  draggable: true,
-				  clickable: true
-				};
-		 			for (var patient in patientMap){
-						var marker = new google.maps.Marker({
-							position: patientMap[fence].center,
-							map: map,
-							title: patientMap[patient].name
-						});
-					}
-					// Add the circle for this city to the map.
-					fence = new google.maps.Circle(fenceOptions);
-					
-					google.maps.event.addListener(fenceMap[fence], 'rightclick', function(event) {
-						fenceOptions.center.infoWindow.open(map, fenceOptions.center)
-					 });	
-			}
 
-						
-					
-					 
-
-			}
-			
-		</script>
-		
-		
-		
-		
-		
-    
 	<%-- This will add the rest of the head tag and navigation and alerts --%>	
 	<jsp:include page = "includes/header.jsp" flush = "true" />
 	<jsp:include page = "includes/headerP.jsp" flush = "true" />
 
 	<div id="content">
-		<form class='pure-form pure-form-aligned' method='POST' action="bla.jsp">
-			<input type='submit' value='Save All Fences'/>
-		</form>	
-		<div id="map-canvas" style="height:500px; width:800px; margin-left:auto; margin-right:auto;"> 
+
+		<div id="map-canvas" style="height:500px; width:500px; margin-left:auto; margin-right:auto;"> 
 			<script>
 				google.maps.event.addDomListener(window, 'load', initialize(<%=fenceLat%>, <%=fenceLng%>)) ;
 			</script>

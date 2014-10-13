@@ -12,6 +12,7 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
@@ -54,8 +55,6 @@
 		var fenceMap = {};
 		var fence;
 		var marker;
-		var infoWindows
-		var inforWindowsIndex = 0;
 	<%			
 			while (rs.next()) {
 				 patientLat = rs.getDouble(4); 
@@ -64,7 +63,7 @@
 				 status = rs.getString(3);
 				 if (rs.getDouble(6) == 0){; 
 					fenceLat = rs.getDouble(4);  //new value TODO: use GEO class
-					fenceLng = rs.getDouble(5); //new value TODO: use GEO class
+					fenceLng = rs.getDouble(6); //new value TODO: use GEO class
 				 } else {
 					fenceLat = rs.getDouble(6); 
 					fenceLng = rs.getDouble(7);
@@ -73,28 +72,24 @@
 				 fenceRad = 100.00; //must kill
 				
 		%>		
-				patientMap['<%=name%>'] = {
+				fenceMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=patientLat%>, <%=patientLng%>),
-				  name: '<%=name%>',
+				  name: '<%=name%>'
 				};
 				
-				fenceMap['<%=name%>'] = {
+				patientMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
 				  radius: <%=fenceRad%>
-				   // infoWindow: new google.maps.InfoWindow({  content: '<p><div class="save"><form action="" method="POST" name="SaveMarker" id="SaveMarker">Fence for <%=name%></form></div></p><button name="save-marker" class="save-marker">Save Marker Details</button>' })
 				};
-				
-				i++;
-				
 			<% } //end While%>
 
 		function initialize(centerLat, centerLng) {
 			  // Create the map.
 			  var mapOptions = {
 				<% if (patientID != 0) { %>
-					zoom: 18,
-				<% } else { %>
 					zoom: 15,
+				<% } else { %>
+					zoom: 12,
 				<% } %>
 				center: new google.maps.LatLng(centerLat, centerLng),				
 				mapTypeId: google.maps.MapTypeId.TERRAIN
@@ -103,12 +98,9 @@
 			  var map = new google.maps.Map(document.getElementById('map-canvas'),
 				  mapOptions);
 
-					
-				  
-				  
 			  // Construct the circle for each value in patientMap.
 			  // Note: We scale the area of the circle based on the population.
-			 for (var fence in fenceMap) {
+			  for (var patient in patientMap) {
 				var fenceOptions = {
 				  strokeColor: '#FF0000',
 				  strokeOpacity: 0.8,
@@ -116,33 +108,20 @@
 				  fillColor: '#FF0000',
 				  fillOpacity: 0.35,
 				  map: map,
-				  center: fenceMap[fence].center,
-				  radius: fenceMap[fence].radius,
-				  editable: true,
-				  draggable: true,
-				  clickable: true
+				  center: patientMap[patient].center,
+				  radius: patientMap[patient].radius
 				};
-		 			for (var patient in patientMap){
-						var marker = new google.maps.Marker({
-							position: patientMap[fence].center,
-							map: map,
-							title: patientMap[patient].name
-						});
-					}
-					// Add the circle for this city to the map.
-					fence = new google.maps.Circle(fenceOptions);
-					
-					google.maps.event.addListener(fenceMap[fence], 'rightclick', function(event) {
-						fenceOptions.center.infoWindow.open(map, fenceOptions.center)
-					 });	
+				for (var fence in fenceMap){
+				var marker = new google.maps.Marker({
+					position: fenceMap[fence].center,
+					map: map,
+					title: fenceMap[fence].name
+				}); 
+				}	
+				// Add the circle for this city to the map.
+				fence = new google.maps.Circle(fenceOptions);
+			  }
 			}
-
-						
-					
-					 
-
-			}
-			
 		</script>
 		
 		
@@ -154,10 +133,7 @@
 	<jsp:include page = "includes/header.jsp" flush = "true" />
 	<jsp:include page = "includes/headerP.jsp" flush = "true" />
 
-	<div id="content">
-		<form class='pure-form pure-form-aligned' method='POST' action="bla.jsp">
-			<input type='submit' value='Save All Fences'/>
-		</form>	
+	<div id="content">		
 		<div id="map-canvas" style="height:500px; width:800px; margin-left:auto; margin-right:auto;"> 
 			<script>
 				google.maps.event.addDomListener(window, 'load', initialize(<%=fenceLat%>, <%=fenceLng%>)) ;
