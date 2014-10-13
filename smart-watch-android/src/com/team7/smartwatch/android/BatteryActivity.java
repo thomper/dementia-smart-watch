@@ -66,4 +66,7 @@ import android.widget.Toast;
            }  
            return ((float) level / (float) scale) * 100.0f;  
       }  
+      
+
  }  
+ 
