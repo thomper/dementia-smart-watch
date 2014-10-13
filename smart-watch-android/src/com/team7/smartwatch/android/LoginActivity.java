@@ -150,7 +150,7 @@ public class LoginActivity extends Activity {
 	private boolean isPasswordValid(String password) {
 
 		// TODO: Replace this with your own logic
-		return password.length() > 4;
+		return true;
 	}
 	
 	/**
@@ -337,7 +337,12 @@ public class LoginActivity extends Activity {
 
 			try {
 				String responseStr = AndroidUtility.StringFromHttpResponse(response);
-				return responseStr.equals(SUCCESS_MESSAGE);
+				boolean succeeded = responseStr.equals(SUCCESS_MESSAGE);
+				if (!succeeded) {
+					Log.d(TAG, "Failed login response from server:\n" +
+							responseStr);
+				}
+				return succeeded;
 			} catch (ParseException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
 				return false;
