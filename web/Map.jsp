@@ -82,10 +82,7 @@
 				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
 				  radius: <%=fenceRad%>
 				   // infoWindow: new google.maps.InfoWindow({  content: '<p><div class="save"><form action="" method="POST" name="SaveMarker" id="SaveMarker">Fence for <%=name%></form></div></p><button name="save-marker" class="save-marker">Save Marker Details</button>' })
-				};
-				
-				i++;
-				
+				};				
 			<% } //end While%>
 
 		function initialize(centerLat, centerLng) {
@@ -103,47 +100,40 @@
 			  var map = new google.maps.Map(document.getElementById('map-canvas'),
 				  mapOptions);
 
-					
+				for (var patient in patientMap){
+					var marker = new google.maps.Marker({
+					position: patientMap[patient].center,
+					map: map,
+					title: patientMap[patient].name
+					});
+				}
 				  
 				  
 			  // Construct the circle for each value in patientMap.
-			  // Note: We scale the area of the circle based on the population.
+			   //Note: We scale the area of the circle based on the population.
 			 for (var fence in fenceMap) {
 				var fenceOptions = {
-				  strokeColor: '#FF0000',
-				  strokeOpacity: 0.8,
-				  strokeWeight: 2,
-				  fillColor: '#FF0000',
-				  fillOpacity: 0.35,
-				  map: map,
-				  center: fenceMap[fence].center,
-				  radius: fenceMap[fence].radius,
-				  editable: true,
-				  draggable: true,
-				  clickable: true
-				};
-		 			for (var patient in patientMap){
-						var marker = new google.maps.Marker({
-							position: patientMap[fence].center,
-							map: map,
-							title: patientMap[patient].name
-						});
-					}
-					// Add the circle for this city to the map.
+					strokeColor: '#FF0000',
+					strokeOpacity: 0.8,
+					strokeWeight: 2,
+					fillColor: '#FF0000',
+					fillOpacity: 0.35,
+					map: map,
+					center: fenceMap[fence].center,
+					radius: fenceMap[fence].radius,
+					editable: true,
+					draggable: true,
+					clickable: true
+				};				
+					 //Add the circle for this city to the map.
 					fence = new google.maps.Circle(fenceOptions);
 					
-					google.maps.event.addListener(fenceMap[fence], 'rightclick', function(event) {
-						fenceOptions.center.infoWindow.open(map, fenceOptions.center)
-					 });	
+					//google.maps.event.addListener(fenceMap[fence], 'rightclick', function(event) {
+					//	fenceOptions.center.infoWindow.open(map, fenceOptions.center)
+					// });	
 			}
-
-						
-					
-					 
-
-			}
-			
-		</script>
+		}
+			</script>
 		
 		
 		
