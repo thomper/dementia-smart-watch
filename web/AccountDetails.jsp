@@ -222,6 +222,10 @@
 						rs2.close();				
 						st2.close();
 						conn2.close();	
+						
+						rs.close();
+						st.close();
+						conn.close();
 					} catch (Exception e) {
 						response.sendRedirect("Error.jsp?error=9");
 					}

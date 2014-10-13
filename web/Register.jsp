@@ -205,8 +205,12 @@
 							response.sendRedirect("RegisterSuccess.jsp");
 							return;						
 						}
+						rs.close();
 						st.close();
 						conn.close();
+						rs2.close();
+						st2.close();
+						conn2.close();
 					} catch (Exception e) {
 						response.sendRedirect("Error.jsp?error=9");
 					}

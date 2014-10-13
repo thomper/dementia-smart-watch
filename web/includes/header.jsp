@@ -1,21 +1,3 @@
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%
-	 String carerID = session.getAttribute("carerid").toString();
-	 String display = "none";
-	 String patientID = "";
-
-	 Class.forName("com.mysql.jdbc.Driver").newInstance();
-	 java.sql.Connection conn;
-	 try {
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
-		Statement st = conn.createStatement();
-		ResultSet rs = st.executeQuery("SELECT patientID, fName, lName, status FROM patients WHERE carerID='"+carerID+"'");
-	 } catch (Exception e) {
-		response.sendRedirect("assignment/Error.jsp?error=9");
-	 }
-%>
 <script type="text/javascript">
 	function changeStatus(patientID) {
 		var xmlhttp;

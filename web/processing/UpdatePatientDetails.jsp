@@ -104,13 +104,12 @@
 							"', '"+emergSuburb+"', '"+emergNum+"', '"+uniqueKey+"');");
 						
 						response.sendRedirect("../AddPatient.jsp?success=1");							
-					}
-								
-					st.close();
-					conn.close();	
+					}	
 				} else {
 					response.sendRedirect("../Error.jsp?error=2");
 				}
+				st.close();
+				conn.close();
 			} catch (Exception e) {
 				response.sendRedirect("../Error.jsp?error=9");
 			}

@@ -55,10 +55,12 @@
 				out.println("<img src='images/exclamation2.gif' /></img>");
 				out.println("<a href='PatientDetails.jsp?patientid=" + patientID + "'>" + rs.getString(2) + " " + rs.getString(3) + "</a> " + status + "  <a href='Map.jsp?patientid=" + patientID + "'>View Location</a> Logged at: " + trigger + " <a href='javascript:changeStatus(" + patientID + ")'>Dismiss</a>");
 				out.println("<br/>");
-			} else {
-				out.println("");
+				st2.close();
 			}		
-		}
+		}	
+		rs.close();
+		st.close();
+		conn.close();
 	} catch (Exception e) {
 		out.println("An error has occured and connection has failed, please refresh the page and try again");
 	}
