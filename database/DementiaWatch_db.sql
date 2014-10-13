@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 23, 2014 at 02:11 AM
+-- Generation Time: Oct 13, 2014 at 09:32 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `carers` (
 --
 
 INSERT INTO `carers` (`carerID`, `fName`, `lName`, `mobileNum`, `contactNum`) VALUES
-(4, 'j', 'j', '1', '1');
+(4, 'jjo', 'jj', '12345678', '12345678');
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `patientalerts` (
 
 INSERT INTO `patientalerts` (`patientID`, `alertTime`, `alertDate`, `alertLat`, `alertLong`) VALUES
 (6, '20:44:04', '2014-09-22', '0.0000000000', '0.0000000000'),
-(8, '10:11:34', '2014-09-23', '0.0000000000', '0.0000000000');
+(8, '13:26:33', '2014-10-13', '0.0000000000', '0.0000000000');
 
 --
 -- Triggers `patientalerts`
@@ -106,8 +106,8 @@ CREATE TABLE IF NOT EXISTS `patientbatteryalerts` (
 --
 
 INSERT INTO `patientbatteryalerts` (`patientID`, `alertTime`, `alertDate`, `batteryLevel`) VALUES
-(6, '11:11:50', '2014-09-22', '20%'),
-(6, '20:50:15', '2014-09-22', '15%');
+(6, '20:50:15', '2014-09-22', '15%'),
+(8, '13:25:13', '2014-10-13', '15%');
 
 --
 -- Triggers `patientbatteryalerts`
@@ -147,8 +147,7 @@ CREATE TABLE IF NOT EXISTS `patientcollapses` (
 --
 
 INSERT INTO `patientcollapses` (`patientID`, `collapseTime`, `collapseDate`, `collapseLat`, `collapseLong`) VALUES
-(6, '20:44:16', '2014-09-22', '0.0000000000', '0.0000000000'),
-(8, '20:45:52', '2014-09-22', '0.0000000000', '0.0000000000');
+(6, '20:44:16', '2014-09-22', '0.0000000000', '0.0000000000');
 
 --
 -- Triggers `patientcollapses`
@@ -248,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `age` int(3) NOT NULL,
   `bloodType` enum('O_POS','O_NEG','A_POS','A_NEG','B_POS','B_NEG','AB_POS','AB_NEG') DEFAULT NULL,
   `medication` varchar(255) DEFAULT NULL,
-  `status` enum('FINE','DISTRESSED','FALLEN','BATTERY_LOW', 'LOST') DEFAULT 'FINE',
+  `status` enum('FINE','DISTRESSED','FALLEN','BATTERY_LOW','LOST') DEFAULT 'FINE',
   `homeAddress` varchar(100) NOT NULL,
   `homeSuburb` varchar(20) NOT NULL,
   `contactNum` varchar(10) NOT NULL,
@@ -261,15 +260,15 @@ CREATE TABLE IF NOT EXISTS `patients` (
   UNIQUE KEY `patientID` (`patientID`),
   UNIQUE KEY `uniqueKey` (`uniqueKey`),
   KEY `carerID` (`carerID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `patients`
 --
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
-(6, 4, 'Josh', 'Johnston', 'Female', 123, 'A_NEG', 'stoofs', 'FINE', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1'),
-(8, 4, 'jason', 'johnston', 'Male', 123, 'O_POS', 'hello', 'FINE', '123 hello', 'hello', '12345678', 'hello', 'dawn street', 'yay', '12345678', 'cf0874d4-6264-4647-a707-29a422a4434c');
+(6, 4, 'Joshua', 'Johnston', 'Female', 123, 'A_NEG', 'stoofs', 'BATTERY_LOW', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1'),
+(8, 4, 'jason', 'johnston', 'Male', 73, 'O_POS', 'hello', 'DISTRESSED', 'hello', 'hello', '12345678', 'hello', 'hello', 'hello', '12345678', '74ab0de7-d310-448b-8e77-f84b0ae6b01b');
 
 -- --------------------------------------------------------
 
@@ -298,7 +297,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`userID`, `patientID`, `carerID`, `email`, `userName`, `userPass`, `salt`) VALUES
-(4, NULL, 4, '1@1.com', 'j', '8161e767e1e85f0f37ad655caf1aad304073d8701bf2a9bbda60090e1e6cd125', '2e033eef-bcd2-4529-9111-74dff28aa093');
+(4, NULL, 4, '123@j.com', 'j', '2ae0f5eecf88938e25f1f73aca933314e431c59988219d37708d398d03e592d9', '2e033eef-bcd2-4529-9111-74dff28aa093');
 
 --
 -- Triggers `users`
@@ -367,8 +366,8 @@ ALTER TABLE `patients`
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`carerID`) REFERENCES `carers` (`carerID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`patientID`) REFERENCES `patients` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_ibfk_3` FOREIGN KEY (`carerID`) REFERENCES `carers` (`carerID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
