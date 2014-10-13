@@ -149,6 +149,7 @@ public class MainActivity extends Activity {
 		Button panicButton = (Button)findViewById(R.id.panic_button);
 		panicButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
+					new Alerter(getApplicationContext(), mPatient.patientID);
 					sendText();
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:"+retrieveNumber()));

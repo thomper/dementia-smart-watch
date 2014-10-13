@@ -2,6 +2,7 @@ package com.team7.smartwatch.server;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,4 +65,37 @@ public class DatabaseLocationWriter {
         	throw new BadPostParameterException();
         }
     }
+
+	public static boolean writeAlert(int patientID) throws BadSQLParameterException {
+		Connection conn = null;
+		double lat;
+        double l0ng;
+		
+        try {
+            conn = DatabaseConnector.getConnection();
+            PreparedStatement getloc = conn.prepareStatement("SELECT patientLat, patientLong "
+        			+ " FROM patientloc WHERE patientID == ? ");
+            getloc.setInt(1, patientID);
+            ResultSet rs = getloc.executeQuery();
+            
+            rs.next();
+            lat = rs.getDouble(1);
+            l0ng = rs.getDouble(2);
+            rs.close();
+            
+            PreparedStatement createAlert = conn.prepareStatement("INSERT INTO  "
+        			+ " (patientID, collapseTime, collapseDate, collapseLat, collapseLong) "
+        			+ "values (?, ?, ?, ?, ?)");
+            bindValues(createAlert, patientID, lat, l0ng);
+            int rowsUpdated = createAlert.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+        	logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
+        	return false;
+        } catch (BadPostParameterException e) {
+        	return false;
+		} finally {
+			DatabaseConnector.closeConnection(conn);
+        }
+	}
 }
