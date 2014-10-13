@@ -12,7 +12,7 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
@@ -39,6 +39,13 @@
 				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients JOIN "+
 				"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
+			
+			for (int i = 0; i<rs.lenght(); i++){
+				out.line
+			}
+			
+			
+			
 			Double patientLat = 0.00;  
 			Double patientLng = 0.00; 
 			String name = "";
