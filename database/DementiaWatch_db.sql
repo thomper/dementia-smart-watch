@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `patientalerts` (
 
 INSERT INTO `patientalerts` (`patientID`, `alertTime`, `alertDate`, `alertLat`, `alertLong`) VALUES
 (6, '20:44:04', '2014-09-22', '0.0000000000', '0.0000000000'),
-(7, '10:11:34', '2014-09-23', '0.0000000000', '0.0000000000');
+(8, '10:11:34', '2014-09-23', '0.0000000000', '0.0000000000');
 
 --
 -- Triggers `patientalerts`
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `patientcollapses` (
 
 INSERT INTO `patientcollapses` (`patientID`, `collapseTime`, `collapseDate`, `collapseLat`, `collapseLong`) VALUES
 (6, '20:44:16', '2014-09-22', '0.0000000000', '0.0000000000'),
-(7, '20:45:52', '2014-09-22', '0.0000000000', '0.0000000000');
+(8, '20:45:52', '2014-09-22', '0.0000000000', '0.0000000000');
 
 --
 -- Triggers `patientcollapses`
@@ -269,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
 
 INSERT INTO `patients` (`patientID`, `carerID`, `fName`, `lName`, `gender`, `age`, `bloodType`, `medication`, `status`, `homeAddress`, `homeSuburb`, `contactNum`, `emergencyContactName`, `emergencyContactAddress`, `emergencyContactSuburb`, `emergencyContactNum`, `uniqueKey`) VALUES
 (6, 4, 'Josh', 'Johnston', 'Female', 123, 'A_NEG', 'stoofs', 'FINE', '123 fake street', 'fakeberg', '12345678', 'Dawn Johnston', '1234 fake street', 'fakeberg', '123456789', '1'),
-(7, 4, 'jason', 'johnston', 'Male', 123, 'O_POS', 'hello', 'FINE', '123 hello', 'hello', '12345678', 'hello', 'dawn street', 'yay', '12345678', 'cf0874d4-6264-4647-a707-29a422a4434c');
+(8, 4, 'jason', 'johnston', 'Male', 123, 'O_POS', 'hello', 'FINE', '123 hello', 'hello', '12345678', 'hello', 'dawn street', 'yay', '12345678', 'cf0874d4-6264-4647-a707-29a422a4434c');
 
 -- --------------------------------------------------------
 
