@@ -196,19 +196,19 @@ public class MainActivity extends Activity {
 
 		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
 		SharedPreferences.Editor editor = patientDetails.edit();
-		editor.putString("fName", "aaron");
-		editor.putString("lName", "ramsey");
-		editor.putString("gender", "Male");
-		editor.putString("age", "88");
-		editor.putString("bloodType", "A");
-		editor.putString("medication", "");
-		editor.putString("homeAddress", "322 Moggill Road");
-		editor.putString("homeSuburb", "Indooroopilly");
-		editor.putString("contactNum", "8877665544");
-		editor.putString("emergencyContactName", "louise elliot");
-		editor.putString("emergencyContactSuburb", "");
-		editor.putString("emergencyContactAddress", "");
-		editor.putString("emergencyContactNumber", "0423787149");
+		editor.putString("fName", mPatient.firstName);
+		editor.putString("lName", mPatient.lastName);
+		editor.putString("gender", mPatient.gender.toString());
+		editor.putInt("age", mPatient.age);
+		editor.putString("bloodType", mPatient.bloodType.toString());
+		editor.putString("medication", mPatient.medication);
+		editor.putString("homeAddress", mPatient.homeAddress);
+		editor.putString("homeSuburb", mPatient.homeSuburb);
+		editor.putString("contactNum", mPatient.contactNum);
+		editor.putString("emergencyContactName", mPatient.emergencyContact.name);
+		editor.putString("emergencyContactSuburb", mPatient.emergencyContact.suburb);
+		editor.putString("emergencyContactAddress", mPatient.emergencyContact.address);
+		editor.putString("emergencyContactNumber", mPatient.emergencyContact.num);
 		
 		editor.apply();
 	}
