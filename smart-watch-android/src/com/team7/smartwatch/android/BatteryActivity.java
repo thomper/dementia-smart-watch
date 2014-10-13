@@ -48,26 +48,16 @@ import android.widget.Toast;
                 Log.e("Battery Level", String.valueOf(batteryLevel));  
            }  
       }  
-      float batteryLevel;  
+      float batteryLevel; 
+      
+      
       private class BatteryReceiver extends BroadcastReceiver {  
-           @Override  
-           public void onReceive(Context arg0, Intent arg1) {  
-                if (arg1.getAction().equalsIgnoreCase(Intent.ACTION_BATTERY_LOW)  
-                          || arg1.getAction().equalsIgnoreCase(  
-                                    Intent.ACTION_BATTERY_CHANGED)  
-                          || arg1.getAction().equalsIgnoreCase(  
-                                    Intent.ACTION_BATTERY_OKAY)) {  
-                     int level = arg1.getIntExtra("level", 0);  
-                     Toast.makeText(BatteryActivity.this,  
-                               "Current Battery " + level + " %", Toast.LENGTH_LONG)  
-                               .show();  
-                     mTextView  
-                               .setText(String  
-                                         .valueOf("Battery Level Change Detect through Receiver = "  
-                                                   + level));  
-                }  
-           }  
-      }  
+          @Override  
+          public void onReceive(Context arg0, Intent arg1) {  
+               
+          }  
+     }   
+      
       public float getBatteryLevel(Intent batteryIntent) {  
            int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);  
            int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);  
