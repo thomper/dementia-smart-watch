@@ -44,7 +44,8 @@
 		
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			java.sql.Connection conn;
-
+			
+			try {
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 				Statement st = conn.createStatement();	
 				
@@ -110,7 +111,9 @@
 				} else {
 					response.sendRedirect("../Error.jsp?error=2");
 				}
-
+			} catch (Exception e) {
+				response.sendRedirect("../Error.jsp?error=9");
+			}
 		%>
     </body>
 </html>

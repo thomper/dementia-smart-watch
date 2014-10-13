@@ -1,0 +1,9 @@
+To run the tests a few things need to change.
+
+You'll need to change the chromedriver location to where you have it throughout each test class.
+
+You'll have to change your xampp folder set up so that all the web files are inside a folder called "assignment" and then all the links in the tests will work, i.e. localhost:8080/assignment/index.jsp
+
+In order to run the tests you need to ensure you have the junit/hamcrest jars referenced as well as the selenium-server-standalone jar
+
+Also before you run the addPatientTests make sure you run the patientListTests (if you're using a fresh database, otherwise do it the other way around)
