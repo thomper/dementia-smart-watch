@@ -33,9 +33,9 @@
 			Statement updb = conn.createStatement();
 			ResultSet rs = null;
 			if (patientID == 0){ 				
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID FROM ( SELECT patientID, MAX(retrievalTime) AS First FROM patientloc GROUP BY patientID ) foo JOIN patientloc ON foo.patientID = patientloc.patientID AND foo.First = patientloc.retrievalTime JOIN patients ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
+				rs = st.executeQuery("SELECT patients.patientID, fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, retrievalTime, retrievalDate FROM patients JOIN patientloc ON patientloc.patientID = patients.patientID JOIN patientfences ON patientfences.patientID = patients.patientID WHERE carerID = "+carerID+" GROUP BY patients.patientID ORDER BY retrievalDate DESC, retrievalTime DESC");
 			} else {
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID FROM ( SELECT patientID, MAX(retrievalTime) AS First FROM patientloc GROUP BY patientID ) foo JOIN patientloc ON foo.patientID = patientloc.patientID AND foo.First = patientloc.retrievalTime JOIN patients ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
+				rs = st.executeQuery("SELECT patients.patientID, fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, retrievalTime, retrievalDate FROM patients JOIN patientloc ON patientloc.patientID = patients.patientID JOIN patientfences ON patientfences.patientID = patients.patientID WHERE carerID = "+carerID+" AND patients.patientID = "+patientID+" GROUP BY patients.patientID ORDER BY retrievalDate DESC, retrievalTime DESC");
 			}
 			
 			Double patientLat = 0.00;  
