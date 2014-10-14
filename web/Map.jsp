@@ -32,10 +32,10 @@
 			Statement st = conn.createStatement();
 			ResultSet rs = null;
 			if (patientID == 0){ 				
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients  JOIN "+
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius FROM patients  JOIN "+
 					"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
 			} else {
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients JOIN "+
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius FROM patients JOIN "+
 				"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
 			Double patientLat = 0.00;  
@@ -44,9 +44,7 @@
 			String status = "";
 			Double fenceLat = 0.00; 
 			Double fenceLng = 0.00;
-			Double radiusLat = 0.00;
-			Double radiusLong = 0.00;
-			Double fenceRad = 0.00; // must kill
+			Double fenceRad  = 0.00;
 		%> 	
 		
 		<script>
@@ -61,14 +59,18 @@
 				 name = rs.getString(1) + " " + rs.getString(2);
 				 status = rs.getString(3);
 				 if (rs.getDouble(6) == 0){; 
-					fenceLat = rs.getDouble(4);  //new value TODO: use GEO class
-					fenceLng = rs.getDouble(5); //new value TODO: use GEO class
+					fenceLat = patientLat;  //new value TODO: use GEO class
+					fenceLng = patientLng; //new value TODO: use GEO class
 				 } else {
 					fenceLat = rs.getDouble(6); 
 					fenceLng = rs.getDouble(7);
 				 }
-				 
-				 fenceRad = 100.00; //must kill
+				 if (rs.getDouble(8) == 0){
+						 fenceRad = 50.00; 
+				} else {
+					fenceRad = rs.getDouble(8);
+				}
+				
 				
 		%>		
 				patientMap['<%=name%>'] = {
