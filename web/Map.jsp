@@ -133,14 +133,14 @@
 
 				};
 				
-				 /*google.maps.event.addListener(fenceMapMap.object, 'radius_changed', function() {
-					alert("working");
+				 google.maps.event.addListener(fenceMap[fence].object, 'radius_changed', function() {
+					alert("Successfully Updated Database");
 				 
 				 });
-				 google.maps.event.addListener(fenceMapMap.object, 'center_changed', function() {
-					alert("working2");
-				 
-				 });*/
+				 google.maps.event.addListener(fenceMap[fence].object, 'center_changed', function() {
+					
+					alert("Successfully Updated Database");
+				 });
 				
 				
  /*console.log(polygonBounds);
