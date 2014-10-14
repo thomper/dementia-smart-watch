@@ -17,6 +17,8 @@ public class Patient {
 	public String homeSuburb;
 	public String contactNum;
 	public EmergencyContact emergencyContact;
+	public Fence fence;
+	
 	
 	public Patient() {
 		
@@ -61,6 +63,24 @@ public class Patient {
 		emergencyContact.address = jObj.getString(emPrefix + "Address");
 		emergencyContact.suburb = jObj.getString(emPrefix + "Suburb");
 		emergencyContact.num = jObj.getString(emPrefix + "Num");
+		
+		if (jObj.has("fenceLat")) {
+			fence.lat = Fence.valueOf(jObj.getString("fenceLat"));
+		} else {
+			fence.lat = null;
+		}
+		
+		if (jObj.has("fenceLat")) {
+			fence.lng = Fence.valueOf(jObj.getString("fenceLng")); 
+		} else {
+			fence.lng = null;
+		}
+		
+		if (jObj.has("fenceLat")) {
+			radius = Fence.valueOf(jObj.getString("radius"));
+		} else {
+			fence.radius = null;
+		}
 	}
 	
 	public JSONObject toJSON() {
@@ -79,6 +99,9 @@ public class Patient {
 				"homeAddress",
 				"homeSuburb",
 				"contactNum",
+				"fenceLat",
+				"fenceLng",
+				"radius"
 		});
 		
 		// Add emergency contact.
