@@ -12,6 +12,7 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
@@ -30,13 +31,20 @@
 			java.sql.Connection conn;
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 			Statement st = conn.createStatement();
-			Statement updb = conn.createStatement();
 			ResultSet rs = null;
 			if (patientID == 0){ 				
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID FROM ( SELECT patientID, MAX(retrievalTime) AS First FROM patientloc GROUP BY patientID ) foo JOIN patientloc ON foo.patientID = patientloc.patientID AND foo.First = patientloc.retrievalTime JOIN patients ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients  JOIN "+
+					"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
 			} else {
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID FROM ( SELECT patientID, MAX(retrievalTime) AS First FROM patientloc GROUP BY patientID ) foo JOIN patientloc ON foo.patientID = patientloc.patientID AND foo.First = patientloc.retrievalTime JOIN patients ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radiusLat, radiusLong FROM patients JOIN "+
+				"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
+			
+			for (int i = 0; i<rs.lenght(); i++){
+				out.line
+			}
+			
+			
 			
 			Double patientLat = 0.00;  
 			Double patientLng = 0.00; 
@@ -44,44 +52,39 @@
 			String status = "";
 			Double fenceLat = 0.00; 
 			Double fenceLng = 0.00;
-			Double fenceRad  = 0.00;
-			Double currentPatientID = 0.00;
+			Double radiusLat = 0.00;
+			Double radiusLong = 0.00;
+			Double fenceRad = 0.00; // must kill
 		%> 	
 		
 		<script>
-		var fenceMap = {};
 		var patientMap = {};
+		var fenceMap = {};
 		var fence;
 		var marker;
-		
 	<%			
 			while (rs.next()) {
 				 patientLat = rs.getDouble(4); 
 				 patientLng = rs.getDouble(5);
-				 currentPatientID = rs.getDouble(9);
 				 name = rs.getString(1) + " " + rs.getString(2);
 				 status = rs.getString(3);
-				
 				 if (rs.getDouble(6) == 0){; 
-					fenceLat = patientLat;  //new value TODO: use GEO class
-					fenceLng = patientLng; //new value TODO: use GEO class
-					updb.executeUpdate("INSERT INTO patientfences (patientID, fenceLat, fenceLong) VALUES ("+currentPatientID + ", " + fenceLat  +", " + fenceLng+")");
+					fenceLat = rs.getDouble(4);  //new value TODO: use GEO class
+					fenceLng = rs.getDouble(6); //new value TODO: use GEO class
 				 } else {
 					fenceLat = rs.getDouble(6); 
 					fenceLng = rs.getDouble(7);
 				 }
-				if (rs.getDouble(8) == 0) {
-					fenceRad = 30.00;
-				} else {
-					fenceRad = rs.getDouble(8);
-				 }
+				 
+				 fenceRad = 100.00; //must kill
+				
 		%>		
-				patientMap['<%=name%>'] = {
+				fenceMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=patientLat%>, <%=patientLng%>),
 				  name: '<%=name%>'
 				};
 				
-				fenceMap['<%=name%>'] = {
+				patientMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
 				  radius: <%=fenceRad%>
 				};
@@ -96,15 +99,15 @@
 					zoom: 12,
 				<% } %>
 				center: new google.maps.LatLng(centerLat, centerLng),				
-				mapTypeId: google.maps.MapTypeId.ROADS
+				mapTypeId: google.maps.MapTypeId.TERRAIN
 			  };
 
 			  var map = new google.maps.Map(document.getElementById('map-canvas'),
 				  mapOptions);
 
-			  // Construct the circle for each value in fenceMap.
+			  // Construct the circle for each value in patientMap.
 			  // Note: We scale the area of the circle based on the population.
-			  for (var fence in fenceMap) {
+			  for (var patient in patientMap) {
 				var fenceOptions = {
 				  strokeColor: '#FF0000',
 				  strokeOpacity: 0.8,
@@ -112,53 +115,19 @@
 				  fillColor: '#FF0000',
 				  fillOpacity: 0.35,
 				  map: map,
-				  center: fenceMap[fence].center,
-				  radius: fenceMap[fence].radius,
-				  editable: true
+				  center: patientMap[patient].center,
+				  radius: patientMap[patient].radius
 				};
-				for (var patient in patientMap){
+				for (var fence in fenceMap){
 				var marker = new google.maps.Marker({
-					position: patientMap[patient].center,
+					position: fenceMap[fence].center,
 					map: map,
-					title: patientMap[patient].name
+					title: fenceMap[fence].name
 				}); 
 				}	
 				// Add the circle for this city to the map.
-				fenceMap[fence] = {
-					object: new google.maps.Circle(fenceOptions),
-					window: new google.maps.InfoWindow({
-					content: "<p>put butten here</p>" 
-					})
-
-				};
-				
-				 google.maps.event.addListener(fenceMap[fence].object, 'radius_changed', function() {
-				
-					alert(" Successfully Updated Database. Radius now set to: " + fenceMap[fence].object.getRadius()+"metres");
-				 
-				 });
-				 google.maps.event.addListener(fenceMap[fence].object, 'center_changed', function() {
-					alert("lame alert");
-					alert(" Successfully Updated Database. Position now set to: " + fenceMap[fence].object.getCircle().lat()+"metres");
-				 });
-				
-				
- /*console.log(polygonBounds);
-        //var myJsonString = JSON.stringify(polygonBounds);
-        $.ajax({
-            url:"updateProperty.php",
-            type: "POST",
-            data: {vertices:polygonBounds},
-            success:function(e){
-                alert(e);
-            }
-        });*/				
-				
-				
-				
+				fence = new google.maps.Circle(fenceOptions);
 			  }
-			 
-			  
 			}
 		</script>
 		
