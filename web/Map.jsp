@@ -30,15 +30,13 @@
 			java.sql.Connection conn;
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dementiawatch_db?user=agile374&password=dementia374");
 			Statement st = conn.createStatement();
+			Statement updb = conn.createStatement();
 			ResultSet rs = null;
 			if (patientID == 0){ 				
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius FROM patients  JOIN "+
-					"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID FROM ( SELECT patientID, MAX(retrievalTime) AS First FROM patientloc GROUP BY patientID ) foo JOIN patientloc ON foo.patientID = patientloc.patientID AND foo.First = patientloc.retrievalTime JOIN patients ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"'");
 			} else {
-				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius FROM patients JOIN "+
-				"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID FROM ( SELECT patientID, MAX(retrievalTime) AS First FROM patientloc GROUP BY patientID ) foo JOIN patientloc ON foo.patientID = patientloc.patientID AND foo.First = patientloc.retrievalTime JOIN patients ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
-			
 			
 			Double patientLat = 0.00;  
 			Double patientLng = 0.00; 
@@ -47,6 +45,7 @@
 			Double fenceLat = 0.00; 
 			Double fenceLng = 0.00;
 			Double fenceRad  = 0.00;
+			Double currentPatientID = 0.00;
 		%> 	
 		
 		<script>
@@ -59,17 +58,23 @@
 			while (rs.next()) {
 				 patientLat = rs.getDouble(4); 
 				 patientLng = rs.getDouble(5);
+				 currentPatientID = rs.getDouble(9);
 				 name = rs.getString(1) + " " + rs.getString(2);
 				 status = rs.getString(3);
-				 fenceRad = rs.getDouble(8);
+				
 				 if (rs.getDouble(6) == 0){; 
 					fenceLat = patientLat;  //new value TODO: use GEO class
 					fenceLng = patientLng; //new value TODO: use GEO class
+					updb.executeUpdate("INSERT INTO patientfences (patientID, fenceLat, fenceLong) VALUES ("+currentPatientID + ", " + fenceLat  +", " + fenceLng+")");
 				 } else {
 					fenceLat = rs.getDouble(6); 
 					fenceLng = rs.getDouble(7);
-				 }				
-				
+				 }
+				if (rs.getDouble(8) == 0) {
+					fenceRad = 30.00;
+				} else {
+					fenceRad = rs.getDouble(8);
+				 }
 		%>		
 				patientMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=patientLat%>, <%=patientLng%>),
@@ -128,7 +133,7 @@
 
 				};
 				
-				 /*sgoogle.maps.event.addListener(fenceMapMap.object, 'radius_changed', function() {
+				 /*google.maps.event.addListener(fenceMapMap.object, 'radius_changed', function() {
 					alert("working");
 				 
 				 });
