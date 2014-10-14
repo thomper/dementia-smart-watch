@@ -33,9 +33,9 @@
 			Statement updb = conn.createStatement();
 			ResultSet rs = null;
 			if (patientID == 0){ 				
-				rs = st.executeQuery("SELECT patients.patientID, fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, retrievalTime, retrievalDate FROM patients JOIN patientloc ON patientloc.patientID = patients.patientID JOIN patientfences ON patientfences.patientID = patients.patientID WHERE carerID = "+carerID+" GROUP BY patients.patientID ORDER BY retrievalDate DESC, retrievalTime DESC");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID, retrievalTime, retrievalDate FROM patients JOIN patientloc ON patientloc.patientID = patients.patientID JOIN patientfences ON patientfences.patientID = patients.patientID WHERE carerID = "+carerID+" GROUP BY patients.patientID ORDER BY retrievalDate DESC, retrievalTime DESC");
 			} else {
-				rs = st.executeQuery("SELECT patients.patientID, fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, retrievalTime, retrievalDate FROM patients JOIN patientloc ON patientloc.patientID = patients.patientID JOIN patientfences ON patientfences.patientID = patients.patientID WHERE carerID = "+carerID+" AND patients.patientID = "+patientID+" GROUP BY patients.patientID ORDER BY retrievalDate DESC, retrievalTime DESC");
+				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius, patients.patientID, retrievalTime, retrievalDate FROM patients JOIN patientloc ON patientloc.patientID = patients.patientID JOIN patientfences ON patientfences.patientID = patients.patientID WHERE carerID = "+carerID+" AND patients.patientID = "+patientID+" GROUP BY patients.patientID ORDER BY retrievalDate DESC, retrievalTime DESC");
 			}
 			
 			Double patientLat = 0.00;  
@@ -114,7 +114,8 @@
 				  map: map,
 				  center: fenceMap[fence].center,
 				  radius: fenceMap[fence].radius,
-				  editable: true
+				  editable: true,
+				  draggable: true
 				};
 				for (var patient in patientMap){
 				var marker = new google.maps.Marker({
@@ -133,7 +134,6 @@
 				};
 				
 				 google.maps.event.addListener(fenceMap[fence].object, 'radius_changed', function() {
-				
 					alert(" Successfully Updated Database. Radius now set to: " + fenceMap[fence].object.getRadius()+"metres");
 				 
 				 });
