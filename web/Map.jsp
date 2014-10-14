@@ -109,7 +109,9 @@
 				  fillOpacity: 0.35,
 				  map: map,
 				  center: fenceMap[fence].center,
-				  radius: fenceMap[fence].radius
+				  radius: fenceMap[fence].radius,
+				  editable: true,
+				  draggable: true
 				};
 				for (var patient in patientMap){
 				var marker = new google.maps.Marker({
@@ -119,8 +121,15 @@
 				}); 
 				}	
 				// Add the circle for this city to the map.
-				allFences = new google.maps.Circle(fenceOptions);
+				fenceMap[fence] = {
+				  object: new google.maps.Circle(fenceOptions)
+				};
+				//fencesObj = new google.maps.Circle(fenceOptions);
+				
+				
 			  }
+			 
+			  
 			}
 		</script>
 		
