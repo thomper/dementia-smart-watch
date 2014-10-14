@@ -38,6 +38,8 @@
 				rs = st.executeQuery("SELECT fName, lName, status, patientLat, patientLong, fenceLat, fenceLong, radius FROM patients JOIN "+
 				"patientloc ON patients.patientID = patientloc.patientID LEFT JOIN patientfences ON patientfences.patientID = patientloc.patientID WHERE carerID = '"+carerID+"' AND patientID = '" + patientID+ "'");
 			}
+			
+			
 			Double patientLat = 0.00;  
 			Double patientLng = 0.00; 
 			String name = "";
@@ -52,6 +54,7 @@
 		var patientMap = {};
 		var fence;
 		var marker;
+		
 	<%			
 			while (rs.next()) {
 				 patientLat = rs.getDouble(4); 
@@ -124,6 +127,29 @@
 					})
 
 				};
+				
+				 /*sgoogle.maps.event.addListener(fenceMapMap.object, 'radius_changed', function() {
+					alert("working");
+				 
+				 });
+				 google.maps.event.addListener(fenceMapMap.object, 'center_changed', function() {
+					alert("working2");
+				 
+				 });*/
+				
+				
+ /*console.log(polygonBounds);
+        //var myJsonString = JSON.stringify(polygonBounds);
+        $.ajax({
+            url:"updateProperty.php",
+            type: "POST",
+            data: {vertices:polygonBounds},
+            success:function(e){
+                alert(e);
+            }
+        });*/				
+				
+				
 				
 			  }
 			 

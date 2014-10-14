@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 14, 2014 at 03:32 AM
+-- Generation Time: Oct 14, 2014 at 04:22 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -187,7 +187,9 @@ CREATE TABLE IF NOT EXISTS `patientloc` (
 --
 
 INSERT INTO `patientloc` (`patientID`, `patientLat`, `patientLong`, `retrievalTime`, `retrievalDate`) VALUES
-(6, '-27.4976428700', '152.9736471000', '10:21:46', '2014-09-04');
+(6, '-27.4976428700', '152.9736471000', '10:21:46', '2014-09-04'),
+(8, '-27.4764090000', '153.0250130000', '12:20:31', '2014-10-14'),
+(8, '-27.4764090000', '153.0250130000', '12:20:42', '2014-10-14');
 
 --
 -- Triggers `patientloc`
