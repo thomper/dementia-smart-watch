@@ -51,8 +51,8 @@
 		%> 	
 		
 		<script>
-		var patientMap = {};
 		var fenceMap = {};
+		var patientMap = {};
 		var fence;
 		var marker;
 	<%			
@@ -72,12 +72,12 @@
 				 fenceRad = 100.00; //must kill
 				
 		%>		
-				fenceMap['<%=name%>'] = {
+				patientMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=patientLat%>, <%=patientLng%>),
 				  name: '<%=name%>'
 				};
 				
-				patientMap['<%=name%>'] = {
+				fenceMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
 				  radius: <%=fenceRad%>
 				};
@@ -98,9 +98,9 @@
 			  var map = new google.maps.Map(document.getElementById('map-canvas'),
 				  mapOptions);
 
-			  // Construct the circle for each value in patientMap.
+			  // Construct the circle for each value in fenceMap.
 			  // Note: We scale the area of the circle based on the population.
-			  for (var patient in patientMap) {
+			  for (var fence in fenceMap) {
 				var fenceOptions = {
 				  strokeColor: '#FF0000',
 				  strokeOpacity: 0.8,
@@ -108,18 +108,18 @@
 				  fillColor: '#FF0000',
 				  fillOpacity: 0.35,
 				  map: map,
-				  center: patientMap[patient].center,
-				  radius: patientMap[patient].radius
+				  center: fenceMap[fence].center,
+				  radius: fenceMap[fence].radius
 				};
-				for (var fence in fenceMap){
+				for (var patient in patientMap){
 				var marker = new google.maps.Marker({
-					position: fenceMap[fence].center,
+					position: patientMap[patient].center,
 					map: map,
-					title: fenceMap[fence].name
+					title: patientMap[patient].name
 				}); 
 				}	
 				// Add the circle for this city to the map.
-				fence = new google.maps.Circle(fenceOptions);
+				allFences = new google.maps.Circle(fenceOptions);
 			  }
 			}
 		</script>
