@@ -12,7 +12,6 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
@@ -122,10 +121,12 @@
 				}	
 				// Add the circle for this city to the map.
 				fenceMap[fence] = {
-				  object: new google.maps.Circle(fenceOptions)
+					object: new google.maps.Circle(fenceOptions),
+					window: new google.maps.InfoWindow({
+					content: "<p>put butten here</p>" 
+					})
+
 				};
-				//fencesObj = new google.maps.Circle(fenceOptions);
-				
 				
 			  }
 			 
