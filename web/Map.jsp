@@ -63,7 +63,7 @@
 				 status = rs.getString(3);
 				 if (rs.getDouble(6) == 0){; 
 					fenceLat = rs.getDouble(4);  //new value TODO: use GEO class
-					fenceLng = rs.getDouble(6); //new value TODO: use GEO class
+					fenceLng = rs.getDouble(5); //new value TODO: use GEO class
 				 } else {
 					fenceLat = rs.getDouble(6); 
 					fenceLng = rs.getDouble(7);
@@ -92,7 +92,7 @@
 					zoom: 12,
 				<% } %>
 				center: new google.maps.LatLng(centerLat, centerLng),				
-				mapTypeId: google.maps.MapTypeId.TERRAIN
+				mapTypeId: google.maps.MapTypeId.ROADS
 			  };
 
 			  var map = new google.maps.Map(document.getElementById('map-canvas'),
