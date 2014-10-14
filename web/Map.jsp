@@ -58,19 +58,14 @@
 				 patientLng = rs.getDouble(5);
 				 name = rs.getString(1) + " " + rs.getString(2);
 				 status = rs.getString(3);
+				 fenceRad = rs.getDouble(8);
 				 if (rs.getDouble(6) == 0){; 
 					fenceLat = patientLat;  //new value TODO: use GEO class
 					fenceLng = patientLng; //new value TODO: use GEO class
 				 } else {
 					fenceLat = rs.getDouble(6); 
 					fenceLng = rs.getDouble(7);
-				 }
-				 if (rs.getDouble(8) == 0){
-						 fenceRad = 50.00; 
-				} else {
-					fenceRad = rs.getDouble(8);
-				}
-				
+				 }				
 				
 		%>		
 				patientMap['<%=name%>'] = {
