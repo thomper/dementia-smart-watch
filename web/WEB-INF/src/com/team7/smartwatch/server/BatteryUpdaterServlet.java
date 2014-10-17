@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class BatteryUpdaterServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -7786496267895391536L;
+	private static final long serialVersionUID = -3130716676056973051L;
 	private static final Logger logger = Logger
 			.getLogger(BatteryUpdaterServlet.class.getName());
     private static final String SUCCESS_MESSAGE = "Battery updated";
@@ -44,11 +44,14 @@ public class BatteryUpdaterServlet extends HttpServlet {
     private class BatteryUpdate {
     	
     	public Integer patientID;
-    	public Integer batteryLevel;
+    	public Double batteryLevel;
     	
     	public boolean valid() {
 
     		if (Utility.arrayContainsNull(patientID, batteryLevel)) {
+    			return false;
+    		}
+    		if (batteryLevel < 0.0 || batteryLevel > 100.0) {
     			return false;
     		}
     		if (patientID < 0) {
@@ -81,7 +84,7 @@ public class BatteryUpdaterServlet extends HttpServlet {
     		return false;
     	}
 
-    	// Update the patient's battery.
+    	// Update the patient's battery level.
     	try {
 			boolean succeeded = DatabaseBatteryWriter.writeBattery(
 					batteryUpdate.patientID, batteryUpdate.batteryLevel);
@@ -102,7 +105,7 @@ public class BatteryUpdaterServlet extends HttpServlet {
 			jObj = JSONConverter.getJSON(request);
 			BatteryUpdate batteryUpdate = new BatteryUpdate();
 			batteryUpdate.patientID = jObj.getInt("patientID");
-			batteryUpdate.batteryLevel = jObj.getInt("batteryLevel");
+			batteryUpdate.batteryLevel = jObj.getDouble("batteryLevel");
 
 	        if (!batteryUpdate.valid()) {
 	        	logger.log(Level.INFO, JSON_ERROR_MESSAGE);
@@ -131,9 +134,9 @@ public class BatteryUpdaterServlet extends HttpServlet {
     
     private void logNoPermission(String address, Integer userID, Integer patientID) {
     	
-    		logger.log(Level.INFO, address + " attempted to update location " +
-    				"of patient that they are not the carer for: patientID=" +
-    				String.valueOf(patientID) + ", userID=" +
-    				String.valueOf(userID) + ".");
+    		logger.log(Level.INFO, address + " attempted to update battery " +
+    				"level of patient that they are not the carer for: " +
+    				"patientID=" + String.valueOf(patientID) +
+    				", userID=" + String.valueOf(userID) + ".");
     }
 }

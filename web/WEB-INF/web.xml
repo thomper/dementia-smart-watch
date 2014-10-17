@@ -17,6 +17,16 @@
 		<servlet-name>LocationUpdater</servlet-name>
 		<url-pattern>/updatelocation</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>BatteryUpdater</servlet-name>
+		<servlet-class>com.team7.smartwatch.server.BatteryUpdaterServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BatteryUpdater</servlet-name>
+		<url-pattern>/updatebattery</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>Alerter</servlet-name>

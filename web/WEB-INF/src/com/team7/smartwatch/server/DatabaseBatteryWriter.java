@@ -15,21 +15,21 @@ public class DatabaseBatteryWriter {
 	private static final Logger logger = Logger
 			.getLogger(DatabaseBatteryWriter.class.getName());
 	private static final String BATTERY_TABLE = "patientbatteryalerts";
-	private static final String REPLACE_STATEMENT = "REPLACE INTO "
+	private static final String INSERT_STATEMENT = "INSERT INTO "
 			+ BATTERY_TABLE
 			+ " (patientID, alertTime, alertDate, batteryLevel) "
 			+ "values (?, ?, ?, ?)";
 
-	public static boolean writeBattery(int patientID, int battery)
+	public static boolean writeBattery(int patientID, Double battery)
 			throws BadSQLParameterException {
 		
 		Connection conn = null;
 
         try {
             conn = DatabaseConnector.getConnection();
-            PreparedStatement replaceBattery = conn.prepareStatement(REPLACE_STATEMENT);
-            bindValues(replaceBattery, patientID, battery);
-            int rowsUpdated = replaceBattery.executeUpdate();
+            PreparedStatement insertBattery = conn.prepareStatement(INSERT_STATEMENT);
+            bindValues(insertBattery, patientID, battery);
+            int rowsUpdated = insertBattery.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {
         	logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
@@ -41,17 +41,18 @@ public class DatabaseBatteryWriter {
         }
 	}
 	
-    private static void bindValues(PreparedStatement replaceBattery, int patientID,
-    		int battery)
+    private static void bindValues(PreparedStatement insertBattery, int patientID,
+    		Double battery)
             throws BadPostParameterException {
     	
         try {
-        	replaceBattery.setInt(1, patientID);
-        	replaceBattery.setInt(2, battery);
-            
+        	insertBattery.setInt(1, patientID);
+        	insertBattery.setString(4, String.valueOf(battery));
 
-        	replaceBattery.setTimestamp(4, new java.sql.Timestamp(0));
-        	replaceBattery.setTimestamp(5, new java.sql.Timestamp(0));
+        	// The time and date given here will be ignored, but they are
+        	// required by mysql.
+        	insertBattery.setTimestamp(2, new java.sql.Timestamp(0));
+        	insertBattery.setTimestamp(3, new java.sql.Timestamp(0));
         } catch (SQLException e) {
         	logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
         } catch (JSONException e) {
