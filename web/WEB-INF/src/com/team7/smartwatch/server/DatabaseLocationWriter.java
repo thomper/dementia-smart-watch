@@ -83,8 +83,8 @@ public class DatabaseLocationWriter {
             l0ng = rs.getDouble(2);
             rs.close();
             
-            PreparedStatement createAlert = conn.prepareStatement("INSERT INTO  "
-        			+ " (patientID, collapseTime, collapseDate, collapseLat, collapseLong) "
+            PreparedStatement createAlert = conn.prepareStatement("INSERT INTO patientalerts "
+        			+ " (patientID, alertTime, alertDate, alertLat, alertLong) "
         			+ "values (?, ?, ?, ?, ?)");
             bindValues(createAlert, patientID, lat, l0ng);
             int rowsUpdated = createAlert.executeUpdate();
