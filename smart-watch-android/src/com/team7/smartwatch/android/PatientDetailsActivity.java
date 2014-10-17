@@ -1,5 +1,10 @@
 package com.team7.smartwatch.android;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.team7.smartwatch.shared.Patient;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,37 +46,43 @@ public class PatientDetailsActivity extends Activity {
 	
 	private void displayStoredData() {
 		
-		SharedPreferences patientDetails = getApplicationContext()
-				.getSharedPreferences("PatientDetails", 0);
+        JSONObject patientJSON = null;
+		try {
+			patientJSON = new JSONObject(getIntent().getExtras().getString("patient"));
+		} catch (JSONException e) {
+			// TODO Communicate error and either go back or exit
+			e.printStackTrace();
+		}
+        Patient patient = new Patient(patientJSON);
 
 		TextView tv = (TextView)findViewById(R.id.first_name);
-		tv.setText(patientDetails.getString("fName", ""));
+		tv.setText(patient.firstName);
 
 		tv = (TextView)findViewById(R.id.last_name);
-		tv.setText(patientDetails.getString("lName", ""));
+		tv.setText(patient.lastName);
 		
 		tv = (TextView)findViewById(R.id.phone);
-		tv.setText(patientDetails.getString("contactNum", ""));
+		tv.setText(patient.contactNum);
 
 		tv = (TextView)findViewById(R.id.blood_type);
-		tv.setText(patientDetails.getString("bloodType", ""));
+		tv.setText(patient.bloodType.toString().toLowerCase());
 
 		tv = (TextView)findViewById(R.id.medication);
-		tv.setText(patientDetails.getString("medication", ""));
+		tv.setText(patient.medication);
 
 		tv = (TextView)findViewById(R.id.residence);
-		String residence = patientDetails.getString("homeAddress", "") + "\n" +
-				patientDetails.getString("homeSuburb", "") + "\n" +
-				patientDetails.getString("contactNum", "");
+		String residence = patient.homeAddress + "\n" +
+				patient.homeSuburb + "\n" +
+				patient.contactNum;
 		tv.setText(residence);
 
 		tv = (TextView)findViewById(R.id.emergency_contact);
-		String emergencyContact = patientDetails.getString("emergencyContactName", "") + "\n" +
-				patientDetails.getString("emergencyContactAddress", "") + "\n" +
-				patientDetails.getString("emergencyContactSuburb", "");
+		String emergencyContact = patient.emergencyContact.name + "\n" +
+				patient.emergencyContact.address + "\n" +
+				patient.emergencyContact.suburb;
 		tv.setText(emergencyContact);
 		
 		tv = (TextView)findViewById(R.id.emergency_number);
-		tv.setText(patientDetails.getString("emergencyContactNumber", ""));
+		tv.setText(patient.emergencyContact.num);
 	}
 }

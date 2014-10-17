@@ -12,10 +12,13 @@ import android.util.Log;
 import android.view.View;  
 import android.view.View.OnClickListener;  
 import android.widget.TextView;  
-import android.widget.Toast;  
  
- public class BatteryActivity extends Activity {  
+ public class BatteryActivity extends Activity {
+
       TextView mTextView;  
+      float mBatteryLevel; 
+      BatteryReceiver mArrow;  
+
       @Override  
       protected void onCreate(Bundle savedInstanceState) {  
            super.onCreate(savedInstanceState);  
@@ -24,31 +27,32 @@ import android.widget.Toast;
            findViewById(R.id.battery_getbutton).setOnClickListener(new OnClickListener() {  
                 @Override  
                 public void onClick(View v) {  
-                     mTextView.setText(String.valueOf(batteryLevel));  
+                     mTextView.setText(String.valueOf(mBatteryLevel));  
                 }  
            });  
            new Thread(new ThreadM()).start();  
       }  
+
       @Override  
       protected void onDestroy() {  
            super.onDestroy();  
            unregisterReceiver(mArrow);  
       }  
-      BatteryReceiver mArrow;  
+
       private class ThreadM implements Runnable {  
+
            @Override  
            public void run() {  
                 mArrow = new BatteryReceiver();  
-                IntentFilter mIntentFilter = new IntentFilter();  
-                mIntentFilter.addAction(Intent.ACTION_BATTERY_LOW);  
-                mIntentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);  
-                mIntentFilter.addAction(Intent.ACTION_BATTERY_OKAY);  
-                Intent batteryIntent = registerReceiver(mArrow, mIntentFilter);  
-                batteryLevel = getBatteryLevel(batteryIntent);  
-                Log.e("Battery Level", String.valueOf(batteryLevel));  
+                IntentFilter intentFilter = new IntentFilter();  
+                intentFilter.addAction(Intent.ACTION_BATTERY_LOW);  
+                intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);  
+                intentFilter.addAction(Intent.ACTION_BATTERY_OKAY);  
+                Intent batteryIntent = registerReceiver(mArrow, intentFilter);  
+                mBatteryLevel = getBatteryLevel(batteryIntent);  
+                Log.e("Battery Level", String.valueOf(mBatteryLevel));  
            }  
       }  
-      float batteryLevel; 
       
       
       private class BatteryReceiver extends BroadcastReceiver {  

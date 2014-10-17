@@ -1,5 +1,8 @@
 package com.team7.smartwatch.android;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.team7.smartwatch.shared.Patient;
 
 import android.annotation.SuppressLint;
@@ -45,13 +48,20 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		// mPatient will be passed to MainActivity by LoginActivity
-		mPatient = new Patient();
-		mPatient.patientID = 9;
+		// Attempt to read patient information.
+		try {
+			JSONObject patientJSON = new JSONObject(getIntent().getExtras().getString("patient"));
+			mPatient = new Patient(patientJSON);
+		} catch (JSONException e) {
+			// TODO Show error and quit or go back to login screen
+			e.printStackTrace();
+		}
+		
 		lockOrientationToPortrait();
 		mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
 		setupPanicButton();
 		setupDetailsButton();
+		setupBatteryButton();
 		startTrackingLocation();
 		setupConnectionTracking();
 		initialiseFallDetection();
@@ -160,12 +170,12 @@ public class MainActivity extends Activity {
 	
 	private void setupDetailsButton() {
 
-		storeData();
 		Button detailsButton = (Button) findViewById(R.id.details_button);
 		detailsButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
 				Intent intent = new Intent(MainActivity.this,
 						PatientDetailsActivity.class);
+				intent.putExtra("patient", mPatient.toJSON().toString());
 				startActivity(intent);
 			}
 		});
@@ -189,28 +199,6 @@ public class MainActivity extends Activity {
         = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-	}
-	
-	//The method that's used to store the patient's data on the device
-	public void storeData() {
-
-		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
-		SharedPreferences.Editor editor = patientDetails.edit();
-		editor.putString("fName", mPatient.firstName);
-		editor.putString("lName", mPatient.lastName);
-		editor.putString("gender", mPatient.gender.toString());
-		editor.putInt("age", mPatient.age);
-		editor.putString("bloodType", mPatient.bloodType.toString());
-		editor.putString("medication", mPatient.medication);
-		editor.putString("homeAddress", mPatient.homeAddress);
-		editor.putString("homeSuburb", mPatient.homeSuburb);
-		editor.putString("contactNum", mPatient.contactNum);
-		editor.putString("emergencyContactName", mPatient.emergencyContact.name);
-		editor.putString("emergencyContactSuburb", mPatient.emergencyContact.suburb);
-		editor.putString("emergencyContactAddress", mPatient.emergencyContact.address);
-		editor.putString("emergencyContactNumber", mPatient.emergencyContact.num);
-		
-		editor.apply();
 	}
 	
 	@SuppressLint("UnlocalizedSms") public void sendText(){

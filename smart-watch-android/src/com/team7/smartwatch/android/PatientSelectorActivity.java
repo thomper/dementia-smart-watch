@@ -1,16 +1,24 @@
 package com.team7.smartwatch.android;
 
+
 import com.team7.smartwatch.shared.Patient;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class PatientSelectorActivity extends Activity {
 	
-	private static final String TAG = PatientSelectorActivity.class.getName();
+	private ReaderTask readerTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +26,12 @@ public class PatientSelectorActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_patient_selector);
 
+		((ListView) findViewById(R.id.listview)).setOnItemClickListener(
+				mPatientClickedHandler);
+
 		// Call Async task to read patients and populate list.
-		new ReaderTask().execute(Globals.get().httpContext);
+		readerTask = new ReaderTask();
+		readerTask.execute(Globals.get().httpContext);
 	}
 
 	@Override
@@ -42,16 +54,66 @@ public class PatientSelectorActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	// Create a message handling object as an anonymous class.
+	private OnItemClickListener mPatientClickedHandler = new OnItemClickListener() {
+
+	    public void onItemClick(AdapterView parent, View v, int position, long id) {
+
+	    	Patient patient = readerTask.mPatients.get(position);
+	        showConfirmationDialog(patient);
+	    }
+	};
 	
 	public class ReaderTask extends PatientReaderTask {
 
 		@Override
 		void onPatientsRead() {
 			
-			// Create selections list
-			for (Patient patient: mPatients) {
-				Log.e("TEST", patient.firstName + " " + patient.lastName);
-			}
+			String[] patientsArray = summaryStringsFromPatientList();
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+					PatientSelectorActivity.this,
+			        android.R.layout.simple_list_item_1, patientsArray);
+			((ListView) findViewById(R.id.listview)).setAdapter(adapter);
 		}
+		
+		/** Create an array of short summary strings from a list of patients. */
+		private String[] summaryStringsFromPatientList() {
+			
+			String[] patientsArray = new String[mPatients.size()];
+			for (int i = 0; i < mPatients.size(); ++i) {
+				Patient patient = mPatients.get(i);
+				patientsArray[i] = summaryStringFromPatient(patient);
+			}
+			
+			return patientsArray;
+		}
+		
+		private String summaryStringFromPatient(Patient patient) {
+			
+				return patient.firstName + " " +
+						patient.lastName + ",\n" +
+						patient.homeAddress + "\n" +
+						patient.homeSuburb;
+		}
+	}
+	
+	private void showConfirmationDialog(final Patient patient) {
+		
+		String patientName = patient.firstName + " " + patient.lastName;
+	    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    builder.setMessage("This device belongs to " + patientName + ".")
+	           .setCancelable(true)
+	           .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+	               public void onClick(final DialogInterface dialog, final int id) {
+	                   Intent intent = new Intent(PatientSelectorActivity.this,
+	                		   MainActivity.class);
+	                   String patientJSON = patient.toJSON().toString();
+	                   intent.putExtra("patient", patientJSON);
+	                   startActivity(intent);
+	               }
+	           });
+	    final AlertDialog alert = builder.create();
+	    alert.show();
 	}
 }

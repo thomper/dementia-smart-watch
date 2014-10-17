@@ -2,10 +2,6 @@ package com.team7.smartwatch.android;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -13,24 +9,17 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.team7.smartwatch.android.Locator.LocationUpdaterTask;
 import com.team7.smartwatch.shared.Utility;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
 /** Locator provides access to the device's last known location and the
  *  time at which the location was last updated. */
 public class Alerter {
 
-	private Context mContext;
 	private int mPatientID;
 
 	private static final String TAG = Alerter.class.getName();
@@ -40,7 +29,6 @@ public class Alerter {
 
 	public Alerter(Context context, int patientID) {
 
-		mContext = context;
 		mPatientID = patientID;
 		AlerterTask task = new AlerterTask();
 		task.execute(Globals.get().httpContext);

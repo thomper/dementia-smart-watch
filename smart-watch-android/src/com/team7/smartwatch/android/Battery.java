@@ -17,8 +17,6 @@ import android.util.Log;
 
 import com.team7.smartwatch.shared.Utility;
 
-/** Locator provides access to the device's last known location and the
- *  time at which the location was last updated. */
 public class Battery {
 
 	private Context mContext;

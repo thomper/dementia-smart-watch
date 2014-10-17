@@ -18,7 +18,7 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public abstract class PatientReaderTask extends AsyncTask<HttpContext, Void, Void> {
+public abstract class PatientReaderTask extends AsyncTask<HttpContext, Void, Boolean> {
 	
 	private static final String TAG = PatientReaderTask.class.getName();
 	private static final String GET_URL = Globals.get().SERVER_ADDRESS + "/readpatients";
@@ -26,7 +26,7 @@ public abstract class PatientReaderTask extends AsyncTask<HttpContext, Void, Voi
 	public List<Patient> mPatients;
 	
 	@Override
-	protected Void doInBackground(HttpContext... params) {
+	protected Boolean doInBackground(HttpContext... params) {
 
 		HttpGet request = new HttpGet(GET_URL);
 
@@ -35,14 +35,22 @@ public abstract class PatientReaderTask extends AsyncTask<HttpContext, Void, Voi
 		try {
 			HttpResponse response = client.execute(request, httpContext);
 			buildPatientsList(response);
-			onPatientsRead();
+			return true;
 		} catch (IOException e) {
 			Log.e(TAG, Utility.StringFromStackTrace(e));
 		} finally {
 			client.close();
 		}
 		
-		return null;
+		return false;
+	}
+	
+	@Override
+	protected void onPostExecute(Boolean succeeded) {
+
+		if (succeeded) {
+			onPatientsRead();
+		}
 	}
 	
     private void buildPatientsList(HttpResponse response) {

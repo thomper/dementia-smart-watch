@@ -1,5 +1,8 @@
 package com.team7.smartwatch.shared;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 
 public class Patient {
@@ -65,28 +68,28 @@ public class Patient {
 	
 	public JSONObject toJSON() {
 		
-		// Everything but emergency contact.
-		JSONObject jObj = new JSONObject(this, new String[] {
-				"patientID",
-				"carerID",
-				"firstName",
-				"lastName",
-				"gender",
-				"age",
-				"bloodType",
-				"medication",
-				"status",
-				"homeAddress",
-				"homeSuburb",
-				"contactNum",
-		});
-		
-		// Add emergency contact.
-		JSONObject emergencyJObj = emergencyContact.toJSON();
-		for (String key : JSONObject.getNames(emergencyJObj)) {
-			jObj.put(key, emergencyJObj.get(key));
-		}
-		
-		return jObj;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("patientID", patientID);
+		map.put("carerID", carerID);
+		map.put("firstName", firstName);
+		map.put("lastName", lastName);
+		map.put("age", age);
+		map.put("medication", medication);
+		map.put("homeAddress", homeAddress);
+		map.put("homeSuburb", homeSuburb);
+		map.put("contactNum", contactNum);
+
+		// Enums.
+		map.put("gender", gender.toString());
+		map.put("bloodType", bloodType.toString());
+		map.put("status", status.toString());
+
+		String emPrefix = "emergencyContact";
+		map.put(emPrefix + "Name", emergencyContact.name);
+		map.put(emPrefix + "Address", emergencyContact.address);
+		map.put(emPrefix + "Suburb", emergencyContact.suburb);
+		map.put(emPrefix + "Num", emergencyContact.num);
+
+		return new JSONObject(map);
 	}
 }
