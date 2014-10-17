@@ -102,7 +102,8 @@ public class PatientSelectorActivity extends Activity {
 		
 		String patientName = patient.firstName + " " + patient.lastName;
 	    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage("This device belongs to " + patientName + ".")
+	    builder.setMessage("Please confirm that this device belongs to " +
+	    				patientName + ".")
 	           .setCancelable(true)
 	           .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
 	               public void onClick(final DialogInterface dialog, final int id) {
