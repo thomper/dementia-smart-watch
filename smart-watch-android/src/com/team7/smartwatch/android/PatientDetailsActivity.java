@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import com.team7.smartwatch.shared.Patient;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;

@@ -14,7 +14,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -38,6 +37,8 @@ public class MainActivity extends Activity {
 	private Locator mLocator;	
 	private Patient mPatient;
 	private MediaPlayer mp;
+	
+	// Collapse detection variables.
 	private final int NOTIF_ID = 4260;
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
@@ -61,8 +62,8 @@ public class MainActivity extends Activity {
 		mp = MediaPlayer.create(getApplicationContext(), R.raw.error);
 		setupPanicButton();
 		setupDetailsButton();
-		setupBatteryButton();
 		startTrackingLocation();
+		startTrackingBatteryCharge();
 		setupConnectionTracking();
 		initialiseFallDetection();
 	}
@@ -101,9 +102,10 @@ public class MainActivity extends Activity {
 		}
 
 	private void initialiseFallDetection() {
+		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		
+		// TODO: We need to call mSensorManager.registerListener at some point.
 	}
 
 	private void setupConnectionTracking() {
@@ -181,20 +183,9 @@ public class MainActivity extends Activity {
 		});
 	}
 	
-	private void setupBatteryButton() {
-		Button batteryButton = (Button) findViewById(R.id.battery_button);
-		batteryButton.setOnClickListener(new View.OnClickListener(){
-			public void onClick(View v){
-				Intent intent = new Intent(MainActivity.this,
-						BatteryActivity.class);
-				startActivity(intent);
-			}
-		});
-	}
-		
-	
 	//returns whether the phone is connected to the internet or not
 	private boolean connectedToInternet(){
+
 		ConnectivityManager connectivityManager 
         = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -202,20 +193,35 @@ public class MainActivity extends Activity {
 	}
 	
 	@SuppressLint("UnlocalizedSms") public void sendText(){
-		SmsManager.getDefault().sendTextMessage(retrieveNumber(), null, "Your Patient is paniced!", null, null);
+
+		SmsManager.getDefault().sendTextMessage(retrieveNumber(), null, "Your Patient is panicked!", null, null);
 	}
 	
 	private String retrieveNumber(){
-		SharedPreferences patientDetails = getApplicationContext().getSharedPreferences("PatientDetails", 0);
-		String number = patientDetails.getString("emergencyContactNumber", "");
-		return number;
+
+		return mPatient.emergencyContact.num;
 	}
 	
 	private void startTrackingLocation() {
+
 		if (!gpsEnabled()) {
 			showDialogNoGps();
 		}
 		mLocator = new Locator(this, mPatient.patientID);
+	}
+	
+	private void startTrackingBatteryCharge() {
+		
+		final Handler handler = new Handler();
+
+		handler.post(new Runnable() {
+		    public void run(){
+		    	BatteryUpdater bu = new BatteryUpdater(MainActivity.this,
+		    			mPatient.patientID);
+		    	bu.logBatteryLevel();
+			   	handler.postDelayed(this, Globals.get().BATTERY_READING_INTERVAL);
+		    }
+		});
 	}
 	
 	private boolean gpsEnabled() {

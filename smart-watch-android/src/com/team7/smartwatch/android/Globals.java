@@ -10,7 +10,8 @@ public class Globals {
 	private static Globals globals = null;
 	
 	public final HttpContext httpContext;
-	public final String SERVER_ADDRESS = "http://192.168.1.13:8080";
+	public final String SERVER_ADDRESS = "http://192.168.1.41:8080";
+	public final Integer BATTERY_READING_INTERVAL = 300000;  // milliseconds
 	
 	private Globals() {
 		

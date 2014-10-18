@@ -11,23 +11,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.util.Log;
 
 import com.team7.smartwatch.shared.Utility;
 
-public class Battery {
+public class BatteryUpdater {
 
 	private Context mContext;
 	private int mPatientID;
 
-	private static final String TAG = Battery.class.getName();
+	private static final String TAG = BatteryUpdater.class.getName();
 	private static final String SUCCESS_MESSAGE = "Battery updated\n";
 	private static final String POST_URL = Globals.get().SERVER_ADDRESS
-			+ "/addbattery";
+			+ "/updatebattery";
 
-	public Battery(Context context, int patientID) {
+	public BatteryUpdater(Context context, int patientID) {
 
 		mContext = context;
 		mPatientID = patientID;
@@ -36,7 +39,9 @@ public class Battery {
 	}
 
 	
-	/* Creates a new battery with the server asynchronously. */
+	/* Attempts to communicate the device's current battery charge level to
+	 * the server.
+	 */
 	public class BatteryTask extends AsyncTask<HttpContext, Void, Boolean> {
 		
 		@Override
@@ -100,6 +105,7 @@ public class Battery {
 			try {
 				JSONObject jObj = new JSONObject();
 				jObj.put("patientID", mPatientID);
+				jObj.put("batteryLevel", getBatteryLevel());
 				return jObj;
 			} catch (JSONException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
@@ -118,5 +124,22 @@ public class Battery {
 				return false;
 			}
 		}
+	}
+
+	public float getBatteryLevel() {
+
+		Intent batteryIntent = mContext.registerReceiver(null, new IntentFilter(
+				Intent.ACTION_BATTERY_CHANGED));
+		int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+		int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+		if (level == -1 || scale == -1) {
+			return -1;
+		}
+
+		return ((float) level / (float) scale) * 100.0f;
+	}
+	
+	public void logBatteryLevel() {
+		//TODO
 	}
 }
