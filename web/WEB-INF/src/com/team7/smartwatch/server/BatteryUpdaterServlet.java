@@ -1,6 +1,7 @@
 package com.team7.smartwatch.server;
 
 import com.team7.smartwatch.shared.Patient;
+import com.team7.smartwatch.shared.PatientStatus;
 import com.team7.smartwatch.shared.Utility;
 
 import java.io.IOException;
@@ -89,14 +90,8 @@ public class BatteryUpdaterServlet extends HttpServlet {
     	try {
 			boolean succeeded = DatabaseBatteryWriter.writeBattery(
 					batteryUpdate.patientID, batteryUpdate.batteryLevel);
-			
-			// Change patient's status to BATTERY_LOW if necessary.
-			boolean lowBattery = batteryUpdate.batteryLevel <=
-					LOW_BATTERY_THRESHOLD;
-			if (lowBattery) {
-				succeeded = succeeded && DatabaseStatusWriter.updateStatus(
-						batteryUpdate.patientID, "BATTERY_LOW");
-			}
+			succeeded = succeeded && updateBatteryStatus(
+					batteryUpdate.patientID, batteryUpdate.batteryLevel);
 			return succeeded;
 		} catch (BadSQLParameterException e) {
 			logger.log(Level.SEVERE, Utility.StringFromStackTrace(e));
@@ -139,6 +134,33 @@ public class BatteryUpdaterServlet extends HttpServlet {
 		Patient patient = DatabasePatientReader
 				.readPatientByPatientID(patientID);
 		return (patient != null) && (patient.carerID == userID);
+    }
+    
+    private boolean updateBatteryStatus(Integer patientID, Double batteryLevel) {
+    	
+		boolean lowBattery = batteryLevel <= LOW_BATTERY_THRESHOLD;
+
+		try {
+			if (lowBattery) {
+				
+				// Change status to BATTERY_LOW.
+				return DatabaseStatusWriter.updateStatus(patientID,
+						"BATTERY_LOW");
+			} else {
+
+				// Change status from BATTERY_LOW to fine if necessary.
+				Patient patient = DatabasePatientReader.readPatientByPatientID(
+						patientID);
+				if (patient.status == PatientStatus.BATTERY_LOW) {
+					return DatabaseStatusWriter.updateStatus(patientID, "FINE");
+				}
+			}
+		} catch (BadSQLParameterException e) {
+			logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
+			return false;
+		}
+		
+		return true;
     }
     
     private void logNoPermission(String address, Integer userID, Integer patientID) {
