@@ -37,7 +37,7 @@
 			String nameReg = "^[a-zA-Z][-\' a-zA-Z]+$";
 			String numberReg = "^(\\+|\\d)[0-9]{7,16}$";
 			String addressReg = "^[A-Za-z0-9][ A-Za-z0-9]*$";
-			String suburbReg = "^[A-Za-z][A-Za-z]*$";
+			String suburbReg = "^[A-Za-z][ A-Za-z]*$";
 			String medicationReg = "^[A-Za-z0-9][ -'A-Za-z0-9]*$";
 			
 			boolean valid = true;

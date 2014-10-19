@@ -220,37 +220,37 @@
 							<legend><b>Your Details:</b></legend>
 							
 							<label for="username">First Name</label>
-							<center><input id="firstName" name="fname" type="text" placeholder="First Name" onblur="checkFirstName();" maxlength='20' required>
+							<center><input id="firstName" name="fname" type="text" placeholder="First Name" onblur="checkFirstName();" value='Dawn' maxlength='20' required>
 							<span id="firstNameMessage" class="firstNameMessage"></span></center>
 							
 							<label for="username">Last Name</label>
-							<center><input id="lastName" name="lname" type="text" placeholder="Last Name" onblur="checkLastName(); return false;" maxlength='30' required>
+							<center><input id="lastName" name="lname" type="text" placeholder="Last Name" onblur="checkLastName(); return false;" value='Smith' maxlength='30' required>
 							<span id="lastNameMessage" class="lastNameMessage"></span></center>
 							
 							<label for="username">Mobile #</label>
-							<center><input id="mobile" name="mobile" type="number" onblur="checkMobile(); return false;" placeholder="0412345678" maxlength='10' required>
+							<center><input id="mobile" name="mobile" type="number" onblur="checkMobile(); return false;" placeholder="0412345678" value='0412345678' maxlength='10' required>
 							<span id="mobileMessage" class="mobileMessage"></span></center>
 							
 							<label for="username">Alternate Contact #</label>
-							<center><input id="alternateMobile" name="contactnum" type="number" onblur="checkAlternateMobile(); return false;" placeholder="0712345678" maxlength='10' required>
+							<center><input id="alternateMobile" name="contactnum" type="number" onblur="checkAlternateMobile(); return false;" placeholder="0712345678" value='0412345678' maxlength='10' required>
 							<span id="alternateMobileMessage" class="alternateMobileMessage"></span></center>
 							
 							<legend><b>Account Details:</b></legend>
 							
 							<label for="email">Email Address</label>
-							<center><input id="email" name="email" type="email" placeholder="foo@bar.com" onblur="checkEmail(); return false;" maxlength='50' required>
+							<center><input id="email" name="email" type="email" placeholder="foo@bar.com" onblur="checkEmail(); return false;" value='example@gmail.com' maxlength='50' required>
 							<span id="emailMessage" class="emailMessage"></span></center>
 							
 							<label for="username">User Name</label>
-							<center><input id="username" name="username" type="text" placeholder="Preferred Username" onblur="checkUsername(); return false;" maxlength='15' required>
+							<center><input id="username" name="username" type="text" placeholder="Preferred Username" onblur="checkUsername(); return false;" value='dawn1123' maxlength='15' required>
 							<span id="usernameMessage" class="usernameMessage"></span></center>
 		
 							<label for="password">Password</label>
-							<center><input id="password" name="password" type="password" placeholder="Password" onblur="checkPassword(); return false;" maxlength='20' required>
+							<center><input id="password" name="password" type="password" placeholder="Password" onblur="checkPassword(); return false;" value='qwerty' maxlength='20' required>
 							<span id="passwordMessage" class="passwordMessage"></span></center>
 							
 							<label for="password">Confirm Password</label>
-							<center><input id="confirmPassword" name="confirmpassword" type="password" placeholder="Confirm Password" onblur="checkConfirmPassword(); return false;" maxlength='20' required>
+							<center><input id="confirmPassword" name="confirmpassword" type="password" placeholder="Confirm Password" onblur="checkConfirmPassword(); return false;" value='qwerty' maxlength='20' required>
 							<span id="confirmPasswordMessage" class="confirmPasswordMessage"></span><center>
 							
 							<input name="submitted" type="hidden" value="submitted">
