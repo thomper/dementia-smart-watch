@@ -216,9 +216,8 @@ public class MainActivity extends Activity {
 
 		handler.post(new Runnable() {
 		    public void run(){
-		    	BatteryUpdater bu = new BatteryUpdater(MainActivity.this,
-		    			mPatient.patientID);
-		    	bu.logBatteryLevel();
+		    	new BatteryUpdater(MainActivity.this, mPatient.patientID,
+		    			retrieveNumber());
 			   	handler.postDelayed(this, Globals.get().BATTERY_READING_INTERVAL);
 		    }
 		});

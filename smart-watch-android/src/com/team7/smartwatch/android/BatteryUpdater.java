@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 import com.team7.smartwatch.shared.Utility;
@@ -24,18 +25,26 @@ public class BatteryUpdater {
 
 	private Context mContext;
 	private int mPatientID;
+	private String mEmergencyContactNumber;
+	private float mBatteryLevel;
 
 	private static final String TAG = BatteryUpdater.class.getName();
 	private static final String SUCCESS_MESSAGE = "Battery updated\n";
 	private static final String POST_URL = Globals.get().SERVER_ADDRESS
 			+ "/updatebattery";
+	private static final float LOW_BATTERY_THRESHOLD = 15.0f;  // percent charge
 
-	public BatteryUpdater(Context context, int patientID) {
+	public BatteryUpdater(Context context, int patientID,
+			String emergencyContactNumber) {
 
 		mContext = context;
 		mPatientID = patientID;
+		mEmergencyContactNumber = emergencyContactNumber;
+		mBatteryLevel = getBatteryLevel();
 		BatteryTask task = new BatteryTask();
 		task.execute(Globals.get().httpContext);
+		sendTextMessage();
+		logBatteryLevel();
 	}
 
 	
@@ -105,7 +114,7 @@ public class BatteryUpdater {
 			try {
 				JSONObject jObj = new JSONObject();
 				jObj.put("patientID", mPatientID);
-				jObj.put("batteryLevel", getBatteryLevel());
+				jObj.put("batteryLevel", mBatteryLevel);
 				return jObj;
 			} catch (JSONException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
@@ -139,7 +148,19 @@ public class BatteryUpdater {
 		return ((float) level / (float) scale) * 100.0f;
 	}
 	
+	public void sendTextMessage() {
+		
+		if (mBatteryLevel <= LOW_BATTERY_THRESHOLD) {
+			SmsManager.getDefault().sendTextMessage(mEmergencyContactNumber,
+					null, "Your patient's battery has only " +
+					String.valueOf(mBatteryLevel) + "% charge remaining!",
+					null, null);
+		}
+	}
+	
 	public void logBatteryLevel() {
-		//TODO
+		
+		Log.i(TAG, "Battery has " + String.valueOf(mBatteryLevel) +
+				"% charge remaining");
 	}
 }
