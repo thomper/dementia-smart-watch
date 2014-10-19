@@ -96,15 +96,12 @@ public class Patient {
 	public String fullName() {
 
 		if (firstName == null || firstName.length() < 1) {
-			System.out.println(lastName);
             return lastName;
         }
 		if (lastName == null || lastName.length() < 1) {
-			System.out.println(firstName);
 			return firstName;
 		}
 
-		System.out.println(firstName + " " + lastName);
 		return firstName + " " + lastName;
 	}
 }
