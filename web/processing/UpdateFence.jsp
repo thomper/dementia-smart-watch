@@ -49,7 +49,7 @@
 					if (patientID != 0) {
 						st.executeUpdate("UPDATE patient SET fenceLat='"+lat+
 							"', fenceLong='"+lng+"', radius='"+radius+"'
-							"' WHERE patientID='"+patientID+"';");;
+							"' WHERE patientID='"+patientID+"';");
 						
 						// response.sendRedirect("../PatientDetails.jsp?patientid="+patientID+"&success=1");						
 					}
@@ -57,9 +57,9 @@
 						//We need to create the parient-carer assoiation and generate new patient ID
 						/*String uniqueKey = UUID.randomUUID().toString();
 						
-						st.executeUpdate("INSERT INTO patientfences VALUES ('"+patientID+"', '"+lat +"', '"+lng+"', '"+radius');");
+						st.executeUpdate("INSERT INTO patientfences VALUES ('"+patientID+"', '"+lat +"', '"+lng+"', '"+radius+');");
 							
-						//response.sendRedirect("../AddPatient.jsp?success=1");*/							
+						//response.sendRedirect("../AddPatient.jsp?success=1");							
 					}	
 				} else {
 					response.sendRedirect("../Error.jsp?error=2");

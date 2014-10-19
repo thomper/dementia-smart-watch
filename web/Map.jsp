@@ -12,6 +12,7 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
@@ -139,7 +140,7 @@
 					var newRadius = fenceMap[fence].object.getRadius();
 					var patientUpdated = fenceMap[fence].owner; //may need .object
 					$.ajax({
-						url:"prcessing/UpdateFence.jsp",
+						url:"processing/UpdateFence.jsp",
 						type: "POST",
 						data: { "radius": newRadius, "patientID": patientUpdated},
 						success:function(e){
