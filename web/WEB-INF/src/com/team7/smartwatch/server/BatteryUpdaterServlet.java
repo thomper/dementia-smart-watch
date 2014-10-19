@@ -1,7 +1,6 @@
 package com.team7.smartwatch.server;
 
 import com.team7.smartwatch.shared.Patient;
-import com.team7.smartwatch.shared.PatientStatus;
 import com.team7.smartwatch.shared.Utility;
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ public class BatteryUpdaterServlet extends HttpServlet {
 			.getLogger(BatteryUpdaterServlet.class.getName());
     private static final String SUCCESS_MESSAGE = "Battery updated";
     private static final String ERROR_MESSAGE = "Failed to update battery level";
-    private static final Double LOW_BATTERY_THRESHOLD = 15.0;  // percent charge
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -90,8 +88,6 @@ public class BatteryUpdaterServlet extends HttpServlet {
     	try {
 			boolean succeeded = DatabaseBatteryWriter.writeBattery(
 					batteryUpdate.patientID, batteryUpdate.batteryLevel);
-			succeeded = succeeded && updateBatteryStatus(
-					batteryUpdate.patientID, batteryUpdate.batteryLevel);
 			return succeeded;
 		} catch (BadSQLParameterException e) {
 			logger.log(Level.SEVERE, Utility.StringFromStackTrace(e));
@@ -134,33 +130,6 @@ public class BatteryUpdaterServlet extends HttpServlet {
 		Patient patient = DatabasePatientReader
 				.readPatientByPatientID(patientID);
 		return (patient != null) && (patient.carerID == userID);
-    }
-    
-    private boolean updateBatteryStatus(Integer patientID, Double batteryLevel) {
-    	
-		boolean lowBattery = batteryLevel <= LOW_BATTERY_THRESHOLD;
-
-		try {
-			if (lowBattery) {
-				
-				// Change status to BATTERY_LOW.
-				return DatabaseStatusWriter.updateStatus(patientID,
-						"BATTERY_LOW");
-			} else {
-
-				// Change status from BATTERY_LOW to fine if necessary.
-				Patient patient = DatabasePatientReader.readPatientByPatientID(
-						patientID);
-				if (patient.status == PatientStatus.BATTERY_LOW) {
-					return DatabaseStatusWriter.updateStatus(patientID, "FINE");
-				}
-			}
-		} catch (BadSQLParameterException e) {
-			logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
-			return false;
-		}
-		
-		return true;
     }
     
     private void logNoPermission(String address, Integer userID, Integer patientID) {

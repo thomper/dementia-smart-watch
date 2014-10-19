@@ -1,10 +1,13 @@
 package com.team7.smartwatch.server;
 
 import com.team7.smartwatch.shared.Patient;
+import com.team7.smartwatch.shared.PatientStatus;
+import com.team7.smartwatch.shared.RadialFence;
 import com.team7.smartwatch.shared.Utility;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,6 +93,7 @@ public class LocationUpdaterServlet extends HttpServlet {
 			boolean succeeded = DatabaseLocationWriter.writeLocation(
 					locationUpdate.patientID, locationUpdate.latitude,
 					locationUpdate.longitude);
+			succeeded = succeeded && updateFenceStatus(locationUpdate);
 			return succeeded;
 		} catch (BadSQLParameterException e) {
 			logger.log(Level.SEVERE, Utility.StringFromStackTrace(e));
@@ -132,6 +136,49 @@ public class LocationUpdaterServlet extends HttpServlet {
 		Patient patient = DatabasePatientReader
 				.readPatientByPatientID(patientID);
 		return (patient != null) && (patient.carerID == userID);
+    }
+    
+    private boolean updateFenceStatus(LocationUpdate locationUpdate) {
+    	
+		boolean lost = true;
+		
+        List<RadialFence> fences = DatabaseFenceReader.readFencesByPatientID(
+				locationUpdate.patientID);
+		for (RadialFence fence : fences) {
+			if (fence.containsLocation(locationUpdate.latitude,
+					locationUpdate.longitude)) {
+				lost = false;
+				break;
+			}
+		}
+
+		try {
+			if (lost) {
+				
+				// Change status to LOST.
+				logger.log(Level.INFO, "Patient with patientID=" +
+						String.valueOf(locationUpdate.patientID) + " is LOST.");
+				return DatabaseStatusWriter.updateStatus(
+						locationUpdate.patientID, "LOST");
+			} else {
+
+				// Change status from LOST to FINE if necessary.
+				Patient patient = DatabasePatientReader.readPatientByPatientID(
+						locationUpdate.patientID);
+				if (patient.status == PatientStatus.LOST) {
+					logger.log(Level.INFO, "Patient with patientID=" +
+							String.valueOf(locationUpdate.patientID) +
+							"is no longer LOST.");
+					return DatabaseStatusWriter.updateStatus(
+							locationUpdate.patientID, "FINE");
+				}
+			}
+		} catch (BadSQLParameterException e) {
+			logger.log(Level.WARNING, Utility.StringFromStackTrace(e));
+			return false;
+		}
+		
+		return true;
     }
     
     private void logNoPermission(String address, Integer userID, Integer patientID) {

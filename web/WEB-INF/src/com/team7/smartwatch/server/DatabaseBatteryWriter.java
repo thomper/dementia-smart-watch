@@ -47,7 +47,7 @@ public class DatabaseBatteryWriter {
     	
         try {
         	insertBattery.setInt(1, patientID);
-        	insertBattery.setString(4, String.valueOf(battery));
+        	insertBattery.setString(4, String.format("%.2f", battery));
 
         	// The time and date given here will be ignored, but they are
         	// required by mysql.

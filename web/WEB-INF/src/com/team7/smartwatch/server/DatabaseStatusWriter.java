@@ -23,10 +23,10 @@ public class DatabaseStatusWriter {
 
         try {
             conn = DatabaseConnector.getConnection();
-            PreparedStatement updateStatus = conn.prepareStatement(
+            PreparedStatement updateStatement = conn.prepareStatement(
             		UPDATE_STATEMENT);
-            bindValues(updateStatus, patientID, status);
-            int rowsUpdated = updateStatus.executeUpdate();
+            bindValues(updateStatement, patientID, status);
+            int rowsUpdated = updateStatement.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {
         	logger.log(Level.WARNING, Utility.StringFromStackTrace(e));

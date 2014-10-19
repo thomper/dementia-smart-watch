@@ -306,31 +306,31 @@ ALTER TABLE `carers`
 -- Indexes for table `patientalerts`
 --
 ALTER TABLE `patientalerts`
- ADD PRIMARY KEY (`patientID`,`alertTime`), ADD KEY `patientID` (`patientID`);
+ ADD PRIMARY KEY (`patientID`,`alertTime`, `alertDate`), ADD KEY `patientID` (`patientID`);
 
 --
 -- Indexes for table `patientbatteryalerts`
 --
 ALTER TABLE `patientbatteryalerts`
- ADD PRIMARY KEY (`patientID`,`alertTime`), ADD KEY `patientID` (`patientID`);
+ ADD PRIMARY KEY (`patientID`,`alertTime`, `alertDate`), ADD KEY `patientID` (`patientID`);
 
 --
 -- Indexes for table `patientcollapses`
 --
 ALTER TABLE `patientcollapses`
- ADD PRIMARY KEY (`patientID`,`collapseTime`), ADD KEY `patientID` (`patientID`);
+ ADD PRIMARY KEY (`patientID`,`collapseTime`, `collapseDate`), ADD KEY `patientID` (`patientID`);
 
 --
 -- Indexes for table `patientfences`
 --
 ALTER TABLE `patientfences`
- ADD PRIMARY KEY (`patientID`,`fenceLat`,`fenceLong`), ADD KEY `patientID` (`patientID`);
+ ADD PRIMARY KEY (`patientID`,`fenceLat`,`fenceLong`, `radius`), ADD KEY `patientID` (`patientID`);
 
 --
 -- Indexes for table `patientloc`
 --
 ALTER TABLE `patientloc`
- ADD PRIMARY KEY (`patientID`,`retrievalTime`), ADD KEY `patientID` (`patientID`);
+ ADD PRIMARY KEY (`patientID`,`retrievalTime`, `retrievalDate`), ADD KEY `patientID` (`patientID`);
 
 --
 -- Indexes for table `patientpoints`
