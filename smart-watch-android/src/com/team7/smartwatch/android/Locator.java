@@ -13,6 +13,7 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.team7.smartwatch.shared.Patient;
 import com.team7.smartwatch.shared.Utility;
 
 import android.annotation.SuppressLint;
@@ -23,6 +24,7 @@ import android.location.LocationManager;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 /** Locator provides access to the device's last known location and the
@@ -30,7 +32,7 @@ import android.util.Log;
 public class Locator {
 
 	private Context mContext;
-	private int mPatientID;
+	private Patient mPatient;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
 	private Location mLastLocation;
@@ -38,18 +40,23 @@ public class Locator {
 
 	private static final String TAG = Locator.class.getName();
 	private static final String SUCCESS_MESSAGE = "Location updated\n";
+	private static final String LOST_MESSAGE = "You are outside the safe zone\n";
 	private static final String POST_URL = Globals.get().SERVER_ADDRESS
 			+ "/updatelocation";
 
-	public Locator(Context context, int patientID) {
+	public Locator(Context context, Patient patient) {
 
 		mContext = context;
-		mPatientID = patientID;
+		mPatient = patient;
 		mLocationListener = new MyLocationListener();
 		mLocationManager = (LocationManager) this.mContext
 				.getSystemService(Context.LOCATION_SERVICE);
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				5000, 10, mLocationListener);
+	}
+	
+	private enum Result {
+		SUCCESS, ERROR, LOST;
 	}
 	
 	public Location getLastLocation() {
@@ -89,16 +96,16 @@ public class Locator {
 	}
 
 	/* Updates patient's current location with the server asynchronously. */
-	public class LocationUpdaterTask extends AsyncTask<HttpContext, Void, Boolean> {
+	public class LocationUpdaterTask extends AsyncTask<HttpContext, Void, Result> {
 		
 		@Override
-        protected Boolean doInBackground(HttpContext... params) {
+        protected Result doInBackground(HttpContext... params) {
 
             // Create the request.
             HttpPost request = createRequest();
             if (request == null) {
                 Log.e(TAG, "Error creating HTTP request");
-                return false;
+                return Result.ERROR;
             }   
 
             // Send the request.
@@ -106,20 +113,23 @@ public class Locator {
             HttpContext httpContext = params[0];
             try {
                 HttpResponse response = client.execute(request, httpContext);
-                return responseSucceeded(response);
+                return getResponseResult(response);
             } catch (IOException e) {
                 Log.e(TAG, Utility.StringFromStackTrace(e));
-                return false;
+                return Result.ERROR;
             } finally {
                 client.close();
             }   
         }   
 
         @Override
-	    protected void onPostExecute(Boolean succeeded) {
+	    protected void onPostExecute(Result result) {
 	        
-        	if (succeeded) {
+        	if (result == Result.SUCCESS) {
         		Log.i(TAG, "Successfully updated location on server.");
+        	} else if (result == Result.LOST) {
+        		Log.i(TAG, "Patient is outside the safe zone.");
+        		sendTextMessage();
         	} else {
         		Log.e(TAG, "Updating location failed.");
         	}
@@ -151,7 +161,7 @@ public class Locator {
 			
 			try {
 				JSONObject jObj = new JSONObject();
-				jObj.put("patientID", mPatientID);
+				jObj.put("patientID", mPatient.patientID);
 				jObj.put("latitude", mLastLocation.getLatitude());
 				jObj.put("longitude", mLastLocation.getLongitude());
 				return jObj;
@@ -161,16 +171,21 @@ public class Locator {
 			}
 		}
 
-		private boolean responseSucceeded(HttpResponse response) {
+		private Result getResponseResult(HttpResponse response) {
 
 			try {
 				String responseStr = AndroidUtility
 						.StringFromHttpResponse(response);
-				return responseStr.equals(SUCCESS_MESSAGE);
+				if (responseStr.equals(LOST_MESSAGE)) {
+					return Result.LOST;
+				} else if (responseStr.equals(SUCCESS_MESSAGE)) {
+					return Result.SUCCESS;
+				}
 			} catch (IOException e) {
 				Log.e(TAG, Utility.StringFromStackTrace(e));
-				return false;
 			}
+			
+			return Result.ERROR;
 		}
 	}
 
@@ -196,5 +211,12 @@ public class Locator {
 		SimpleDateFormat dfGMT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		dfGMT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return dfGMT.format(time);
+	}
+
+	public void sendTextMessage() {
+		
+		SmsManager.getDefault().sendTextMessage(mPatient.emergencyContact.num,
+				null, mPatient.fullName() + " has become lost!",
+				null, null);
 	}
 }

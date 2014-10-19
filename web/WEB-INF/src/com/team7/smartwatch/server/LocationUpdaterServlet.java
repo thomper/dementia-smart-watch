@@ -25,7 +25,12 @@ public class LocationUpdaterServlet extends HttpServlet {
 	private static final Logger logger = Logger
 			.getLogger(LocationUpdaterServlet.class.getName());
     private static final String SUCCESS_MESSAGE = "Location updated";
+    private static final String LOST_MESSAGE = "You are outside the safe zone";
     private static final String ERROR_MESSAGE = "Failed to update location";
+    
+    private enum Result {
+    	SUCCESS, ERROR, LOST
+    }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,11 +38,16 @@ public class LocationUpdaterServlet extends HttpServlet {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        boolean succeeded = update(request);
-        if (succeeded) {
+        
+        Result result = update(request);
+        if (result != Result.ERROR) {
         	logger.log(Level.INFO, "Location update received from " +
         			request.getRemoteAddr() + ".");
-            out.println(SUCCESS_MESSAGE);
+        	if (result == Result.LOST) {
+        		out.println(LOST_MESSAGE);
+        	} else {
+        		out.println(SUCCESS_MESSAGE);
+        	}
         } else {
             out.println(ERROR_MESSAGE);
         }
@@ -70,12 +80,12 @@ public class LocationUpdaterServlet extends HttpServlet {
      * @param request
      * @return true if the update was successful, false otherwise.
      */
-    private boolean update(HttpServletRequest request) {
+    private Result update(HttpServletRequest request) {
     	
     	// Read and verify given location.
     	LocationUpdate locationUpdate = getRequestDetails(request);
     	if (locationUpdate == null) {
-    		return false;
+    		return Result.ERROR;
     	}
     	
     	// Check that user has permission to update this patient's location.
@@ -85,7 +95,7 @@ public class LocationUpdaterServlet extends HttpServlet {
     	if (!permitted) {
 			logNoPermission(request.getRemoteAddr(), userID,
 					locationUpdate.patientID);
-    		return false;
+    		return Result.ERROR;
     	}
 
     	// Update the patient's location.
@@ -93,11 +103,18 @@ public class LocationUpdaterServlet extends HttpServlet {
 			boolean succeeded = DatabaseLocationWriter.writeLocation(
 					locationUpdate.patientID, locationUpdate.latitude,
 					locationUpdate.longitude);
-			succeeded = succeeded && updateFenceStatus(locationUpdate);
-			return succeeded;
+			boolean lost = patientIsLost(locationUpdate);
+			succeeded = succeeded && updateFenceStatus(locationUpdate, lost);
+			if (!succeeded) {
+				return Result.ERROR;
+			} else if (lost) {
+				return Result.LOST;
+			} else {
+				return Result.SUCCESS;
+			}
 		} catch (BadSQLParameterException e) {
 			logger.log(Level.SEVERE, Utility.StringFromStackTrace(e));
-			return false;
+			return Result.ERROR;
 		}
     }
     
@@ -138,7 +155,7 @@ public class LocationUpdaterServlet extends HttpServlet {
 		return (patient != null) && (patient.carerID == userID);
     }
     
-    private boolean updateFenceStatus(LocationUpdate locationUpdate) {
+    private boolean patientIsLost(LocationUpdate locationUpdate) {
     	
 		boolean lost = true;
 		
@@ -151,6 +168,12 @@ public class LocationUpdaterServlet extends HttpServlet {
 				break;
 			}
 		}
+		
+		return lost;
+    }
+    
+    private boolean updateFenceStatus(LocationUpdate locationUpdate,
+    		boolean lost) {
 
 		try {
 			if (lost) {
@@ -168,7 +191,7 @@ public class LocationUpdaterServlet extends HttpServlet {
 				if (patient.status == PatientStatus.LOST) {
 					logger.log(Level.INFO, "Patient with patientID=" +
 							String.valueOf(locationUpdate.patientID) +
-							"is no longer LOST.");
+							" is no longer LOST.");
 					return DatabaseStatusWriter.updateStatus(
 							locationUpdate.patientID, "FINE");
 				}
