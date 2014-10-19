@@ -41,10 +41,12 @@ public class BatteryUpdater {
 		mPatientID = patientID;
 		mEmergencyContactNumber = emergencyContactNumber;
 		mBatteryLevel = getBatteryLevel();
-		BatteryTask task = new BatteryTask();
-		task.execute(Globals.get().httpContext);
-		sendTextMessage();
-		logBatteryLevel();
+        logBatteryLevel();
+		if (mBatteryLevel <= LOW_BATTERY_THRESHOLD) {
+			BatteryTask task = new BatteryTask();
+			task.execute(Globals.get().httpContext);
+			sendTextMessage();
+		}
 	}
 
 	
