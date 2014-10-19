@@ -148,7 +148,7 @@ public class BatteryUpdaterServlet extends HttpServlet {
 						"BATTERY_LOW");
 			} else {
 
-				// Change status from BATTERY_LOW to fine if necessary.
+				// Change status from BATTERY_LOW to FINE if necessary.
 				Patient patient = DatabasePatientReader.readPatientByPatientID(
 						patientID);
 				if (patient.status == PatientStatus.BATTERY_LOW) {
