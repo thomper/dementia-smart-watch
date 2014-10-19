@@ -21,23 +21,30 @@
 			double lat = 0.00;
 			double lng = 0.00;
 			
-			try { patientID = Integer.parseInt(request.getParamter("patientID")); }
+			try { patientID = Integer.parseInt(request.getParameter("patientID")); }
 			catch (Exception e) { response.sendRedirect("../Error.jsp?error=666"); }
-%> alert("trying patient ID"); <%
+%> <script>alert("trying patient ID");</script> <%
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			java.sql.Connection conn;
 
-			if (Double.parseDouble(request.getParameter("radius")) {
-				radius = Double.parseDouble(request.getParameter("radius"))
-			}
+			//try {
+			//	radius = Double.parseDouble(request.getParameter("radius"));
+			//	lat = Double.parseDouble(request.getParameter("lat"));
+			//	lat = Double.parseDouble(request.getParameter("lng"));
+			//} catch (Exception e) {
+			//}
 			
-			if (Double.parseDouble(request.getParameter("lat")) {
-				lat = Double.parseDouble(request.getParameter("lat"))
-			}
-			
-			if (Double.parseDouble(request.getParameter("lng")) {
-				lat = Double.parseDouble(request.getParameter("lng"))
-			}
+			//if (tryParseDouble(request.getParameter("radius"))) {
+			//	radius = Double.parseDouble(request.getParameter("radius"));
+			//}
+			//
+			//if (Double.parseDouble(request.getParameter("lat"))) {
+			//	lat = Double.parseDouble(request.getParameter("lat"));
+			//}
+			//
+			//if (Double.parseDouble(request.getParameter("lng"))) {
+			//	lat = Double.parseDouble(request.getParameter("lng"));
+			//}
 			
 			Boolean valid = true; 
 			
@@ -47,9 +54,9 @@
 
 				if (valid) {
 					if (patientID != 0) {
-						st.executeUpdate("UPDATE patient SET fenceLat='"+lat+
-							"', fenceLong='"+lng+"', radius='"+radius+"'
-							"' WHERE patientID='"+patientID+"';");
+						st.executeUpdate("UPDATE patientfences SET fenceLat='"+lat+
+							"', fenceLong='"+lng+"', radius='"+radius+"'" +
+							" WHERE patientID='"+patientID+"';");
 						
 						// response.sendRedirect("../PatientDetails.jsp?patientid="+patientID+"&success=1");						
 					}
@@ -57,9 +64,9 @@
 						//We need to create the parient-carer assoiation and generate new patient ID
 						/*String uniqueKey = UUID.randomUUID().toString();
 						
-						st.executeUpdate("INSERT INTO patientfences VALUES ('"+patientID+"', '"+lat +"', '"+lng+"', '"+radius+');");
+						st.executeUpdate("INSERT INTO patientfences (patientID, fenceLat, fenceLong, radius) VALUES ('"+patientID+"', '"+lat +"', '"+lng+"', '"+radius+"');");
 							
-						//response.sendRedirect("../AddPatient.jsp?success=1");							
+						//response.sendRedirect("../AddPatient.jsp?success=1");*/							
 					}	
 				} else {
 					response.sendRedirect("../Error.jsp?error=2");
