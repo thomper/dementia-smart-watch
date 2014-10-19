@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
 		if (!gpsEnabled()) {
 			showDialogNoGps();
 		}
-		mLocator = new Locator(this, mPatient.patientID);
+		mLocator = new Locator(this, mPatient);
 	}
 	
 	private void startTrackingBatteryCharge() {

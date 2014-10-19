@@ -191,7 +191,7 @@ public class LocationUpdaterServlet extends HttpServlet {
 				if (patient.status == PatientStatus.LOST) {
 					logger.log(Level.INFO, "Patient with patientID=" +
 							String.valueOf(locationUpdate.patientID) +
-							"is no longer LOST.");
+							" is no longer LOST.");
 					return DatabaseStatusWriter.updateStatus(
 							locationUpdate.patientID, "FINE");
 				}
