@@ -74,7 +74,7 @@ public class DatabaseLocationWriter {
         try {
             conn = DatabaseConnector.getConnection();
             PreparedStatement getloc = conn.prepareStatement("SELECT patientLat, patientLong "
-        			+ " FROM patientloc WHERE patientID == ? ");
+        			+ " FROM patientloc WHERE patientID = ? ");
             getloc.setInt(1, patientID);
             ResultSet rs = getloc.executeQuery();
             
