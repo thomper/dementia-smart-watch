@@ -12,7 +12,7 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
