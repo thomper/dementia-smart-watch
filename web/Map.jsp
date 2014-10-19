@@ -12,7 +12,7 @@
 	<link rel="icon" type="image/jpg" href="images/DementiaLogo.png">
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
 	    	
 		<%
 			//If not logged in - redirect to error page and cancel processing od remaining jsp
@@ -139,10 +139,11 @@
 				 google.maps.event.addListener(fenceMap[fence].object, 'radius_changed', function() {
 					var newRadius = fenceMap[fence].object.getRadius();
 					var patientUpdated = fenceMap[fence].owner; //may need .object
+					alert(patientUpdated);
 					$.ajax({
 						url:"processing/UpdateFence.jsp",
 						type: "POST",
-						data: { "radius": newRadius, "patientID": patientUpdated},
+						data: { "radius": newRadius, "patientID": patientUpdated, "updateType": "radius"},
 						success:function(e){
 							alert(e);
 						}
@@ -151,17 +152,17 @@
 				 
 				 });
 				 google.maps.event.addListener(fenceMap[fence].object, 'center_changed', function() {
-					/*var newLat = fenceMap[fence].object.getCenter().lat();
+					var newLat = fenceMap[fence].object.getCenter().lat();
 					var newLng = fenceMap[fence].object.getCenter().lng();
 					var patientUpdated = fenceMap[fence].owner; //may need .object
 					$.ajax({
 						url:"processing/UpdateFence.jsp",
 						type: "POST",
-						data: { "lat": newLat, "lng": newLng, "patientID":  patientUpdated },
+						data: { "lat": newLat, "lng": newLng, "patientID":  patientUpdated,"updateType": "center" },
 						success:function(e){
 							alert(e);
 						}
-					});*/
+					});
 					alert(" Successfully Updated Database");
 				 });
 				
