@@ -86,7 +86,9 @@
 				fenceMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
 				  radius: <%=fenceRad%>,
-				  owner: <%=currentPatientID%>
+				  owner: <%=currentPatientID%>,
+				  object: null,
+				  window: null
 				};
 			<% } //end While%>
 
@@ -117,8 +119,13 @@
 				  map: map,
 				  center: fenceMap[fence].center,
 				  radius: fenceMap[fence].radius,
-				  editable: true,
-				  draggable: true
+				  <% if (patientID != 0) { %>
+					editable: true,
+					draggable: true
+				<% } else { %>
+					editable: false,
+					draggable: false
+				<% } %>
 				};
 				for (var patient in patientMap){
 				var marker = new google.maps.Marker({
@@ -131,39 +138,39 @@
 				fenceMap[fence] = {
 					object: new google.maps.Circle(fenceOptions),
 					window: new google.maps.InfoWindow({
-					content: "<p>put butten here</p>" 					 
-					})
+						content: "<p>put butten here</p>" 					 
+						})
 
 				};
-				
+				 
 				 google.maps.event.addListener(fenceMap[fence].object, 'radius_changed', function() {
 					var newRadius = fenceMap[fence].object.getRadius();
-					var patientUpdated = fenceMap[fence].owner; //may need .object
-					alert(patientUpdated);
+					var newLat = fenceMap[fence].object.getCenter().lat();
+					var newLng = fenceMap[fence].object.getCenter().lng();
 					$.ajax({
 						url:"processing/UpdateFence.jsp",
 						type: "POST",
-						data: { "radius": newRadius, "patientID": patientUpdated, "updateType": "radius"},
+						data: { "radius": newRadius, "lat": newLat, "lng": newLng, "patientID":   <%=patientID %>},
 						success:function(e){
-							alert(e);
+							//alert(e);
 						}
 					});
-					alert(" Successfully Updated Database. Radius now set to: " + newRadius+"metres");
+					alert(" Successfully Updated Radius in Database");
 				 
 				 });
 				 google.maps.event.addListener(fenceMap[fence].object, 'center_changed', function() {
+					var newRadius = fenceMap[fence].object.getRadius();
 					var newLat = fenceMap[fence].object.getCenter().lat();
 					var newLng = fenceMap[fence].object.getCenter().lng();
-					var patientUpdated = fenceMap[fence].owner; //may need .object
 					$.ajax({
 						url:"processing/UpdateFence.jsp",
 						type: "POST",
-						data: { "lat": newLat, "lng": newLng, "patientID":  patientUpdated,"updateType": "center" },
+						data: {"radius": newRadius, "lat": newLat, "lng": newLng, "patientID":  <%=patientID %>},
 						success:function(e){
-							alert(e);
+							//alert(e);
 						}
 					});
-					alert(" Successfully Updated Database");
+					alert(" Successfully Updated Fence Location in Database");
 				 });
 				
 				
