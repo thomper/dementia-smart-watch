@@ -23,6 +23,7 @@ public class BatteryUpdaterServlet extends HttpServlet {
 			.getLogger(BatteryUpdaterServlet.class.getName());
     private static final String SUCCESS_MESSAGE = "Battery updated";
     private static final String ERROR_MESSAGE = "Failed to update battery level";
+    private static final Double LOW_BATTERY_THRESHOLD = 15.0;  // percent charge
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -88,6 +89,14 @@ public class BatteryUpdaterServlet extends HttpServlet {
     	try {
 			boolean succeeded = DatabaseBatteryWriter.writeBattery(
 					batteryUpdate.patientID, batteryUpdate.batteryLevel);
+			
+			// Change patient's status to BATTERY_LOW if necessary.
+			boolean lowBattery = batteryUpdate.batteryLevel <=
+					LOW_BATTERY_THRESHOLD;
+			if (lowBattery) {
+				succeeded = succeeded && DatabaseStatusWriter.updateStatus(
+						batteryUpdate.patientID, "BATTERY_LOW");
+			}
 			return succeeded;
 		} catch (BadSQLParameterException e) {
 			logger.log(Level.SEVERE, Utility.StringFromStackTrace(e));
