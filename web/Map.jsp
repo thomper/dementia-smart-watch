@@ -45,7 +45,7 @@
 			Double fenceLat = 0.00; 
 			Double fenceLng = 0.00;
 			Double fenceRad  = 0.00;
-			Double currentPatientID = 0.00;
+			Integer currentPatientID = 0;
 		%> 	
 		
 		<script>
@@ -58,13 +58,13 @@
 			while (rs.next()) {
 				 patientLat = rs.getDouble(4); 
 				 patientLng = rs.getDouble(5);
-				 currentPatientID = rs.getDouble(9);
+				 currentPatientID = rs.getInt(9);
 				 name = rs.getString(1) + " " + rs.getString(2);
 				 status = rs.getString(3);
 				
 				 if (rs.getDouble(6) == 0){; 
-					fenceLat = patientLat;  //new value TODO: use GEO class
-					fenceLng = patientLng; //new value TODO: use GEO class
+					fenceLat = patientLat; 
+					fenceLng = patientLng;
 					updb.executeUpdate("INSERT INTO patientfences (patientID, fenceLat, fenceLong) VALUES ("+currentPatientID + ", " + fenceLat  +", " + fenceLng+")");
 				 } else {
 					fenceLat = rs.getDouble(6); 
@@ -78,12 +78,14 @@
 		%>		
 				patientMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=patientLat%>, <%=patientLng%>),
-				  name: '<%=name%>'
+				  name: '<%=name%>',
+				  id: <%=currentPatientID%>
 				};
 				
 				fenceMap['<%=name%>'] = {
 				  center: new google.maps.LatLng(<%=fenceLat%>, <%=fenceLng%>),
-				  radius: <%=fenceRad%>
+				  radius: <%=fenceRad%>,
+				  owner: <%=currentPatientID%>
 				};
 			<% } //end While%>
 
@@ -96,7 +98,7 @@
 					zoom: 12,
 				<% } %>
 				center: new google.maps.LatLng(centerLat, centerLng),				
-				mapTypeId: google.maps.MapTypeId.ROADS
+				mapTypeId: google.maps.MapTypeId.ROADMAP
 			  };
 
 			  var map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -123,43 +125,52 @@
 					map: map,
 					title: patientMap[patient].name
 				}); 
-				}	
+				}
 				// Add the circle for this city to the map.
 				fenceMap[fence] = {
 					object: new google.maps.Circle(fenceOptions),
 					window: new google.maps.InfoWindow({
-					content: "<p>put butten here</p>" 
+					content: "<p>put butten here</p>" 					 
 					})
 
 				};
 				
 				 google.maps.event.addListener(fenceMap[fence].object, 'radius_changed', function() {
-					alert(" Successfully Updated Database. Radius now set to: " + fenceMap[fence].object.getRadius()+"metres");
+					var newRadius = fenceMap[fence].object.getRadius();
+					var patientUpdated = fenceMap[fence].owner; //may need .object
+					$.ajax({
+						url:"prcessing/UpdateFence.jsp",
+						type: "POST",
+						data: { "radius": newRadius, "patientID": patientUpdated},
+						success:function(e){
+							alert(e);
+						}
+					});
+					alert(" Successfully Updated Database. Radius now set to: " + newRadius+"metres");
 				 
 				 });
 				 google.maps.event.addListener(fenceMap[fence].object, 'center_changed', function() {
-					alert("lame alert");
-					alert(" Successfully Updated Database. Position now set to: " + fenceMap[fence].object.getCircle().lat()+"metres");
+					/*var newLat = fenceMap[fence].object.getCenter().lat();
+					var newLng = fenceMap[fence].object.getCenter().lng();
+					var patientUpdated = fenceMap[fence].owner; //may need .object
+					$.ajax({
+						url:"processing/UpdateFence.jsp",
+						type: "POST",
+						data: { "lat": newLat, "lng": newLng, "patientID":  patientUpdated },
+						success:function(e){
+							alert(e);
+						}
+					});*/
+					alert(" Successfully Updated Database");
 				 });
 				
 				
- /*console.log(polygonBounds);
-        //var myJsonString = JSON.stringify(polygonBounds);
-        $.ajax({
-            url:"updateProperty.php",
-            type: "POST",
-            data: {vertices:polygonBounds},
-            success:function(e){
-                alert(e);
-            }
-        });*/				
 				
 				
-				
-			  }
-			 
 			  
 			}
+			  
+		}
 		</script>
 		
 		
@@ -180,6 +191,7 @@
 		<%
 			
 			st.close();
+			updb.close();
 			conn.close();
 		%>
 	</div>
