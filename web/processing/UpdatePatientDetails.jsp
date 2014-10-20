@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.UUID" %>
 <!DOCTYPE html>
 
@@ -102,6 +103,15 @@
 							"',  '"+medication+"', 'FINE', '"+address+
 							"', '"+suburb+"', '"+conNum+"', '"+emergName+"', '"+emergAddress+
 							"', '"+emergSuburb+"', '"+emergNum+"', '"+uniqueKey+"');");
+							
+						
+						ResultSet rs = st.executeQuery("SELECT LAST_INSERT_ID()");
+		
+						rs.next();
+						
+						int hello = rs.getInt(1);
+												
+						st.executeUpdate("INSERT INTO patientfences (patientID, fenceLat, fenceLong) VALUES ("+hello+", -27.477778000, 153.0275040000);");
 						
 						response.sendRedirect("../AddPatient.jsp?success=1");							
 					}	
