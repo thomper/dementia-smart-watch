@@ -1,7 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.UUID" %>
 <!DOCTYPE html>
 
@@ -38,7 +37,7 @@
 			String nameReg = "^[a-zA-Z][-\' a-zA-Z]+$";
 			String numberReg = "^(\\+|\\d)[0-9]{7,16}$";
 			String addressReg = "^[A-Za-z0-9][ A-Za-z0-9]*$";
-			String suburbReg = "^[A-Za-z][A-Za-z]*$";
+			String suburbReg = "^[A-Za-z][ A-Za-z]*$";
 			String medicationReg = "^[A-Za-z0-9][ -'A-Za-z0-9]*$";
 			
 			boolean valid = true;
@@ -103,15 +102,6 @@
 							"',  '"+medication+"', 'FINE', '"+address+
 							"', '"+suburb+"', '"+conNum+"', '"+emergName+"', '"+emergAddress+
 							"', '"+emergSuburb+"', '"+emergNum+"', '"+uniqueKey+"');");
-							
-						
-						ResultSet rs = st.executeQuery("SELECT LAST_INSERT_ID()");
-		
-						rs.next();
-						
-						int hello = rs.getInt(1);
-												
-						st.executeUpdate("INSERT INTO patientfences (patientID, fenceLat, fenceLong) VALUES ("+hello+", -27.477778000, 153.0275040000);");
 						
 						response.sendRedirect("../AddPatient.jsp?success=1");							
 					}	
