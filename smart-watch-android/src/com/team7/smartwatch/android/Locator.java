@@ -75,6 +75,11 @@ public class Locator {
 		public void onLocationChanged(Location loc) {
 			mLastLocation = loc;
 			mLastTime = new Date();
+			
+			if (containsLocation(loc.getLatitude(), loc.getLongitude()) ){
+				// update database
+			}
+						
 			logLocation();
 			postLocation();
 		}
